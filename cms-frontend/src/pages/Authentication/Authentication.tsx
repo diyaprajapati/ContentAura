@@ -2,7 +2,6 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { TabsContent } from '@radix-ui/react-tabs'
 import Login from './Login'
 import Signup from './Signup'
-import React from 'react'
 
 export default function Authentication() {
   return (
