@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
+import KeyFeature from './KeyFeature'
 
 function HomePage() {
   return (
@@ -48,6 +49,7 @@ function HomePage() {
           <Button className='p-8 rounded-full text-lg font-semibold bg-transparent hover:scale-105 hover:transition-all'> Learn more &rarr;</Button>
         </div>
       </motion.div>
+      <KeyFeature />
     </>
   )
 }

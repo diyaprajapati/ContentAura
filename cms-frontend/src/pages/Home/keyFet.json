@@ -1,0 +1,26 @@
+[
+    {
+        "title": "Custom Schema Builder",
+        "desc": "Create tailored schemas for your projects"
+    },
+    {
+        "title": "Data Management Simplified",
+        "desc": "Add, update, and organize data effortlessly."
+    },
+    {
+        "title": "API Access",
+        "desc": "Fetch and integrate data with secure and scalable APIs"
+    },
+    {
+        "title": "Collaboration Tools",
+        "desc": "Allow teams to work on shared projects seamlessly"
+    },
+    {
+        "title": "Robust Security",
+        "desc": "Data encryption, user roles, and authentication to keep your data safe"
+    },
+    {
+        "title": "Scalability",
+        "desc": "Perfect for businesses of all sizes"
+    }
+]
