@@ -1,25 +1,31 @@
 [
     {
+        "icon": "wrench.svg",
         "title": "Custom Schema Builder",
         "desc": "Create tailored schemas for your projects"
     },
     {
+        "icon": "folder_open.svg",
         "title": "Data Management Simplified",
         "desc": "Add, update, and organize data effortlessly."
     },
     {
+        "icon": "key.svg",
         "title": "API Access",
         "desc": "Fetch and integrate data with secure and scalable APIs"
     },
     {
+        "icon": "group.svg",
         "title": "Collaboration Tools",
         "desc": "Allow teams to work on shared projects seamlessly"
     },
     {
+        "icon": "lock.svg",
         "title": "Robust Security",
         "desc": "Data encryption, user roles, and authentication to keep your data safe"
     },
     {
+        "icon": "show_chart.svg",
         "title": "Scalability",
         "desc": "Perfect for businesses of all sizes"
     }
