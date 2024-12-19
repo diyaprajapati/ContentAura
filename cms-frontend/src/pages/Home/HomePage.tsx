@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 import KeyFeature from './KeyFeature'
+import WhyUs from './WhyUs'
 
 function HomePage() {
   return (
@@ -50,6 +51,7 @@ function HomePage() {
         </div>
       </motion.div>
       <KeyFeature />
+      <WhyUs />
     </>
   )
 }

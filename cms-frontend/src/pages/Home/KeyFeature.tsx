@@ -1,5 +1,6 @@
 import keyFet from './keyFet.json'
 import { motion } from 'framer-motion'
+import BlurFade from "@/components/ui/blur-fade";
 
 export default function KeyFeature() {
   return (
@@ -15,18 +16,10 @@ export default function KeyFeature() {
             }
           }}
           >Key Features</motion.div>
-        <motion.div className='grid md:grid-cols-2 m-4 gap-3 justify-between md:ml-12 md:gap-8'
-        initial={{
-            x:-20
-          }}
-          animate = {{
-            x:0,
-            transition: {
-              duration: 0.75
-            }
-          }}>
+        <div className='grid md:grid-cols-2 m-4 gap-3 justify-between md:ml-12 md:gap-8'>
             {keyFet.map((fet) => (
                 <div>
+                    <BlurFade inView>
                     <div className='flex flex-row px-6 py-3 bg-[#0e1936] rounded-lg border border-indigo-900 cursor-pointer hover:bg-[#0c142b] hover:border-indigo-950 gap-6'>
                         <div className='mr-15 flex items-center'>
                             <img
@@ -41,9 +34,10 @@ export default function KeyFeature() {
                             </div>
                         </div>
                     </div>
+            </BlurFade>
                 </div>
             ))}
-        </motion.div>
+        </div>
     </div>
   )
 }
