@@ -1,10 +1,11 @@
 import keyFet from './keyFet.json'
 import { motion } from 'framer-motion'
 import BlurFade from "@/components/ui/blur-fade";
+import { forwardRef } from 'react';
 
-export default function KeyFeature() {
+const KeyFeature = forwardRef<HTMLDivElement>((props, ref) => {
   return (
-    <div className='flex flex-col items-center h-screen md:justify-center'>
+    <div ref={ref} {...props} className='flex flex-col items-center h-screen md:justify-center'>
         <motion.div className='flex justify-center text-4xl font-bold text-violet-400 mb-10 mt-14 md:text-5xl md:mb-20'
         initial={{
             y:-20
@@ -40,4 +41,6 @@ export default function KeyFeature() {
         </div>
     </div>
   )
-}
+});
+
+export default KeyFeature

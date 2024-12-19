@@ -3,8 +3,14 @@ import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 import KeyFeature from './KeyFeature'
 import WhyUs from './WhyUs'
+import {useRef} from 'react';
 
 function HomePage() {
+  const ref = useRef<HTMLDivElement>(null);
+  const handleClick = () => {
+    ref.current?.scrollIntoView({behavior: 'smooth'});
+  };
+
   return (
     <>
       <nav className='absolute w-fit left-5 top-4'>
@@ -47,10 +53,10 @@ function HomePage() {
         </div>
         <div className='flex flex-row gap-8'>
           <Link to={"/auth"}><Button className='p-8 rounded-full text-lg font-semibold hover:scale-105 hover:transition-all'>Get Started</Button> </Link>
-          <Button className='p-8 rounded-full text-lg font-semibold bg-transparent hover:scale-105 hover:transition-all'> Learn more &rarr;</Button>
+          <Button className='p-8 rounded-full text-lg font-semibold bg-transparent hover:scale-105 hover:transition-all' onClick={handleClick}> Learn more &rarr;</Button>
         </div>
       </motion.div>
-      <KeyFeature />
+      <KeyFeature ref={ref} />
       <WhyUs />
     </>
   )
