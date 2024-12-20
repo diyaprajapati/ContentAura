@@ -5,6 +5,7 @@ import KeyFeature from './KeyFeature'
 import WhyUs from './WhyUs'
 import {useRef} from 'react';
 
+// useRef is used for smooth scroll after click on the button
 function HomePage() {
   const ref = useRef<HTMLDivElement>(null);
   const handleClick = () => {
@@ -51,11 +52,15 @@ function HomePage() {
           Streamline your projects with a robust, developer-friendly CMS designed for efficiency.
           </div>
         </div>
+
+        {/* Buttons */}
         <div className='flex flex-row gap-8'>
           <Link to={"/auth"}><Button className='p-8 rounded-full text-lg font-semibold hover:scale-105 hover:transition-all'>Get Started</Button> </Link>
           <Button className='p-8 rounded-full text-lg font-semibold bg-transparent hover:scale-105 hover:transition-all' onClick={handleClick}> Learn more &rarr;</Button>
         </div>
       </motion.div>
+
+      {/* Other components */}
       <KeyFeature ref={ref} />
       <WhyUs />
     </>
