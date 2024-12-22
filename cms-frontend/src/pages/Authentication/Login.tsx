@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import axios from 'axios';
 
 // validation schema 
 const loginSchema = z.object({
@@ -30,11 +31,22 @@ export default function Login() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      //  API call
-      console.log('Form submitted:', data)
-    } catch (error) {
-      console.error('Login error:', error)
-    }
+        // API call
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}/auth/authenticate`,
+          data
+        );
+        console.log('Login successful:', response.data);
+        // Perform any redirection or state update here
+      } catch (error: any) {
+        // Handle error response
+        const errorMessage =
+          error.response?.data?.message || 'Something went wrong. Please try again.';
+        console.error('Login error:', errorMessage);
+    
+        // You can show this message to the user, for example:
+        alert(errorMessage);
+      }
   }
 
   return (

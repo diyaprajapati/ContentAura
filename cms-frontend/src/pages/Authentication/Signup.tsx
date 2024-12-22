@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { z } from 'zod'
+import axios from 'axios'
 
 // validation schema
 const signupSchema = z.object({
@@ -72,20 +73,29 @@ export default function Signup() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (validateForm()) {
-      setIsSubmitting(true)
-      try {
-        // API call
-        console.log('Form submitted:', formData)
+      setIsSubmitting(true);
 
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000)) 
-      } catch (error) {
-        console.error('Signup error:', error)
-      } finally {
-        setIsSubmitting(false)
-      }
+    try {
+        const response = await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/auth/register`,
+            formData
+        );
+        console.log('Signup successful:', response.data);
+        alert('Signup successful! Please log in.'); // Redirect to login if needed
+    } 
+    catch (error: any) {
+        console.error('Signup error:', error);
+        const message =
+            error.response?.data?.message || 'Something went wrong. Please try again.';
+        alert(message);
     }
-  }
+    finally {
+        setIsSubmitting(false);
+        }
+    }
+};
+    
+
 
   return (
     <div className="mt-3">
