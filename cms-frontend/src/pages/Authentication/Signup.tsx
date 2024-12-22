@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { z } from 'zod'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 // validation schema
 const signupSchema = z.object({
@@ -27,12 +28,21 @@ const signupSchema = z.object({
 type SignupFormData = z.infer<typeof signupSchema>
 
 export default function Signup() {
+
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<SignupFormData>({
     email: '',
     password: '',
     confirmPassword: ''
   })
-  
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token !== null) {
+      navigate('/dashboard');
+    }
+  }, [])
+
   const [errors, setErrors] = useState<Partial<Record<keyof SignupFormData, string>>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -75,27 +85,28 @@ export default function Signup() {
     if (validateForm()) {
       setIsSubmitting(true);
 
-    try {
+      try {
         const response = await axios.post(
-            `${import.meta.env.VITE_API_BASE_URL}/auth/register`,
-            formData
+          `${import.meta.env.VITE_API_BASE_URL}/auth/register`,
+          formData
         );
-        console.log('Signup successful:', response.data);
-        alert('Signup successful! Please log in.'); // Redirect to login if needed
-    } 
-    catch (error: any) {
+        if (response.status === 200) {
+          console.log('Signup successful:', response.data);
+          localStorage.setItem('token', response.data.token);
+          navigate('/dashboard');
+        }
+      }
+      catch (error: any) {
         console.error('Signup error:', error);
         const message =
-            error.response?.data?.message || 'Something went wrong. Please try again.';
+          error.response?.data?.message || 'Something went wrong. Please try again.';
         alert(message);
-    }
-    finally {
+      }
+      finally {
         setIsSubmitting(false);
-        }
+      }
     }
-};
-    
-
+  };
 
   return (
     <div className="mt-3">
@@ -161,8 +172,8 @@ export default function Signup() {
 
             {/* button */}
             <div className="w-full">
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full"
                 disabled={isSubmitting}
               >

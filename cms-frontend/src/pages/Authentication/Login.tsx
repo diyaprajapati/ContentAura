@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 
 // validation schema 
 const loginSchema = z.object({
@@ -21,6 +23,8 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>
 
 export default function Login() {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -29,6 +33,13 @@ export default function Login() {
     resolver: zodResolver(loginSchema)
   })
 
+  useEffect( () => {
+    const token = localStorage.getItem('token')
+    if(token !== null) {
+      navigate('/dashboard');
+    }
+  }, [])
+
   const onSubmit = async (data: LoginFormData) => {
     try {
         // API call
@@ -36,7 +47,11 @@ export default function Login() {
           `${import.meta.env.VITE_API_BASE_URL}/auth/authenticate`,
           data
         );
-        console.log('Login successful:', response.data);
+        if(response.status === 200) {
+          console.log('Login successful:', response.data);
+          localStorage.setItem('token', response.data.token);
+          navigate("/dashboard");
+        }
         // Perform any redirection or state update here
       } catch (error: any) {
         // Handle error response
