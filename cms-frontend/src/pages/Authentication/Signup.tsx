@@ -9,6 +9,12 @@ import { useNavigate } from 'react-router-dom'
 
 // validation schema
 const signupSchema = z.object({
+  firstname: z.string()
+    .min(1, "First name is required")
+    .max(50, "First name must not exceed 50 characters"),
+  lastname: z.string()
+    .min(1, "Last name is required")
+    .max(50, "Last name must not exceed 50 characters"),
   email: z.string()
     .min(1, "Email is required")
     .email("Invalid email format"),
@@ -31,6 +37,8 @@ export default function Signup() {
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState<SignupFormData>({
+    firstname: '',
+    lastname: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -113,6 +121,22 @@ export default function Signup() {
       <Card className="p-2">
         <CardContent className="space-y-5">
           <form onSubmit={handleSubmit} className="space-y-5">
+            {/* First name */}
+            <div>
+              <Label>First name</Label>
+              <Input id='fname' name='firstname' type='text' placeholder='First name' value={formData.firstname} onChange={handleChange} />
+              {errors.firstname && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.firstname}
+                </p>
+              )}
+            </div>
+
+            {/* Last name */}
+            <div>
+              <Label>Last name</Label>
+              <Input id='lname' name='lastname' type='text' placeholder='Last name' value={formData.lastname} onChange={handleChange} />
+            </div>
             {/* email */}
             <div className="space-y-1">
               <Label htmlFor="email">Email</Label>
