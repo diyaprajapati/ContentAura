@@ -1,4 +1,15 @@
-import { Calendar, ChevronUp, Home, Inbox, Search, Settings, User2 } from "lucide-react"
+import {
+    ChevronUp,
+    Home,
+    User2,
+    Folder,
+    Key,
+    Database,
+    FileText,
+    BarChart,
+    LogOut,
+    Settings
+} from "lucide-react"
 
 import {
     Sidebar,
@@ -15,7 +26,6 @@ import {
 import { DropdownMenu, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu"
 import { useNavigate } from "react-router-dom"
-import { Button } from "./ui/button"
 
 // Menu items.
 const items = [
@@ -27,28 +37,27 @@ const items = [
     {
         title: "Projects",
         url: "#",
-        icon: Inbox,
+        icon: Folder,
     },
     {
         title: "Api Keys",
         url: "#",
-        icon: Calendar,
-        // icons change krvana cheeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+        icon: Key,
     },
     {
         title: "Schemas",
         url: "#",
-        icon: Search,
+        icon: Database,
     },
     {
         title: "Content",
         url: "#",
-        icon: Settings,
+        icon: FileText,
     },
     {
         title: "Analytics",
         url: "#",
-        icon: Settings,
+        icon: BarChart,
     },
 ]
 
@@ -95,11 +104,13 @@ export function AppSidebar() {
                                 </SidebarMenuButton>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
-                                <DropdownMenuItem>
-                                    <span className="py-2">Account</span>
+                                <DropdownMenuItem className="flex justify-between">
+                                    <span>Account</span>
+                                    <Settings />
                                 </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Button onClick={handleLogout} className='bg-transparent hover:bg-transparent p-[-2] py-[-4] font-normal text-sm'>Logout </Button>
+                                <DropdownMenuItem onClick={handleLogout} className="flex justify-between">
+                                    <span>Logout</span>
+                                    <LogOut />
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>

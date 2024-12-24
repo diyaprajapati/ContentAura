@@ -33,35 +33,35 @@ export default function Login() {
     resolver: zodResolver(loginSchema)
   })
 
-  useEffect( () => {
+  useEffect(() => {
     const token = localStorage.getItem('token')
-    if(token !== null) {
+    if (token !== null) {
       navigate('/dashboard');
     }
   }, [])
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-        // API call
-        const response = await axios.post(
-          `${import.meta.env.VITE_API_BASE_URL}/auth/authenticate`,
-          data
-        );
-        if(response.status === 200) {
-          console.log('Login successful:', response.data);
-          localStorage.setItem('token', response.data.token);
-          navigate("/dashboard");
-        }
-        // Perform any redirection or state update here
-      } catch (error: any) {
-        // Handle error response
-        const errorMessage =
-          error.response?.data?.message || 'Something went wrong. Please try again.';
-        console.error('Login error:', errorMessage);
-    
-        // You can show this message to the user, for example:
-        alert(errorMessage);
+      // API call
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/auth/authenticate`,
+        data
+      );
+      if (response.status === 200) {
+        console.log('Login successful:', response.data);
+        localStorage.setItem('token', response.data.token);
+        navigate("/dashboard");
       }
+      // Perform any redirection or state update here
+    } catch (error: any) {
+      // Handle error response
+      const errorMessage =
+        error.response?.data?.message || 'Something went wrong. Please try again.';
+      console.error('Login error:', errorMessage);
+
+      // You can show this message to the user, for example:
+      alert(errorMessage);
+    }
   }
 
   return (
@@ -105,8 +105,8 @@ export default function Login() {
 
             {/* button */}
             <div className="w-full">
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full"
                 disabled={isSubmitting}
               >
