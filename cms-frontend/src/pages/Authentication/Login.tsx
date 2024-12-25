@@ -38,16 +38,24 @@ export default function Login() {
     if (token !== null) {
       navigate('/dashboard');
     }
-  }, [])
+  }, [navigate])
 
   const onSubmit = async (data: LoginFormData) => {
     try {
       // API call
       const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/auth/authenticate`,
-        data
+        data,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          withCredentials: false
+        }
       );
-      if (response.status === 200) {
+
+      if (response.data?.token) {
         console.log('Login successful:', response.data);
         localStorage.setItem('token', response.data.token);
         navigate("/dashboard");

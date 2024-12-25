@@ -26,7 +26,9 @@ import {
 import { DropdownMenu, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu"
 import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 // Menu items.
 const items = [
     {
@@ -62,8 +64,38 @@ const items = [
 ]
 
 export function AppSidebar() {
-
     const navigate = useNavigate();
+    const [firstname, setFirstname] = useState("");
+
+    // fetch firstname from the backend
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            const token = localStorage.getItem("token")
+            if (!token) {
+                navigate('/auth')
+                return
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/auth/user-details`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+
+                if (!response.ok) {
+                    throw new Error()
+                }
+
+                const data = await response.json()
+                setFirstname(data.firstname)
+            } catch {
+                localStorage.removeItem('token')
+                navigate('/auth')
+            }
+        }
+
+        fetchUserDetails()
+    }, [navigate]);
+
     function handleLogout() {
         localStorage.removeItem('token');
         navigate('/auth');
@@ -99,7 +131,7 @@ export function AppSidebar() {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <SidebarMenuButton>
-                                    <User2 /> Username
+                                    <User2 /> {firstname}
                                     <ChevronUp className="ml-auto" />
                                 </SidebarMenuButton>
                             </DropdownMenuTrigger>
