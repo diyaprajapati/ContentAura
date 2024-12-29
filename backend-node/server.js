@@ -1,19 +1,33 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const schemaRoutes = require('./routes/schemaRoutes');
-const dataRoutes = require('./routes/dataRoutes');
-require('dotenv').config();
+const Ajv = require('ajv');
+const ajv = new Ajv();
 
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
+
+app.post('/validate', (req, res) => {
+    const body = req.body;
+    console.log(body);
+
+    const valid = validateSchema(body.schema, body.data);
+    if(!valid) {
+        return res.status(500).json({ message: "Validation failed: " + ajv.errorsText(validateAdditionalItems.errors) });
+    }
+    else {
+        return res.status(200).json({ message: "Validation successful" });
+    }
+});
 
 app.get('/', (req, res) => {
-    res.send('Server is running');
-  });  
+    res.send("Server is running");
+});
 
-// Routes
-app.use('/schemas', schemaRoutes);
-app.use('/data', dataRoutes);
+app.listen(3001, () => {
+    console.log("Server is running on port 3001");
+});
 
-const PORT = process.env.PORT || 4001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+function validateSchema(schema, data) {
+    const validate = ajv.compile(schema);
+    const valid = validate(data);
+    return valid;
+}
