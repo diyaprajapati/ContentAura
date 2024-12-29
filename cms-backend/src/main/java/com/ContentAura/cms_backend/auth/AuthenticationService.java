@@ -2,7 +2,6 @@ package com.ContentAura.cms_backend.auth;
 
 import com.ContentAura.cms_backend.config.JwtService;
 import com.ContentAura.cms_backend.user.Role;
-import com.ContentAura.cms_backend.user.Role.*;
 import com.ContentAura.cms_backend.user.User;
 import com.ContentAura.cms_backend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,9 +44,7 @@ public class AuthenticationService {
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
-                        request.getPassword()
-                )
-        );
+                        request.getPassword()));
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
         String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
