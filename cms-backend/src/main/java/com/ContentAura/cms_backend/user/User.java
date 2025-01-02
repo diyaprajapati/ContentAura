@@ -1,5 +1,6 @@
 package com.ContentAura.cms_backend.user;
 
+import com.ContentAura.cms_backend.project.Project;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,6 +29,9 @@ public class User implements UserDetails {
     private String lastname;
     private String email;
     private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Project> projects = new ArrayList<>();
 
     @Enumerated(EnumType.ORDINAL)
     private Role role;
