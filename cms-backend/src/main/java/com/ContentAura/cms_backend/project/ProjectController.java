@@ -22,6 +22,6 @@ public class ProjectController {
 
     @GetMapping
     public ResponseEntity<?> getUserProjects(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(projectService.getUserProjects(Long.valueOf(user.getId())));
+        return ResponseEntity.ok(projectService.getUserProjects(Integer.valueOf(user.getId())));
     }
 }

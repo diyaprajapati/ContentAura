@@ -92,14 +92,21 @@ export default function Signup() {
     e.preventDefault()
     if (validateForm()) {
       setIsSubmitting(true);
+      const formDataNew = {
+        firstname: formData.firstname,
+        lastname: formData.lastname,
+        email: formData.email,
+        password: formData.password
+      }
+      // console.log('Form data:', formDataNew);
 
       try {
         const response = await axios.post(
           `${import.meta.env.VITE_API_BASE_URL}/auth/register`,
-          formData
+          formDataNew
         );
         if (response.status === 200) {
-          console.log('Signup successful:', response.data);
+          console.log('Signup successful');
           localStorage.setItem('token', response.data.token);
           navigate('/dashboard');
         }

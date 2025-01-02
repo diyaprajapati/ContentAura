@@ -27,7 +27,7 @@ public class ProjectService {
         return mapToResponse(savedProject);
     }
 
-    public List<ProjectResponse> getUserProjects(Long userId) {
+    public List<ProjectResponse> getUserProjects(Integer userId) {
         return projectRepository.findByUserId(userId).stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());

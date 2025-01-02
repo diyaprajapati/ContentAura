@@ -11,7 +11,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:5173", "https://content-aura.vercel.app/"})
+//@CrossOrigin(origins = {"http://localhost:5173", "https://content-aura.vercel.app/"})
 public class AuthenticationController {
     private final AuthenticationService service;
 

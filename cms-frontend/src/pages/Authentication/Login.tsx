@@ -56,7 +56,7 @@ export default function Login() {
       );
 
       if (response.data?.token) {
-        console.log('Login successful:', response.data);
+        console.log('Login successful');
         localStorage.setItem('token', response.data.token);
         navigate("/dashboard");
       }
