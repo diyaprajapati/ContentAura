@@ -38,7 +38,7 @@ const items = [
     },
     {
         title: "Projects",
-        url: "#",
+        url: "/project",
         icon: Folder,
     },
     {

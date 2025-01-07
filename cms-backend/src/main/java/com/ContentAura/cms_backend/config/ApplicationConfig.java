@@ -15,11 +15,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+//class for security
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
+
+    //    to interact with user database
     private final UserRepository userRepository;
 
+    //retrieve user details using email
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository
@@ -27,6 +31,7 @@ public class ApplicationConfig {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
+    //authenticate user based on database
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -35,11 +40,13 @@ public class ApplicationConfig {
         return authProvider;
     }
 
+    //interface for auth management
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
+    //encode hash password
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
