@@ -4,7 +4,7 @@ import { getAllProjects } from "@/lib/api/project";
 import { ProjectData } from "@/lib/types/project";
 import { ToastAction } from "@radix-ui/react-toast";
 import { useEffect, useState } from "react";
-import { DialogBox } from "./DialogBox";
+import { AddProjectDialogBox } from "./AddProjectDialogBox";
 
 export default function Project() {
 
@@ -42,7 +42,7 @@ export default function Project() {
                 {/* Button */}
                 <div className="mr-5">
                     {/* Dialog box */}
-                    <DialogBox />
+                    <AddProjectDialogBox onProjectAdded={fetchProject} />
                 </div>
             </div>
 

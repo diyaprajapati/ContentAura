@@ -1,3 +1,5 @@
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './index.css'
 import HomePage from './pages/Home/HomePage'
@@ -10,6 +12,8 @@ function App() {
   return (
     <>
       {/* routers */}
+      <Toaster />
+      <Sonner />
       <BrowserRouter>
         <Routes>
           <Route path='/dashboard' element={<Layout />}>
