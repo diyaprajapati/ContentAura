@@ -1,7 +1,9 @@
 import ButtonAdd from "@/components/ui/ButtonAdd";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/hooks/use-toast";
 import { getAllProjects } from "@/lib/api/project";
 import { ProjectData } from "@/lib/types/project";
+import { ToastAction } from "@radix-ui/react-toast";
 import { useEffect, useState } from "react";
 
 export default function Project() {
@@ -16,7 +18,12 @@ export default function Project() {
             setProjects(res.data);
         }
         else {
-            // insert toast ....................................................
+            toast({
+                title: `Error accurse ${res}`,
+                action: (
+                    <ToastAction altText="Goto schedule to undo">Undo</ToastAction>
+                ),
+            })
             console.log("Error", res);
         }
     }
@@ -26,14 +33,14 @@ export default function Project() {
     }, [])
 
     return (
-        <div className="flex flex-col gap-10 mx-10 my-4">
-            <div className="flex justify-between w-full items-center">
+        <div className="flex flex-col gap-10 mx-8 my-4">
+            <div className="flex justify-between w-full items-center ml-5">
                 {/* Title */}
                 <div className="">
                     <Label className="font-bold text-5xl">Your Projects</Label>
                 </div>
                 {/* Button */}
-                <div className="">
+                <div className="mr-5">
                     <ButtonAdd label="Add Project" />
                 </div>
             </div>
