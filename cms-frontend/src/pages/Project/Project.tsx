@@ -1,10 +1,10 @@
-import ButtonAdd from "@/components/ui/ButtonAdd";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { getAllProjects } from "@/lib/api/project";
 import { ProjectData } from "@/lib/types/project";
 import { ToastAction } from "@radix-ui/react-toast";
 import { useEffect, useState } from "react";
+import { DialogBox } from "./DialogBox";
 
 export default function Project() {
 
@@ -41,7 +41,8 @@ export default function Project() {
                 </div>
                 {/* Button */}
                 <div className="mr-5">
-                    <ButtonAdd label="Add Project" />
+                    {/* Dialog box */}
+                    <DialogBox />
                 </div>
             </div>
 
