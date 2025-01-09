@@ -27,6 +27,14 @@ public class ProjectService {
         return mapToResponse(savedProject);
     }
 
+    public boolean deleteProject(Long projectId) {
+        if (projectRepository.existsById(projectId)) {
+            projectRepository.deleteById(projectId);
+            return true;
+        }
+        return false;
+    }
+
     public List<ProjectResponse> getUserProjects(Integer userId) {
         return projectRepository.findByUserId(userId).stream()
                 .map(this::mapToResponse)

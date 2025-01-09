@@ -8,6 +8,7 @@ import { AddProjectDialogBox } from "./AddProjectDialogBox";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import DropDownMenu from "./DropDownMenu";
 
+
 export default function Project() {
 
     const [projects, setProjects] = useState<ProjectData[]>([]);
@@ -30,6 +31,11 @@ export default function Project() {
             console.log("Error", res);
         }
     }
+
+    // handle delete project
+    const handleDelete = (projectId: number) => {
+        setProjects((prevProjects) => prevProjects.filter((project) => project.id !== projectId));
+    };
 
     useEffect(() => {
         fetchProject();
@@ -100,7 +106,10 @@ export default function Project() {
                                 </div>
 
                                 {/* Drop down */}
-                                <DropDownMenu />
+                                <DropDownMenu
+                                    projectId={proj.id}
+                                    onDelete={handleDelete}
+                                />
                             </div>
                             <hr />
                         </div>
