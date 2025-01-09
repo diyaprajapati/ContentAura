@@ -52,7 +52,7 @@ export default function Project() {
                 {projects.length > 0 && projects.map(proj => (
                     <div className="m-5 px-5 py-2 flex flex-col gap-7" key={proj.id}>
                         <div className="flex flex-col gap-2">
-                            <Label className="font-bold text-xl text-violet-400 hover:text-violet-500 hover:underline transition-all">{proj.title}</Label>
+                            <Label className="font-bold text-xl text-violet-400 hover:text-violet-500 hover:underline transition-all cursor-pointer">{proj.title}</Label>
                             <p className="text-base font-medium text-gray-400"> {proj.description}</p>
                             <div className="text-xs font-normal text-slate-400 ">{new Date(proj.createdAt).toLocaleDateString()}</div>
                         </div>
