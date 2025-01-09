@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 export default function Project() {
 
     const [projects, setProjects] = useState<ProjectData[]>([]);
+    const [filter, setFilter] = useState<string>("date");
 
     // apicall
     const fetchProject = async () => {
@@ -31,7 +32,17 @@ export default function Project() {
 
     useEffect(() => {
         fetchProject();
-    }, [])
+    }, []);
+
+    // Filter and sort projects based on the selected filter
+    const sortedProjects = [...projects].sort((a, b) => {
+        if (filter === "name") {
+            return a.title.localeCompare(b.title);
+        } else {
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        }
+    });
+
 
     return (
         <div className="flex flex-col gap-8 mx-8 my-4">
@@ -46,15 +57,15 @@ export default function Project() {
                     <AddProjectDialogBox onProjectAdded={fetchProject} />
                 </div>
             </div>
+            {/* filter */}
             <div className="flex justify-end">
-                <Select>
+                <Select onValueChange={(value) => setFilter(value)} defaultValue="date">
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Filter" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
                             <SelectLabel>Sort By</SelectLabel>
-                            <SelectItem value="lastUpdated">Last Updated</SelectItem>
                             <SelectItem value="name">Name</SelectItem>
                             <SelectItem value="date">Date</SelectItem>
                         </SelectGroup>
@@ -65,16 +76,29 @@ export default function Project() {
             {/* project layout */}
             <div>
                 <hr className="ml-10 mr-10" />
-                {projects.length > 0 && projects.map(proj => (
-                    <div className="m-5 px-5 py-2 flex flex-col gap-7" key={proj.id}>
-                        <div className="flex flex-col gap-2">
-                            <Label className="font-bold text-xl text-violet-400 hover:text-violet-500 hover:underline transition-all cursor-pointer">{proj.title}</Label>
-                            <p className="text-base font-medium text-gray-400"> {proj.description}</p>
-                            <div className="text-xs font-normal text-slate-400 ">{new Date(proj.createdAt).toLocaleDateString()}</div>
+                {sortedProjects.length > 0 ? (
+                    sortedProjects.map((proj) => (
+                        <div
+                            className="m-5 px-5 py-2 flex flex-col gap-7"
+                            key={proj.id}
+                        >
+                            <div className="flex flex-col gap-2">
+                                <Label className="font-bold text-xl text-violet-400 hover:text-violet-500 hover:underline transition-all cursor-pointer">
+                                    {proj.title}
+                                </Label>
+                                <p className="text-base font-medium text-gray-400">
+                                    {proj.description}
+                                </p>
+                                <div className="text-xs font-normal text-slate-400">
+                                    {new Date(proj.createdAt).toLocaleDateString()}
+                                </div>
+                            </div>
+                            <hr />
                         </div>
-                        <hr />
-                    </div>
-                ))}
+                    ))
+                ) : (
+                    <p className="text-center text-gray-500">No projects found</p>
+                )}
             </div>
         </div>
     )
