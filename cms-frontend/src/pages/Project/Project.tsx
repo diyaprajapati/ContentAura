@@ -5,6 +5,7 @@ import { ProjectData } from "@/lib/types/project";
 import { ToastAction } from "@radix-ui/react-toast";
 import { useEffect, useState } from "react";
 import { AddProjectDialogBox } from "./AddProjectDialogBox";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function Project() {
 
@@ -33,7 +34,7 @@ export default function Project() {
     }, [])
 
     return (
-        <div className="flex flex-col gap-10 mx-8 my-4">
+        <div className="flex flex-col gap-8 mx-8 my-4">
             <div className="flex justify-between w-full items-center ml-5">
                 {/* Title */}
                 <div className="">
@@ -44,6 +45,21 @@ export default function Project() {
                     {/* Dialog box */}
                     <AddProjectDialogBox onProjectAdded={fetchProject} />
                 </div>
+            </div>
+            <div className="flex justify-end">
+                <Select>
+                    <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Filter" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectLabel>Sort By</SelectLabel>
+                            <SelectItem value="lastUpdated">Last Updated</SelectItem>
+                            <SelectItem value="name">Name</SelectItem>
+                            <SelectItem value="date">Date</SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
             </div>
 
             {/* project layout */}
