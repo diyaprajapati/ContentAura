@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/sidebar"
 import { DropdownMenu, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import { useEffect, useState } from "react";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
@@ -65,6 +65,7 @@ const items = [
 
 export function AppSidebar() {
     const navigate = useNavigate();
+    const location = useLocation();
     const [firstname, setFirstname] = useState("");
 
     // fetch firstname from the backend
@@ -110,16 +111,22 @@ export function AppSidebar() {
                     <SidebarGroupContent>
                         {/* sidebar items */}
                         <SidebarMenu>
-                            {items.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild>
-                                        <a href={item.url}>
-                                            <item.icon />
-                                            <span>{item.title}</span>
-                                        </a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
+                            {items.map((item) => {
+                                const isActive = location.pathname === item.url;
+                                return (
+                                    <SidebarMenuItem key={item.title}>
+                                        <SidebarMenuButton asChild>
+                                            <a
+                                                href={item.url}
+                                                className={isActive ? "bg-white/20 font-semibold" : ""}
+                                            >
+                                                <item.icon />
+                                                <span>{item.title}</span>
+                                            </a>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                );
+                            })}
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
