@@ -22,7 +22,6 @@ type EditDialogProps = {
 };
 
 export const EditDialog: React.FC<EditDialogProps> = ({ children, projectId, currentTitle, currentDescription, onUpdate }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState(currentTitle);
   const [description, setDescription] = useState(currentDescription);
   const [loading, setLoading] = useState(false);
@@ -40,7 +39,6 @@ export const EditDialog: React.FC<EditDialogProps> = ({ children, projectId, cur
         title: "Project updated successfully!",
       });
       onUpdate(projectId, response.data); // Update the parent state
-      setIsOpen(false);
       window.location.reload();
     } catch (error) {
       console.error("Error updating project:", error);
@@ -96,7 +94,7 @@ export const EditDialog: React.FC<EditDialogProps> = ({ children, projectId, cur
             >
               {loading ? "Saving..." : "Save"}
             </Button>
-            <Button type="button" variant="ghost" className="border-2" onClick={() => setIsOpen(false)}>
+            <Button type="button" variant="ghost" className="border-2">
               Cancel
             </Button>
           </DialogFooter>
