@@ -16,7 +16,7 @@ interface AlertBoxProps {
     onConfirm: () => void;
 }
 
-export function AlertBox({ children, onConfirm }: AlertBoxProps) {
+export function DeleteAlertBox({ children, onConfirm }: AlertBoxProps) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>

@@ -108,7 +108,16 @@ export default function Project() {
                                 {/* Drop down */}
                                 <DropDownMenu
                                     projectId={proj.id}
+                                    currentTitle={proj.title} // Pass the title
+                                    currentDescription={proj.description} // Pass the description
                                     onDelete={handleDelete}
+                                    onUpdate={(projectId, updatedData) => {
+                                        setProjects((prevProjects) =>
+                                            prevProjects.map((project) =>
+                                                project.id === projectId ? { ...project, ...updatedData } : project
+                                            )
+                                        );
+                                    }}
                                 />
                             </div>
                             <hr />

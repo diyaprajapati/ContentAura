@@ -1,16 +1,20 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import { EllipsisVertical, Pencil, Trash2 } from "lucide-react";
-import { AlertBox } from "./AlertBox";
+import { DeleteAlertBox } from "./DeleteAlertBox";
 import axios from "axios";
 import { toast } from "@/hooks/use-toast";
+import { EditDialog } from "./EditDialog";
 
 type DropDownMenuProps = {
     projectId: number;
+    currentTitle: string;
+    currentDescription: string;
     onDelete: (projectId: number) => void;
+    onUpdate: (projectId: number, updatedData: { title: string; description: string }) => void;
 };
 
-export default function DropDownMenu({ projectId, onDelete }: DropDownMenuProps) {
+export default function DropDownMenu({ projectId, onDelete, currentDescription, currentTitle, onUpdate }: DropDownMenuProps) {
 
     const deleteProject = async () => {
         try {
@@ -42,12 +46,21 @@ export default function DropDownMenu({ projectId, onDelete }: DropDownMenuProps)
             <DropdownMenuContent className="w-40">
                 <DropdownMenuGroup>
                     {/* Edit button */}
-                    <DropdownMenuItem className="cursor-pointer">
-                        <Pencil />
-                        <span>Edit</span>
-                    </DropdownMenuItem>
+                    <EditDialog
+                        projectId={projectId}
+                        currentTitle={currentTitle}
+                        currentDescription={currentDescription}
+                        onUpdate={onUpdate}
+                    >
+                        <DropdownMenuItem className="cursor-pointer" onSelect={(e) => e.preventDefault()}>
+                            <Pencil />
+                            <span>Edit</span>
+                        </DropdownMenuItem>
+                    </EditDialog>
+
+
                     {/* Delete button with alert box */}
-                    <AlertBox
+                    <DeleteAlertBox
                         onConfirm={deleteProject}>
                         <DropdownMenuItem
                             className="text-red-400 hover:!text-red-500 transition-all cursor-pointer"
@@ -55,7 +68,7 @@ export default function DropDownMenu({ projectId, onDelete }: DropDownMenuProps)
                             <Trash2 />
                             <span>Delete</span>
                         </DropdownMenuItem>
-                    </AlertBox>
+                    </DeleteAlertBox>
                 </DropdownMenuGroup>
             </DropdownMenuContent>
         </DropdownMenu>
