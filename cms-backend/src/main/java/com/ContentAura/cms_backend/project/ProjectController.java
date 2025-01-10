@@ -44,7 +44,7 @@ public class ProjectController {
 
     @PutMapping("/{projectId}")
     public ResponseEntity<Project> updateProject(
-            @PathVariable Long projectId, 
+            @PathVariable Long projectId,
             @RequestBody Project updatedProject,
             @RequestHeader("Authorization") String token
     ) {
