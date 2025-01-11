@@ -1,5 +1,6 @@
 package com.ContentAura.cms_backend.project;
 
+import com.ContentAura.cms_backend.schema.Schema;
 import com.ContentAura.cms_backend.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -29,7 +31,8 @@ public class Project {
     @JoinColumn(name = "user_id")
     private User user;
 
-
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Schema> schemas;
 
     public void setId(Long id) {
         this.id = id;

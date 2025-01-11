@@ -10,5 +10,13 @@ public class SchemaResponse {
     private Long id;
     private String name;
     private JsonNode content;
-    private Long projectId;
+    private ProjectResponse project;
+
+    @Data
+    @Builder
+    public static class ProjectResponse {
+        private Long id;
+        private String title;
+        private String description;
+    }
 }

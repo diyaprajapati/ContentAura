@@ -1,5 +1,7 @@
 package com.ContentAura.cms_backend.schema;
 
+import com.ContentAura.cms_backend.project.Project;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
@@ -29,6 +31,8 @@ public class Schema {
     @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode content;
 
-    @Column(nullable = false)
-    private Long projectId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id", nullable = false)
+    @JsonIgnore
+    private Project project;
 }

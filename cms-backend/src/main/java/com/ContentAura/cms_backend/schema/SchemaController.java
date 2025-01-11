@@ -1,5 +1,6 @@
 package com.ContentAura.cms_backend.schema;
 
+import com.ContentAura.cms_backend.project.Project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +43,15 @@ public class SchemaController {
                 .id(schema.getId())
                 .name(schema.getName())
                 .content(schema.getContent())
-                .projectId(schema.getProjectId())
+                .project(toProjectResponse(schema.getProject()))
+                .build();
+    }
+
+    private SchemaResponse.ProjectResponse toProjectResponse(Project project) {
+        return SchemaResponse.ProjectResponse.builder()
+                .id(project.getId())
+                .title(project.getTitle())
+                .description(project.getDescription())
                 .build();
     }
 }

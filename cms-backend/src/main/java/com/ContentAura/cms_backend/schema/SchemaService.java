@@ -1,9 +1,10 @@
 package com.ContentAura.cms_backend.schema;
 
+import com.ContentAura.cms_backend.project.Project;
+import com.ContentAura.cms_backend.project.ProjectRepository;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,18 +15,20 @@ import java.util.List;
 public class SchemaService {
 
     private final SchemaRepository schemaRepository;
-    private final ObjectMapper objectMapper;
+    private final ProjectRepository projectRepository;
     private final RestTemplate restTemplate;
 
-    @Value("${node.schema.validation.url}")
-    private String nodeValidationUrl;
+//    @Value("${node.schema.validation.url}")
+//    private String nodeValidationUrl;
 
     public Schema createSchema(String name, JsonNode content, Long projectId) {
         validateSchemaWithNode(content);
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new RuntimeException("Project not found with ID: " + projectId));
         Schema schema = Schema.builder()
                 .name(name)
                 .content(content)
-                .projectId(projectId)
+                .project(project)
                 .build();
         return schemaRepository.save(schema);
     }
@@ -52,7 +55,7 @@ public class SchemaService {
 
     private void validateSchemaWithNode(JsonNode content) {
         try {
-            String response = restTemplate.postForObject(nodeValidationUrl, content, String.class);
+            String response = restTemplate.postForObject("http://localhost:3001/validate", content, String.class);
             System.out.println("Validation successful: " + response);
         }
         catch (Exception e) {
