@@ -7,5 +7,5 @@ import lombok.Data;
 public class SchemaRequest {
     private String name;
     private JsonNode content;
-    private Long projectId;
+//    private Long projectId;
 }

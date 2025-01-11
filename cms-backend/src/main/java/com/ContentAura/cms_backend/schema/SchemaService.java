@@ -4,7 +4,6 @@ import com.ContentAura.cms_backend.project.Project;
 import com.ContentAura.cms_backend.project.ProjectRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,7 +21,7 @@ public class SchemaService {
 //    private String nodeValidationUrl;
 
     public Schema createSchema(String name, JsonNode content, Long projectId) {
-        validateSchemaWithNode(content);
+//        validateSchemaWithNode(content);
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new RuntimeException("Project not found with ID: " + projectId));
         Schema schema = Schema.builder()

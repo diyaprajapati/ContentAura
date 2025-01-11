@@ -43,15 +43,15 @@ public class SchemaController {
                 .id(schema.getId())
                 .name(schema.getName())
                 .content(schema.getContent())
-                .project(toProjectResponse(schema.getProject()))
+//                .project(toProjectResponse(schema.getProject()))
                 .build();
     }
 
-    private SchemaResponse.ProjectResponse toProjectResponse(Project project) {
-        return SchemaResponse.ProjectResponse.builder()
-                .id(project.getId())
-                .title(project.getTitle())
-                .description(project.getDescription())
-                .build();
-    }
+//    private SchemaResponse.ProjectResponse toProjectResponse(Project project) {
+//        return SchemaResponse.ProjectResponse.builder()
+//                .id(project.getId())
+//                .title(project.getTitle())
+//                .description(project.getDescription())
+//                .build();
+//    }
 }
