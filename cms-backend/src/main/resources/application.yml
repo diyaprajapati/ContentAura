@@ -14,3 +14,8 @@ spring:
         format_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+    node:
+      schema:
+        validation:
+          url=http://localhost:3001/validate:
