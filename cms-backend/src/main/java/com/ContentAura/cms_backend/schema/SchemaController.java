@@ -1,6 +1,5 @@
 package com.ContentAura.cms_backend.schema;
 
-import com.ContentAura.cms_backend.project.Project;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
