@@ -37,7 +37,7 @@ public class SchemaService {
     }
 
     public Schema updateSchema(Long id, String name, JsonNode content) {
-        validateSchemaWithNode(content);
+//        validateSchemaWithNode(content);
         return schemaRepository.findById(id).map(schema -> {
             schema.setName(name);
             schema.setContent(content);
