@@ -48,7 +48,7 @@ const items = [
     },
     {
         title: "Schemas",
-        url: "#",
+        url: "/schema",
         icon: Database,
     },
     {

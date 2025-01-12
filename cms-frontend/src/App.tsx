@@ -7,6 +7,7 @@ import Authentication from './pages/Authentication/Authentication'
 import Dashboard from './pages/Dashboard/Dashboard'
 import Layout from './Layout'
 import Project from './pages/Project/Project'
+import Schema from "./pages/Schema/Schema";
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
           </Route>
           <Route path='/project' element={<Layout />}>
             <Route index element={<Project />} />
+          </Route>
+          <Route path='/schema' element={<Layout />}>
+            <Route index element={<Schema />} />
           </Route>
           <Route path='/auth' element={<Authentication />} />
           <Route path="/" element={<HomePage />} />
