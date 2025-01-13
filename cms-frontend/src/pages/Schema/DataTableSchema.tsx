@@ -31,28 +31,21 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-
-const data: Payment[] = [
-    {
-        id: "m5gr84i9",
-        fields: 4,
-        name: "blog",
-        lastUpdated: "8 hours ago"
-    },
-    {
-        id: "3u1reuv4",
-        fields: 2,
-        name: "portfolio",
-        lastUpdated: "10 hours ago"
-    }
-]
+import { useNavigate } from "react-router-dom"
+import data from '../Field/data.json';
 
 export type Payment = {
-    id: string
-    fields: number
-    name: string
-    lastUpdated: string
+    id: string;
+    fields: number;
+    name: string;
+    lastUpdated: string;
+    fieldDetails: {
+        fieldName: string;
+        type: string;
+        required: boolean;
+    }[];
 }
+
 
 export const columns: ColumnDef<Payment>[] = [
     {
@@ -69,7 +62,18 @@ export const columns: ColumnDef<Payment>[] = [
                 </Button>
             </div>
         ),
-        cell: ({ row }) => <div className="text-left pl-4">{row.getValue("name")}</div>,
+        cell: ({ row }) => {
+            const navigate = useNavigate();
+            const handleNameClick = () => {
+                navigate(`/fields/${row.getValue("id")}`);
+            };
+
+            return (
+                <div className="text-left pl-4 cursor-pointer hover:underline hover:text-blue-400" onClick={handleNameClick}>
+                    {row.getValue("name")}
+                </div>
+            );
+        },
     },
     {
         id: "spacer",

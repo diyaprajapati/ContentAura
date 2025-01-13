@@ -1,0 +1,43 @@
+[
+    {
+        "id": "m5gr84i9",
+        "fields": 4,
+        "name": "blog",
+        "lastUpdated": "8 hours ago",
+        "fieldDetails": [
+            {
+                "fieldName": "Title",
+                "type": "string",
+                "required": true
+            },
+            {
+                "fieldName": "Content",
+                "type": "text",
+                "required": true
+            },
+            {
+                "fieldName": "Author",
+                "type": "string",
+                "required": false
+            }
+        ]
+    },
+    {
+        "id": "3u1reuv4",
+        "fields": 2,
+        "name": "portfolio",
+        "lastUpdated": "5 hours ago",
+        "fieldDetails": [
+            {
+                "fieldName": "Project Name",
+                "type": "string",
+                "required": true
+            },
+            {
+                "fieldName": "Technologies",
+                "type": "array",
+                "required": true
+            }
+        ]
+    }
+]
