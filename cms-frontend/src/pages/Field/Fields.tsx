@@ -2,6 +2,7 @@
 // import data from './data.json'
 import ButtonAdd from '@/components/ui/ButtonAdd';
 import { Label } from '@/components/ui/label';
+import { FieldTable } from './FieldTable';
 
 export default function Fields() {
     // const { id } = useParams();
@@ -18,13 +19,17 @@ export default function Fields() {
             <div className="flex justify-between w-full items-center ml-5">
                 {/* Title */}
                 <div className="">
-                    <Label className="font-bold md:text-5xl text-4xl">Schemas</Label>
+                    <Label className="font-bold md:text-5xl text-4xl">Fields</Label>
                 </div>
                 {/* Button */}
                 <div>
                     {/* dialog box to add schema */}
                     <ButtonAdd label='Add Field'></ButtonAdd>
                 </div>
+            </div>
+            {/* table */}
+            <div>
+                <FieldTable />
             </div>
         </div>
     );

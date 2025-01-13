@@ -65,7 +65,7 @@ export const columns: ColumnDef<Payment>[] = [
         cell: ({ row }) => {
             const navigate = useNavigate();
             const handleNameClick = () => {
-                navigate(`/fields/${row.getValue("id")}`);
+                navigate(`/schema/${row.getValue("id")}`);
             };
 
             return (

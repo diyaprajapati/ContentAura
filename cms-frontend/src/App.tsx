@@ -27,7 +27,7 @@ function App() {
           <Route path='/schema' element={<Layout />}>
             <Route index element={<Schema />} />
           </Route>
-          <Route path='/fields/:id' element={<Layout />}>
+          <Route path='/schema/:id' element={<Layout />}>
             <Route index element={<Fields />} />
           </Route>
           <Route path='/auth' element={<Authentication />} />
