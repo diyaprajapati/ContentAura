@@ -1,8 +1,6 @@
-// import React from 'react'
-
 import { Label } from "@/components/ui/label";
 import { DataTableSchema } from "./DataTableSchema";
-import ButtonAdd from "@/components/ui/ButtonAdd";
+import { AddSchemaDialogbox } from "./AddSchemaDialogbox";
 
 export default function Schema() {
     return (
@@ -14,9 +12,12 @@ export default function Schema() {
                 </div>
                 {/* Button */}
                 <div>
-                    <ButtonAdd label="Add Schema" > </ButtonAdd>
+                    {/* dialog box to add schema */}
+                    <AddSchemaDialogbox />
                 </div>
             </div>
+
+            {/* data */}
             <DataTableSchema />
         </div>
     )
