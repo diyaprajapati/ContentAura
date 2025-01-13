@@ -1,6 +1,7 @@
 package com.ContentAura.cms_backend.project;
 
 import com.ContentAura.cms_backend.user.User;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,11 +28,13 @@ public class ProjectService {
         return mapToResponse(savedProject);
     }
 
+    @Transactional
     public boolean deleteProject(Long projectId) {
         if (projectRepository.existsById(projectId)) {
             projectRepository.deleteById(projectId);
             return true;
         }
+        System.out.println("Project ID not found: " + projectId);
         return false;
     }
 

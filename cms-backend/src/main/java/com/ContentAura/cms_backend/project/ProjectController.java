@@ -34,7 +34,6 @@ public class ProjectController {
     @DeleteMapping("/{projectId}")
     public ResponseEntity<?> deleteProject(@PathVariable Long projectId) {
         boolean isDeleted = projectService.deleteProject(projectId);
-
         if (isDeleted) {
             return ResponseEntity.ok("Project deleted successfully");
         } else {

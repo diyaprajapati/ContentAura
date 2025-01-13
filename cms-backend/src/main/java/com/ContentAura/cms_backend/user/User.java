@@ -30,8 +30,8 @@ public class User implements UserDetails {
     private String email;
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Project> projects = new ArrayList<>();
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Project> projects;
 
     @Enumerated(EnumType.ORDINAL)
     private Role role;
