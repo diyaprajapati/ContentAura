@@ -1,7 +1,6 @@
 package com.ContentAura.cms_backend.schema;
 
 import com.ContentAura.cms_backend.project.Project;
-import com.ContentAura.cms_backend.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -40,8 +39,8 @@ public class Schema {
     @JsonIgnore
     private Project project;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id", nullable = false)
-//    @JsonIgnore
-//    private User user;
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "user_id", nullable = false)
+    // @JsonIgnore
+    // private User user;
 }
