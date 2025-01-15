@@ -1,8 +1,6 @@
-// import { useParams } from 'react-router-dom';
-// import data from './data.json'
-import ButtonAdd from '@/components/ui/ButtonAdd';
 import { Label } from '@/components/ui/label';
 import { FieldTable } from './FieldTable';
+import { AddFieldDialog } from './AddFieldDialog';
 
 export default function Fields() {
     // const { id } = useParams();
@@ -24,7 +22,7 @@ export default function Fields() {
                 {/* Button */}
                 <div>
                     {/* dialog box to add schema */}
-                    <ButtonAdd label='Add Field'></ButtonAdd>
+                    <AddFieldDialog />
                 </div>
             </div>
             {/* table */}

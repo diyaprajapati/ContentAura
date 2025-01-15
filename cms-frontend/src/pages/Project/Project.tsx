@@ -6,7 +6,7 @@ import { ToastAction } from "@radix-ui/react-toast";
 import { useEffect, useState } from "react";
 import { AddProjectDialogBox } from "./AddProjectDialogBox";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import DropDownMenu from "./DropDownMenu";
+import ProjectOptionsDropdown from "./ProjectOptionsDropdown";
 
 
 export default function Project() {
@@ -106,7 +106,7 @@ export default function Project() {
                                 </div>
 
                                 {/* Drop down */}
-                                <DropDownMenu
+                                <ProjectOptionsDropdown
                                     projectId={proj.id}
                                     currentTitle={proj.title} // Pass the title
                                     currentDescription={proj.description} // Pass the description

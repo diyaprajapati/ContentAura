@@ -49,7 +49,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { MoreHorizontal } from "lucide-react";
+import FieldsOptionsDropdown from './FieldsOptionsDropdown'
 
 const fields = [
     {
@@ -81,7 +81,7 @@ export function FieldTable() {
                         </TableCell>
                         <TableCell className="text-center px-4 py-2">{field.fieldType}</TableCell>
                         <TableCell className="text-center ">
-                            <MoreHorizontal className="text-gray-500  cursor-pointer hover:text-white transition-all" />
+                            <FieldsOptionsDropdown />
                         </TableCell>
                     </TableRow>
                 ))}
