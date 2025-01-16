@@ -8,7 +8,7 @@ import Dashboard from './pages/Dashboard/Dashboard'
 import Layout from './Layout'
 import Project from './pages/Project/Project'
 import Schema from "./pages/Schema/Schema";
-import Fields from "./pages/Field/Fields";
+// import Fields from "./pages/Field/Fields";
 
 function App() {
   return (
@@ -27,8 +27,8 @@ function App() {
           <Route path='/schema' element={<Layout />}>
             <Route index element={<Schema />} />
           </Route>
-          <Route path='/schema/:id' element={<Layout />}>
-            <Route index element={<Fields />} />
+          <Route path='/schema/:projectId' element={<Layout />}>
+            <Route index element={<Schema />} />
           </Route>
           <Route path='/auth' element={<Authentication />} />
           <Route path="/" element={<HomePage />} />

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { AddProjectDialogBox } from "./AddProjectDialogBox";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ProjectOptionsDropdown from "./ProjectOptionsDropdown";
+import { useNavigate } from "react-router-dom";
 
 
 export default function Project() {
@@ -50,6 +51,12 @@ export default function Project() {
         }
     });
 
+    // to navigate it to the schema
+    const navigate = useNavigate();
+
+    const handleNavigateToSchema = (projectId: number) => {
+        navigate(`/schema/${projectId}`);
+    }
 
     return (
         <div className="flex flex-col gap-8 mx-8 my-4">
@@ -92,7 +99,7 @@ export default function Project() {
                             <div className="flex flex-row justify-between mx-2 items-center">
                                 <div className="flex flex-col gap-2">
                                     {/* title */}
-                                    <Label className="font-bold text-xl text-violet-400 hover:text-violet-500 hover:underline transition-all cursor-pointer">
+                                    <Label className="font-bold text-xl text-violet-400 hover:text-violet-500 hover:underline transition-all cursor-pointer" onClick={() => handleNavigateToSchema(proj.id)}>
                                         {proj.title}
                                     </Label>
                                     {/* description */}
