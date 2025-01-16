@@ -11,7 +11,6 @@ export const getAllSchemasByProjectId = async (projectId: string): Promise<Axios
                 Authorization: `Bearer ${token}`
             }
         });
-        console.log(response);
         return response;
     } catch (error) {
         console.error('Error fetching schemas:', error);

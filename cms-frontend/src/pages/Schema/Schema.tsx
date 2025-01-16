@@ -1,5 +1,5 @@
 import { Label } from "@/components/ui/label";
-import { DataTableSchema } from "./DataTableSchema";
+import { DataTableSchema, SchemaColumn } from "./DataTableSchema";
 import { AddSchemaDialogbox } from "./AddSchemaDialogbox";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -9,7 +9,7 @@ import { toast } from "@/hooks/use-toast";
 
 export default function Schema() {
     const { projectId } = useParams();
-    const [schemas, setSchemas] = useState<SchemaData[]>([]);
+    const [schemas, setSchemas] = useState<SchemaColumn[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     console.log(schemas, isLoading);
@@ -21,7 +21,14 @@ export default function Schema() {
         try {
             const response = await getAllSchemasByProjectId(projectId);
             if (response && response.status === 200) {
-                setSchemas(response.data);
+                console.log(response.data);
+                setSchemas(response.data.map((schema) => ({
+                    id: schema.id.toString(),
+                    name: schema.name,
+                    fields: schema.content ? Object.keys(schema.content.properties).length : 0,
+                    lastUpdated: schema.createdAt ?? (new Date).toLocaleDateString(),
+                })));
+
             }
             else {
                 toast({
@@ -64,7 +71,7 @@ export default function Schema() {
             </div>
 
             {/* data */}
-            <DataTableSchema />
+            <DataTableSchema data={schemas} />
         </div>
     )
 }

@@ -32,22 +32,17 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { useNavigate } from "react-router-dom"
-import data from '../Field/data.json';
+//import data from '../Field/data.json';
 
-export type Payment = {
+export type SchemaColumn = {
     id: string;
     fields: number;
     name: string;
     lastUpdated: string;
-    fieldDetails: {
-        fieldName: string;
-        type: string;
-        required: boolean;
-    }[];
 }
 
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<SchemaColumn>[] = [
     {
         accessorKey: "name",
         header: ({ column }) => (
@@ -122,7 +117,7 @@ export const columns: ColumnDef<Payment>[] = [
     },
 ]
 
-export function DataTableSchema() {
+export function DataTableSchema({data}: {data: SchemaColumn[]}) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})

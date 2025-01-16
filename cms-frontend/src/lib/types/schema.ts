@@ -1,7 +1,11 @@
 export interface SchemaData {
     id: number;
     name: string;
-    content: object;
+    content: {
+      properties: object;
+      required: boolean;
+      type: string;
+    };
     projectId: number;
     createdAt: string;
 }
