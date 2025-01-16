@@ -19,8 +19,8 @@ export const getAllSchemasByProjectId = async (projectId: string): Promise<Axios
 };
 
 export const createSchema = async (projectId: string, data: { name: string, content: string }): Promise<AxiosResponse<SchemaData>> => {
-    const token = getAuthToken();
     try {
+        const token = getAuthToken();
         const response = await axios.post<SchemaData>(`${import.meta.env.VITE_API_BASE_URL}/schema/${projectId}`, data,
         {
             headers: {
@@ -47,12 +47,12 @@ export const updateSchema = async (id: number, data: { name: string, content: st
 export const deleteSchema = async (id: number): Promise<AxiosResponse<void>> => {
     const token = getAuthToken();
     try {
-        const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/schema/${id}`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/schema/${id}`, 
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
         return response;
     } catch (error) {
         console.error('Error deleting schema:', error);

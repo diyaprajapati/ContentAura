@@ -54,7 +54,9 @@ export default function Schema() {
             const response = await deleteSchema(Number(id));
             if (response.status === 200) {
                 toast({
-                    title: "Schema Deleted Successfully!"
+                    title: "Schema Deleted",
+                    description: "Schema Deleted Successfully!",
+                    variant: "destructive",
                 });
                 await fetchSchemas(); // Refresh the data after successful deletion
             }

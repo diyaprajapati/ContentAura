@@ -32,8 +32,6 @@ import {
 } from "@/components/ui/table"
 import { useNavigate } from "react-router-dom"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
-// import { deleteSchema } from "@/lib/api/schema"
-// import { toast } from "@/hooks/use-toast"
 
 export type SchemaColumn = {
     id: string;
@@ -46,22 +44,6 @@ type DataTableSchemaProps = {
     data: SchemaColumn[];
     onDelete: (id: string) => Promise<void>;
 };
-
-// const handleDelete = async (id: string, onDelete: () => void) => {
-//     try {
-//         const response = await deleteSchema(Number(id));
-//         if (response.status === 200) {
-//             toast({
-//                 title: "Schema Deleted Successfully!"
-//             });
-//             onDelete();
-//         }
-//     } catch (error) {
-//         toast({
-//             title: "Error deleting schema"
-//         })
-//     }
-// }
 
 export const createColumns = (onDelete: (id: string) => Promise<void>): ColumnDef<SchemaColumn>[] => [
     {
