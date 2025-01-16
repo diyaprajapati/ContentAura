@@ -3,7 +3,6 @@ import { DataTableSchema, SchemaColumn } from "./DataTableSchema";
 import { AddSchemaDialogbox } from "./AddSchemaDialogbox";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { SchemaData } from "@/lib/types/schema";
 import { getAllSchemasByProjectId } from "@/lib/api/schema";
 import { toast } from "@/hooks/use-toast";
 
