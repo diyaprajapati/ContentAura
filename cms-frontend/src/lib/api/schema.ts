@@ -45,8 +45,14 @@ export const updateSchema = async (id: number, data: { name: string, content: st
 };
 
 export const deleteSchema = async (id: number): Promise<AxiosResponse<void>> => {
+    const token = getAuthToken();
     try {
-        const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/schema/${id}`);
+        const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/schema/${id}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         return response;
     } catch (error) {
         console.error('Error deleting schema:', error);

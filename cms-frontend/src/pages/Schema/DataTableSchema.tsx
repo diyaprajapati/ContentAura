@@ -19,7 +19,6 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
@@ -32,7 +31,9 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { useNavigate } from "react-router-dom"
-// import data from '../Field/data.json';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+// import { deleteSchema } from "@/lib/api/schema"
+// import { toast } from "@/hooks/use-toast"
 
 export type SchemaColumn = {
     id: string;
@@ -43,9 +44,26 @@ export type SchemaColumn = {
 
 type DataTableSchemaProps = {
     data: SchemaColumn[];
+    onDelete: (id: string) => Promise<void>;
 };
 
-export const columns: ColumnDef<SchemaColumn>[] = [
+// const handleDelete = async (id: string, onDelete: () => void) => {
+//     try {
+//         const response = await deleteSchema(Number(id));
+//         if (response.status === 200) {
+//             toast({
+//                 title: "Schema Deleted Successfully!"
+//             });
+//             onDelete();
+//         }
+//     } catch (error) {
+//         toast({
+//             title: "Error deleting schema"
+//         })
+//     }
+// }
+
+export const createColumns = (onDelete: (id: string) => Promise<void>): ColumnDef<SchemaColumn>[] => [
     {
         accessorKey: "name",
         header: ({ column }) => (
@@ -98,9 +116,10 @@ export const columns: ColumnDef<SchemaColumn>[] = [
         id: "actions",
         enableHiding: false,
         header: () => <div></div>,
-        cell: () => {
+        cell: ({ row }) => {
             return (
                 <div className="flex justify-end">
+                    {/* dropdown for delete and edit */}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">
@@ -109,9 +128,26 @@ export const columns: ColumnDef<SchemaColumn>[] = [
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem>Edit Name</DropdownMenuItem>
-                            <DropdownMenuItem>Delete Schema</DropdownMenuItem>
+                            {/* to delete the schema */}
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>Delete schema</DropdownMenuItem>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            This action cannot be undone. This will permanently delete your
+                                            account and remove your data from our servers.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction className="bg-red-600 hover:bg-red-800" onClick={() => onDelete(row.original.id)}>Delete</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
@@ -120,11 +156,14 @@ export const columns: ColumnDef<SchemaColumn>[] = [
     },
 ]
 
-export function DataTableSchema({ data }: DataTableSchemaProps) {
+
+export function DataTableSchema({ data, onDelete }: DataTableSchemaProps) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
+
+    const columns = React.useMemo(() => createColumns(onDelete), [onDelete]);
 
     const table = useReactTable({
         data,

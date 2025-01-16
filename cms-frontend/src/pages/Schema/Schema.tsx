@@ -3,7 +3,7 @@ import { DataTableSchema, SchemaColumn } from "./DataTableSchema";
 import { AddSchemaDialogbox } from "./AddSchemaDialogbox";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getAllSchemasByProjectId } from "@/lib/api/schema";
+import { deleteSchema, getAllSchemasByProjectId } from "@/lib/api/schema";
 import { toast } from "@/hooks/use-toast";
 
 export default function Schema() {
@@ -20,14 +20,12 @@ export default function Schema() {
         try {
             const response = await getAllSchemasByProjectId(projectId);
             if (response && response.status === 200) {
-                console.log(response.data);
                 setSchemas(response.data.map((schema) => ({
                     id: schema.id.toString(),
                     name: schema.name,
                     fields: schema.content ? Object.keys(schema.content.properties).length : 0,
                     lastUpdated: schema.createdAt ?? (new Date).toLocaleDateString(),
                 })));
-
             }
             else {
                 toast({
@@ -51,8 +49,22 @@ export default function Schema() {
         fetchSchemas();
     }, [projectId]);
 
-
-
+    const handleDeleteSchema = async (id: string) => {
+        try {
+            const response = await deleteSchema(Number(id));
+            if (response.status === 200) {
+                toast({
+                    title: "Schema Deleted Successfully!"
+                });
+                await fetchSchemas(); // Refresh the data after successful deletion
+            }
+        } catch (error) {
+            toast({
+                title: "Error deleting schema",
+                variant: "destructive"
+            });
+        }
+    };
     function handleSchemaAdded() {
         fetchSchemas();
     }
@@ -72,7 +84,7 @@ export default function Schema() {
             </div>
 
             {/* data */}
-            <DataTableSchema data={schemas} />
+            <DataTableSchema data={schemas} onDelete={handleDeleteSchema} key={schemas.length} />
         </div>
     )
 }
