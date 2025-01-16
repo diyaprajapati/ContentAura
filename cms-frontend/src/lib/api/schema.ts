@@ -19,8 +19,14 @@ export const getAllSchemasByProjectId = async (projectId: string): Promise<Axios
 };
 
 export const createSchema = async (projectId: string, data: { name: string, content: string }): Promise<AxiosResponse<SchemaData>> => {
+    const token = getAuthToken();
     try {
-        const response = await axios.post<SchemaData>(`${import.meta.env.VITE_API_BASE_URL}/schema/${projectId}`, data);
+        const response = await axios.post<SchemaData>(`${import.meta.env.VITE_API_BASE_URL}/schema/${projectId}`, data,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
         return response;
     } catch (error) {
         console.error('Error creating schema:', error);

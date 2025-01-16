@@ -32,7 +32,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { useNavigate } from "react-router-dom"
-//import data from '../Field/data.json';
+// import data from '../Field/data.json';
 
 export type SchemaColumn = {
     id: string;
@@ -41,6 +41,9 @@ export type SchemaColumn = {
     lastUpdated: string;
 }
 
+type DataTableSchemaProps = {
+    data: SchemaColumn[];
+};
 
 export const columns: ColumnDef<SchemaColumn>[] = [
     {
@@ -60,7 +63,7 @@ export const columns: ColumnDef<SchemaColumn>[] = [
         cell: ({ row }) => {
             const navigate = useNavigate();
             const handleNameClick = () => {
-                navigate(`/schema/${row.getValue("id")}`);
+                navigate(`/fields/${row.getValue("id")}`);
             };
 
             return (
@@ -117,7 +120,7 @@ export const columns: ColumnDef<SchemaColumn>[] = [
     },
 ]
 
-export function DataTableSchema({data}: {data: SchemaColumn[]}) {
+export function DataTableSchema({ data }: DataTableSchemaProps) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})

@@ -51,9 +51,11 @@ export default function Schema() {
         fetchSchemas();
     }, [projectId]);
 
-    // const handleSchemaAdded = () => {
-    //     fetchSchemas();
-    // }
+
+
+    function handleSchemaAdded() {
+        fetchSchemas();
+    }
 
     return (
         <div className="flex flex-col gap-8 mx-8 my-4">
@@ -65,7 +67,7 @@ export default function Schema() {
                 {/* Button */}
                 <div>
                     {/* dialog box to add schema */}
-                    <AddSchemaDialogbox />
+                    <AddSchemaDialogbox projectId={projectId} onSchemaCreated={handleSchemaAdded} />
                 </div>
             </div>
 
