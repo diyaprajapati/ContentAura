@@ -5,7 +5,7 @@ import com.ContentAura.cms_backend.project.ProjectRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+// import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -15,20 +15,20 @@ public class SchemaService {
 
     private final SchemaRepository schemaRepository;
     private final ProjectRepository projectRepository;
-    private final RestTemplate restTemplate;
+    // private final RestTemplate restTemplate;
 
-//    @Value("${node.schema.validation.url}")
-//    private String nodeValidationUrl;
+    // @Value("${node.schema.validation.url}")
+    // private String nodeValidationUrl;
 
     public Schema createSchema(String name, JsonNode content, Long projectId) {
-//        validateSchemaWithNode(content);
+        // validateSchemaWithNode(content);
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new RuntimeException("Project not found with ID: " + projectId));
         Schema schema = Schema.builder()
                 .name(name)
                 .project(project)
                 .build();
-        if(content != null) {
+        if (content != null) {
             schema.setContent(content);
         }
         return schemaRepository.save(schema);
@@ -37,12 +37,13 @@ public class SchemaService {
     public List<Schema> getSchemasByProjectId(Long projectId) {
         return schemaRepository.findByProjectId(projectId);
     }
+
     public Schema getSchemaById(Long id) {
         return schemaRepository.findById(id).orElseThrow(() -> new RuntimeException("Schema not found with ID: " + id));
     }
 
     public Schema updateSchema(Long id, String name, JsonNode content) {
-//        validateSchemaWithNode(content);
+        // validateSchemaWithNode(content);
         return schemaRepository.findById(id).map(schema -> {
             schema.setName(name);
             schema.setContent(content);
@@ -51,19 +52,21 @@ public class SchemaService {
     }
 
     public void deleteSchema(Long id) {
-        if(!schemaRepository.existsById(id)) {
+        if (!schemaRepository.existsById(id)) {
             throw new SchemaNotFoundException("Schema not found with id " + id);
         }
         schemaRepository.deleteById(id);
     }
 
-    private void validateSchemaWithNode(JsonNode content) {
-        try {
-            String response = restTemplate.postForObject("http://localhost:3001/validate", content, String.class);
-            System.out.println("Validation successful: " + response);
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Validation failed: " + e.getMessage());
-        }
-    }
+    // private void validateSchemaWithNode(JsonNode content) {
+    // try {
+    // String response =
+    // restTemplate.postForObject("http://localhost:3001/validate", content,
+    // String.class);
+    // System.out.println("Validation successful: " + response);
+    // }
+    // catch (Exception e) {
+    // throw new RuntimeException("Validation failed: " + e.getMessage());
+    // }
+    // }
 }
