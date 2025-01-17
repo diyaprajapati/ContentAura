@@ -52,17 +52,19 @@ export default function Schema() {
     const handleDeleteSchema = async (id: string) => {
         try {
             const response = await deleteSchema(Number(id));
-            if (response.status === 200) {
+            if (response && response.status === 200 || response.status === 204) {
                 toast({
-                    title: "Schema Deleted",
+                    title: "Success",
                     description: "Schema Deleted Successfully!",
-                    variant: "destructive",
+                    variant: "default",
                 });
+
                 await fetchSchemas(); // Refresh the data after successful deletion
             }
         } catch (error) {
             toast({
-                title: "Error deleting schema",
+                title: "Error",
+                description: "Failed to delete schema. Please try again.",
                 variant: "destructive"
             });
         }

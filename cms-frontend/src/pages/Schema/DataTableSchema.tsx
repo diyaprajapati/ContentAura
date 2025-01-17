@@ -96,8 +96,8 @@ export const createColumns = (onDelete: (id: string) => Promise<void>): ColumnDe
     },
     {
         id: "actions",
-        enableHiding: false,
-        header: () => <div></div>,
+        // enableHiding: false,
+        // header: () => <div></div>,
         cell: ({ row }) => {
             return (
                 <div className="flex justify-end">
