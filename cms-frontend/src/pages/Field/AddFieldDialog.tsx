@@ -12,11 +12,80 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { toast } from "@/hooks/use-toast"
+import { createField } from "@/lib/api/schema"
+import { useState } from "react"
 
+interface AddFieldDialogProps {
+    schemaId: string | undefined;
+    onFieldCreated: () => void;
+}
 
-export function AddFieldDialog() {
+export function AddFieldDialog({ schemaId, onFieldCreated }: AddFieldDialogProps) {
+    const [name, setName] = useState<string>("");
+    const [type, setType] = useState<string>("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [open, setOpen] = useState(false);
+
+    const handleSubmit = async () => {
+        if (!name.trim()) {
+            toast({
+                title: "Error",
+                description: "Field name cannot be empty.",
+                variant: "destructive",
+            });
+            return;
+        }
+        if (!schemaId) {
+            toast({
+                title: "Error",
+                description: "Schema ID is missing.",
+                variant: "destructive",
+            });
+            return;
+        }
+        if (!type) {
+            toast({
+                title: "Error",
+                description: "Field type is required.",
+                variant: "destructive",
+            });
+            return;
+        }
+        setIsSubmitting(true);
+        try {
+            const response = await createField(schemaId, { name, type });
+            console.log(response);
+
+            if (response && response.status === 200) {
+                toast({
+                    title: "Success",
+                    description: "Field created successfully.",
+                    variant: "default",
+                });
+
+                onFieldCreated();
+                setOpen(false);
+            }
+            else {
+                throw new Error("Failed to create field");
+            }
+        }
+        catch (error) {
+            console.log(error);
+            toast({
+                title: "Error",
+                description: "Failed to create field. Please try again.",
+                variant: "destructive",
+            });
+        }
+        finally {
+            setIsSubmitting(false);
+        }
+    }
+
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <ButtonAdd label='Add Field'></ButtonAdd>
             </DialogTrigger>
@@ -35,13 +104,16 @@ export function AddFieldDialog() {
                         <Input
                             id="name"
                             className="col-span-3"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Field name"
                         />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="username" className="text-right">
+                        <Label htmlFor="type" className="text-right">
                             Type
                         </Label>
-                        <Select>
+                        <Select value={type} onValueChange={(value) => setType(value)}>
                             <SelectTrigger className="w-[180px]">
                                 <SelectValue placeholder="Select a type" />
                             </SelectTrigger>
@@ -59,7 +131,9 @@ export function AddFieldDialog() {
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button type="submit">Save</Button>
+                    <Button type="submit" onClick={handleSubmit} disabled={isSubmitting}>
+                        {isSubmitting ? "Creating..." : "Submit"}
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

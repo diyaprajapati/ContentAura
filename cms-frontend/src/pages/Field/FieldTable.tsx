@@ -23,6 +23,12 @@ const fields = [
     }
 ]
 
+export type FieldColumn = {
+    id: string;
+    name: string;
+    type: string;
+}
+
 export function FieldTable() {
     return (
         <Table className="md:w-[90%] place-self-center">
