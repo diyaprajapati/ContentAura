@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
 
 interface AddFieldDialogProps {
@@ -28,7 +29,6 @@ interface AddFieldDialogProps {
 }
 
 export function AddFieldDialog({
-  schemaId,
   onFieldCreated,
 }: AddFieldDialogProps) {
   const [name, setName] = useState<string>("");
