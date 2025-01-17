@@ -8,28 +8,13 @@ import {
 } from "@/components/ui/table"
 import { MoreHorizontal } from "lucide-react"
 
-const fields = [
-    {
-        name: "title",
-        fieldType: "string"
-    },
-    {
-        name: "amount",
-        fieldType: "number"
-    },
-    {
-        name: "status",
-        fieldType: "boolean"
-    }
-]
 
 export type FieldColumn = {
-    id: string;
     name: string;
     type: string;
 }
 
-export function FieldTable() {
+export function FieldTable({fields}: {fields: FieldColumn[]}) {
     return (
         <Table className="md:w-[90%] place-self-center">
             <TableHeader>
@@ -39,15 +24,19 @@ export function FieldTable() {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {fields.map((field) => (
+                {fields.length > 0 ? fields.map((field) => (
                     <TableRow key={field.name}>
                         <TableCell className="font-medium py-4">{field.name}</TableCell>
                         <div className="flex items-center justify-end pt-2 gap-16 md:gap-40">
-                            <TableCell>{field.fieldType}</TableCell>
+                            <TableCell>{field.type}</TableCell>
                             <MoreHorizontal />
                         </div>
                     </TableRow>
-                ))}
+                )): (
+                  <TableRow>
+                    <TableCell colSpan={2} className="text-center">No fields found</TableCell>
+                  </TableRow>
+                )}
             </TableBody>
         </Table>
     )

@@ -28,7 +28,7 @@ public class Schema {
     @Column(nullable = false)
     private String name;
 
-    @Column(columnDefinition = "jsonb", nullable = false)
+    @Column(columnDefinition = "jsonb", nullable = true)
     @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode content;
 

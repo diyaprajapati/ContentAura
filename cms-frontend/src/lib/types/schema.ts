@@ -10,6 +10,15 @@ export interface SchemaData {
     createdAt: string;
 }
 
+export interface SchemaRequestData {
+  name: string;
+  content: {
+    properties: object;
+    required: boolean;
+    type: string;
+  }
+}
+
 export interface ApiResponse<T = any> {
     status: number;
     data: T;

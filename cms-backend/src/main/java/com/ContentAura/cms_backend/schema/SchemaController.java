@@ -29,6 +29,13 @@ public class SchemaController {
         return ResponseEntity.ok(schemas.stream().map(this::toResponse).collect(Collectors.toList()));
     }
 
+    @GetMapping("/byId/{id}")
+    public ResponseEntity<SchemaResponse> getSchemaById (@PathVariable Long id) {
+        Schema schema = schemaService.getSchemaById(id);
+        return ResponseEntity.ok(toResponse(schema));
+    }
+
+
     @PreAuthorize("hasAuthority('UPDATE_SCHEMA')")
     @PutMapping("/{id}")
     public ResponseEntity<SchemaResponse> updateSchema (@PathVariable Long id, @RequestBody SchemaRequest request) {

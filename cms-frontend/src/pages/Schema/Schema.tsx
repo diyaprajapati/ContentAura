@@ -65,15 +65,17 @@ export default function Schema() {
         setIsLoading(true);
         try {
             const response = await getAllSchemasByProjectId(projectId);
+            console.log(response.data)
             if (response && response.status === 200) {
                 setSchemas(response.data.map((schema) => ({
                     id: schema.id.toString(),
                     name: schema.name,
-                    fields: schema.content ? Object.keys(schema.content.properties).length : 0,
+                    fields: schema.content != undefined ? Object.keys(schema.content.properties).length : 0,
                     lastUpdated: schema.createdAt ?? (new Date).toLocaleDateString(),
                 })));
             }
             else {
+                console.log("schema ", response.data);
                 toast({
                     title: "Error fetching schemas",
                     description: "Failed to load schemas. Please try again.",
@@ -81,6 +83,7 @@ export default function Schema() {
                 })
             }
         } catch (error) {
+            console.log("error ", error);
             toast({
                 title: "Error",
                 description: "An unexpected error occurred.",

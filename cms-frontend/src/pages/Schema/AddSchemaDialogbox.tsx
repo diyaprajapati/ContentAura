@@ -45,7 +45,7 @@ export function AddSchemaDialogbox({ projectId, onSchemaCreated }: AddSchemaDial
         }
         setIsSubmitting(true);
         try {
-            const response = await createSchema(projectId as string, { name, content: { foo: 0, bar: '' } });
+            const response = await createSchema(projectId as string, name);
             console.log("API Response:", response);
 
             if (response.status === 201 || response.status === 200) {

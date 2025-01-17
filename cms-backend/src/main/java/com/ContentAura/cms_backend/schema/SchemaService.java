@@ -26,14 +26,19 @@ public class SchemaService {
                 .orElseThrow(() -> new RuntimeException("Project not found with ID: " + projectId));
         Schema schema = Schema.builder()
                 .name(name)
-                .content(content)
                 .project(project)
                 .build();
+        if(content != null) {
+            schema.setContent(content);
+        }
         return schemaRepository.save(schema);
     }
 
     public List<Schema> getSchemasByProjectId(Long projectId) {
         return schemaRepository.findByProjectId(projectId);
+    }
+    public Schema getSchemaById(Long id) {
+        return schemaRepository.findById(id).orElseThrow(() -> new RuntimeException("Schema not found with ID: " + id));
     }
 
     public Schema updateSchema(Long id, String name, JsonNode content) {
