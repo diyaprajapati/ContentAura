@@ -10,7 +10,7 @@ export default function Fields() {
 
     useEffect(() => {
         if (!schemaId) {
-            navigate('/schema'); // or wherever you want to redirect if there's no ID
+            navigate('/schema');
             return;
         }
     }, [schemaId, navigate]);
@@ -21,14 +21,14 @@ export default function Fields() {
 
     return (
         <div className="flex flex-col gap-8 mx-8 my-4">
-            <div className="flex justify-between w-full items-center ml-5">
+            <div className="flex justify-between w-full items-center ml-5 md:mx-16">
                 {/* Title */}
                 <div className="">
                     <Label className="font-bold md:text-5xl text-4xl">Fields</Label>
                     <p>Fields for Schema id: {schemaId}</p>
                 </div>
                 {/* Button */}
-                <div>
+                <div className='md:mr-28'>
                     {/* dialog box to add schema */}
                     <AddFieldDialog />
                 </div>

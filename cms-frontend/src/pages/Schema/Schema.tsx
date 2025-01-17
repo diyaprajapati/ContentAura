@@ -13,11 +13,34 @@ export default function Schema() {
 
     console.log(schemas, isLoading);
 
-    const handleUpdateSchema = async (schemaId: number, updatedData: { name: string }) => {
+    // const handleUpdateSchema = async (schemaId: number, updatedData: { name: string }) => {
+    //     try {
+    //         const response = await updateSchema(schemaId, {
+    //             name: updatedData.name,
+    //             content: "" // or pass the existing content if needed
+    //         });
+
+    //         if (response.status === 200) {
+    //             toast({
+    //                 title: "Success",
+    //                 description: "Schema name updated successfully",
+    //             });
+    //             await fetchSchemas(); // Refresh the schemas list
+    //         }
+    //     } catch (error) {
+    //         toast({
+    //             title: "Error",
+    //             description: "Failed to update schema name",
+    //             variant: "destructive",
+    //         });
+    //     }
+    // };
+
+    const handleUpdateSchema = async (schemaId: number, updatedData: { name: string, content?: { foo: number, bar: string } }) => {
         try {
             const response = await updateSchema(schemaId, {
                 name: updatedData.name,
-                content: "" // or pass the existing content if needed
+                content: updatedData.content || { foo: 0, bar: '' }  // Default to empty object with defaults if content is not provided
             });
 
             if (response.status === 200) {
