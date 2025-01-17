@@ -3,7 +3,7 @@ import { DataTableSchema, SchemaColumn } from "./DataTableSchema";
 import { AddSchemaDialogbox } from "./AddSchemaDialogbox";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { deleteSchema, getAllSchemasByProjectId } from "@/lib/api/schema";
+import { deleteSchema, getAllSchemasByProjectId, updateSchema } from "@/lib/api/schema";
 import { toast } from "@/hooks/use-toast";
 
 export default function Schema() {
@@ -12,6 +12,29 @@ export default function Schema() {
     const [isLoading, setIsLoading] = useState(true);
 
     console.log(schemas, isLoading);
+
+    const handleUpdateSchema = async (schemaId: number, updatedData: { name: string }) => {
+        try {
+            const response = await updateSchema(schemaId, {
+                name: updatedData.name,
+                content: "" // or pass the existing content if needed
+            });
+
+            if (response.status === 200) {
+                toast({
+                    title: "Success",
+                    description: "Schema name updated successfully",
+                });
+                await fetchSchemas(); // Refresh the schemas list
+            }
+        } catch (error) {
+            toast({
+                title: "Error",
+                description: "Failed to update schema name",
+                variant: "destructive",
+            });
+        }
+    };
 
     const fetchSchemas = async () => {
         if (!projectId) return;
@@ -88,7 +111,9 @@ export default function Schema() {
             </div>
 
             {/* data */}
-            <DataTableSchema data={schemas} onDelete={handleDeleteSchema} key={schemas.length} />
+            <DataTableSchema data={schemas} onDelete={handleDeleteSchema} schemaId={0}
+                currentName=""
+                onUpdate={handleUpdateSchema} key={schemas.length} />
         </div>
     )
 }

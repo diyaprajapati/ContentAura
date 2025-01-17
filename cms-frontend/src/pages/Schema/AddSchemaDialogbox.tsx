@@ -61,6 +61,7 @@ export function AddSchemaDialogbox({ projectId, onSchemaCreated }: AddSchemaDial
                 throw new Error("Failed to create schema");
             }
         } catch (error) {
+            console.log(error);
             toast({
                 title: "Error",
                 description: "Failed to create schema. Please try again.",

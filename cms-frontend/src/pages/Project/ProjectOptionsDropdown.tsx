@@ -19,13 +19,23 @@ export default function DropDownMenu({ projectId, onDelete, currentDescription, 
     const deleteProject = async () => {
         try {
             const token = localStorage.getItem("token");
-            await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/projects/${projectId}`, {
-                headers: { Authorization: `Bearer ${token}` },
+            const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/projects/${projectId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
             });
-            toast({
-                title: "Project deleted successfully!",
-            });
-            onDelete(projectId); // Update the UI
+            if (response.status === 200) {
+                toast({
+                    title: "Success",
+                    description: "Project deleted successfully",
+                });
+                onDelete(projectId); // Update the UI
+            }
+            // toast({
+            //     title: "Project deleted successfully!",
+            // });
+            // onDelete(projectId); // Update the UI
         } catch (error) {
             console.error("Error deleting project:", error);
             toast({

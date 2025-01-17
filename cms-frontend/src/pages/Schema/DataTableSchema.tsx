@@ -12,7 +12,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal, Pencil, Trash2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/table"
 import { useNavigate } from "react-router-dom"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
+import { EditSchemaDialog } from "./EditSchemaDialog"
 
 export type SchemaColumn = {
     id: string;
@@ -43,109 +44,124 @@ export type SchemaColumn = {
 type DataTableSchemaProps = {
     data: SchemaColumn[];
     onDelete: (id: string) => Promise<void>;
+    schemaId: number;
+    currentName: string;
+    onUpdate: (schemaId: number, updatedData: { name: string }) => void;
 };
 
-export const createColumns = (onDelete: (id: string) => Promise<void>): ColumnDef<SchemaColumn>[] => [
-    {
-        accessorKey: "name",
-        header: ({ column }) => (
-            <div className="flex-1">
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    className="text-left"
-                >
-                    Name
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            </div>
-        ),
-        cell: ({ row }) => {
-            const navigate = useNavigate();
-            const handleNameClick = () => {
-                navigate(`/fields/${row.getValue("id")}`);
-            };
-
-            return (
-                <div className="text-left pl-4 cursor-pointer hover:underline hover:text-blue-400" onClick={handleNameClick}>
-                    {row.getValue("name")}
+export const createColumns = (onDelete: (id: string) => Promise<void>, _schemaId: number,
+    _currentName: string,
+    onUpdate: (schemaId: number, updatedData: { name: string }) => void): ColumnDef<SchemaColumn>[] => [
+        {
+            accessorKey: "name",
+            header: ({ column }) => (
+                <div className="flex-1">
+                    <Button
+                        variant="ghost"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                        className="text-left"
+                    >
+                        Name
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
                 </div>
-            );
+            ),
+            cell: ({ row }) => {
+                const navigate = useNavigate();
+                const handleNameClick = () => {
+                    navigate(`/fields/${row.getValue("id")}`);
+                };
+
+                return (
+                    <div className="text-left pl-4 cursor-pointer hover:underline hover:text-blue-400" onClick={handleNameClick}>
+                        {row.getValue("name")}
+                    </div>
+                );
+            },
         },
-    },
-    {
-        id: "spacer",
-        enableHiding: false,
-        header: () => null,
-        cell: () => <div className="flex-1" />,
-    },
-    {
-        accessorKey: "fields",
-        header: () => <div className="text-right whitespace-nowrap">Fields</div>,
-        cell: ({ row }) => {
-            const fields = parseInt(row.getValue("fields"))
-            return <div className="text-right font-medium pr-4">{fields}</div>
+        {
+            id: "spacer",
+            enableHiding: false,
+            header: () => null,
+            cell: () => <div className="flex-1" />,
         },
-    },
-    {
-        accessorKey: "lastUpdated",
-        header: () => <div className="text-right whitespace-nowrap">Last Updated</div>,
-        cell: ({ row }) => (
-            <div className="text-right font-medium">{row.getValue("lastUpdated")}</div>
-        ),
-    },
-    {
-        id: "actions",
-        // enableHiding: false,
-        // header: () => <div></div>,
-        cell: ({ row }) => {
-            return (
-                <div className="flex justify-end">
-                    {/* dropdown for delete and edit */}
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <span className="sr-only">Open menu</span>
-                                <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem>Edit Name</DropdownMenuItem>
-                            {/* to delete the schema */}
-                            <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>Delete schema</DropdownMenuItem>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            This action cannot be undone. This will permanently delete your
-                                            account and remove your data from our servers.
-                                        </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                        <AlertDialogAction className="bg-red-600 hover:bg-red-800" onClick={() => onDelete(row.original.id)}>Delete</AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div>
-            )
+        {
+            accessorKey: "fields",
+            header: () => <div className="text-right whitespace-nowrap">Fields</div>,
+            cell: ({ row }) => {
+                const fields = parseInt(row.getValue("fields"))
+                return <div className="text-right font-medium pr-4">{fields}</div>
+            },
         },
-    },
-]
+        {
+            accessorKey: "lastUpdated",
+            header: () => <div className="text-right whitespace-nowrap">Last Updated</div>,
+            cell: ({ row }) => (
+                <div className="text-right font-medium">{row.getValue("lastUpdated")}</div>
+            ),
+        },
+        {
+            id: "actions",
+            // enableHiding: false,
+            // header: () => <div></div>,
+            cell: ({ row }) => {
+                return (
+                    <div className="flex justify-end">
+                        {/* dropdown for delete and edit */}
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                    <span className="sr-only">Open menu</span>
+                                    <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <EditSchemaDialog
+                                    schemaId={Number(row.original.id)}
+                                    currentName={row.original.name}
+                                    onUpdate={onUpdate}
+                                >
+                                    <DropdownMenuItem className="cursor-pointer" onSelect={(e) => e.preventDefault()}>
+                                        <Pencil />  Edit Name
+                                    </DropdownMenuItem>
+                                </EditSchemaDialog>
+                                {/* to delete the schema */}
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-red-400 hover:!text-red-600 cursor-pointer">
+                                            <Trash2 /> Delete schema
+                                        </DropdownMenuItem>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                This action cannot be undone. This will permanently delete your
+                                                account and remove your data from our servers.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            <AlertDialogAction className="bg-red-600 hover:bg-red-800" onClick={() => onDelete(row.original.id)}>Delete</AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                )
+            },
+        },
+    ]
 
 
-export function DataTableSchema({ data, onDelete }: DataTableSchemaProps) {
+export function DataTableSchema({ data, onDelete, schemaId, currentName, onUpdate }: DataTableSchemaProps) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
 
-    const columns = React.useMemo(() => createColumns(onDelete), [onDelete]);
+    const columns = React.useMemo(() => createColumns(onDelete, schemaId, currentName, onUpdate), [onDelete, schemaId, currentName, onUpdate]);
 
     const table = useReactTable({
         data,

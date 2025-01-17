@@ -19,8 +19,8 @@ export const getAllSchemasByProjectId = async (projectId: string): Promise<Axios
 };
 
 export const createSchema = async (projectId: string, data: { name: string, content: string }): Promise<AxiosResponse<SchemaData>> => {
+    const token = getAuthToken();
     try {
-        const token = getAuthToken();
         const response = await axios.post<SchemaData>(`${import.meta.env.VITE_API_BASE_URL}/schema/${projectId}`, data,
         {
             headers: {
@@ -35,8 +35,14 @@ export const createSchema = async (projectId: string, data: { name: string, cont
 };
 
 export const updateSchema = async (id: number, data: { name: string, content: string }): Promise<AxiosResponse<SchemaData>> => {
+    const token = getAuthToken();
     try {
-        const response = await axios.put<SchemaData>(`${import.meta.env.VITE_API_BASE_URL}/schema/${id}`, data);
+        const response = await axios.put<SchemaData>(`${import.meta.env.VITE_API_BASE_URL}/schema/${id}`, data,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
         return response;
     } catch (error) {
         console.error('Error updating schema:', error);
