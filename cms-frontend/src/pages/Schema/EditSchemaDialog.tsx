@@ -20,7 +20,7 @@ export const EditSchemaDialog: React.FC<EditSchemaDialogProps> = ({ children, sc
     const handleEdit = async () => {
         setLoading(true);
         try {
-            const response = await updateSchema(schemaId, { name, content: "" })
+            const response = await updateSchema(schemaId, { name, content: { foo: 0, bar: '' } })
             console.log(response);
 
             if (response && response.status === 200) {
