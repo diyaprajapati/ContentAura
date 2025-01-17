@@ -49,9 +49,18 @@ type DataTableSchemaProps = {
     onUpdate: (schemaId: number, updatedData: { name: string }) => void;
 };
 
-export const createColumns = (onDelete: (id: string) => Promise<void>, _schemaId: number,
-    _currentName: string,
-    onUpdate: (schemaId: number, updatedData: { name: string }) => void): ColumnDef<SchemaColumn>[] => [
+export function DataTableSchema({
+    data,
+    onDelete,
+    onUpdate
+}: DataTableSchemaProps) {
+    const navigate = useNavigate();
+    const [sorting, setSorting] = React.useState<SortingState>([])
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
+    const [rowSelection, setRowSelection] = React.useState({})
+
+    const columns = React.useMemo<ColumnDef<SchemaColumn>[]>(() => [
         {
             accessorKey: "name",
             header: ({ column }) => (
@@ -66,18 +75,14 @@ export const createColumns = (onDelete: (id: string) => Promise<void>, _schemaId
                     </Button>
                 </div>
             ),
-            cell: ({ row }) => {
-                const navigate = useNavigate();
-                const handleNameClick = () => {
-                    navigate(`/fields/${row.getValue("id")}`);
-                };
-
-                return (
-                    <div className="text-left pl-4 cursor-pointer hover:underline hover:text-blue-400" onClick={handleNameClick}>
-                        {row.getValue("name")}
-                    </div>
-                );
-            },
+            cell: ({ row }) => (
+                <div
+                    className="text-left pl-4 cursor-pointer hover:underline hover:text-blue-400"
+                    onClick={() => navigate(`/fields/${row.original.id}`)}
+                >
+                    {row.getValue("name")}
+                </div>
+            ),
         },
         {
             id: "spacer",
@@ -102,12 +107,9 @@ export const createColumns = (onDelete: (id: string) => Promise<void>, _schemaId
         },
         {
             id: "actions",
-            // enableHiding: false,
-            // header: () => <div></div>,
             cell: ({ row }) => {
                 return (
                     <div className="flex justify-end">
-                        {/* dropdown for delete and edit */}
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="h-8 w-8 p-0">
@@ -122,14 +124,13 @@ export const createColumns = (onDelete: (id: string) => Promise<void>, _schemaId
                                     onUpdate={onUpdate}
                                 >
                                     <DropdownMenuItem className="cursor-pointer" onSelect={(e) => e.preventDefault()}>
-                                        <Pencil />  Edit Name
+                                        <Pencil className="mr-2 h-4 w-4" />  Edit Name
                                     </DropdownMenuItem>
                                 </EditSchemaDialog>
-                                {/* to delete the schema */}
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
                                         <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-red-400 hover:!text-red-600 cursor-pointer">
-                                            <Trash2 /> Delete schema
+                                            <Trash2 className="mr-2 h-4 w-4" /> Delete schema
                                         </DropdownMenuItem>
                                     </AlertDialogTrigger>
                                     <AlertDialogContent>
@@ -137,12 +138,14 @@ export const createColumns = (onDelete: (id: string) => Promise<void>, _schemaId
                                             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                             <AlertDialogDescription>
                                                 This action cannot be undone. This will permanently delete your
-                                                account and remove your data from our servers.
+                                                schema and all its data.
                                             </AlertDialogDescription>
                                         </AlertDialogHeader>
                                         <AlertDialogFooter>
                                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                            <AlertDialogAction className="bg-red-600 hover:bg-red-800" onClick={() => onDelete(row.original.id)}>Delete</AlertDialogAction>
+                                            <AlertDialogAction className="bg-red-600 hover:bg-red-800" onClick={() => onDelete(row.original.id)}>
+                                                Delete
+                                            </AlertDialogAction>
                                         </AlertDialogFooter>
                                     </AlertDialogContent>
                                 </AlertDialog>
@@ -152,16 +155,7 @@ export const createColumns = (onDelete: (id: string) => Promise<void>, _schemaId
                 )
             },
         },
-    ]
-
-
-export function DataTableSchema({ data, onDelete, schemaId, currentName, onUpdate }: DataTableSchemaProps) {
-    const [sorting, setSorting] = React.useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = React.useState({})
-
-    const columns = React.useMemo(() => createColumns(onDelete, schemaId, currentName, onUpdate), [onDelete, schemaId, currentName, onUpdate]);
+    ], [navigate, onDelete, onUpdate])
 
     const table = useReactTable({
         data,

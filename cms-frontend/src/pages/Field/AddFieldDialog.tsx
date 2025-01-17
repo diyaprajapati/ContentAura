@@ -52,6 +52,7 @@ export function AddFieldDialog() {
                                     <SelectItem value="str">String</SelectItem>
                                     <SelectItem value="list">List</SelectItem>
                                     <SelectItem value="bool">Boolean</SelectItem>
+                                    <SelectItem value="link">Link</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>

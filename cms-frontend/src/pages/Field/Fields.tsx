@@ -1,13 +1,22 @@
 import { Label } from '@/components/ui/label';
 import { FieldTable } from './FieldTable';
 import { AddFieldDialog } from './AddFieldDialog';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export default function Fields() {
-    const { id } = useParams();
+    const { schemaId } = useParams<{ schemaId: string }>();
+    const navigate = useNavigate();
 
-    if (!id) {
-        return <div>Error: Schema ID is missing.</div>;
+    useEffect(() => {
+        if (!schemaId) {
+            navigate('/schema'); // or wherever you want to redirect if there's no ID
+            return;
+        }
+    }, [schemaId, navigate]);
+
+    if (!schemaId) {
+        return null; // or a loading spinner
     }
 
     return (
@@ -16,7 +25,7 @@ export default function Fields() {
                 {/* Title */}
                 <div className="">
                     <Label className="font-bold md:text-5xl text-4xl">Fields</Label>
-                    <p>Fields for Schema id: {id}</p>
+                    <p>Fields for Schema id: {schemaId}</p>
                 </div>
                 {/* Button */}
                 <div>
