@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { updateSchema } from "@/lib/api/schema";
+import { SchemaRequestData } from "@/lib/types/schema";
 import React, { useState } from "react"
 
 type EditSchemaDialogProps = {
@@ -20,7 +21,15 @@ export const EditSchemaDialog: React.FC<EditSchemaDialogProps> = ({ children, sc
     const handleEdit = async () => {
         setLoading(true);
         try {
-            const response = await updateSchema(schemaId, { name, content: { foo: 0, bar: '' } })
+            const updatedData: SchemaRequestData = {
+                name,
+                content: {
+                    properties: {},
+                    required: true,
+                    type: "object",
+                },
+            };
+            const response = await updateSchema(schemaId.toString(), updatedData)
             console.log(response);
 
             if (response && response.status === 200) {

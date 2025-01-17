@@ -33,6 +33,7 @@ import {
 import { useNavigate } from "react-router-dom"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { EditSchemaDialog } from "./EditSchemaDialog"
+import { SchemaRequestData } from "@/lib/types/schema"
 
 export type SchemaColumn = {
     id: string;
@@ -46,7 +47,7 @@ type DataTableSchemaProps = {
     onDelete: (id: string) => Promise<void>;
     schemaId: number;
     currentName: string;
-    onUpdate: (schemaId: number, updatedData: { name: string }) => void;
+    onUpdate: (schemaId: number, updatedData: SchemaRequestData) => Promise<void>;
 };
 
 export function DataTableSchema({
@@ -121,7 +122,18 @@ export function DataTableSchema({
                                 <EditSchemaDialog
                                     schemaId={Number(row.original.id)}
                                     currentName={row.original.name}
-                                    onUpdate={onUpdate}
+                                    // onUpdate={onUpdate}
+                                    onUpdate={(schemaId, updatedData) => {
+                                        const fullUpdatedData = {
+                                            ...updatedData,
+                                            content: {
+                                                properties: {}, // Add schema properties here
+                                                required: true, // Or set to false if optional
+                                                type: "object",
+                                            },
+                                        };
+                                        onUpdate(schemaId, fullUpdatedData);
+                                    }}
                                 >
                                     <DropdownMenuItem className="cursor-pointer" onSelect={(e) => e.preventDefault()}>
                                         <Pencil className="mr-2 h-4 w-4" />  Edit Name

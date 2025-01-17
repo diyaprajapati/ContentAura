@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { deleteSchema, getAllSchemasByProjectId, updateSchema } from "@/lib/api/schema";
 import { toast } from "@/hooks/use-toast";
+import { SchemaRequestData } from "@/lib/types/schema";
 
 export default function Schema() {
     const { projectId } = useParams();
@@ -36,12 +37,9 @@ export default function Schema() {
     //     }
     // };
 
-    const handleUpdateSchema = async (schemaId: number, updatedData: { name: string, content?: { foo: number, bar: string } }) => {
+    const handleUpdateSchema = async (schemaId: number, updatedData: SchemaRequestData) => {
         try {
-            const response = await updateSchema(schemaId, {
-                name: updatedData.name,
-                content: updatedData.content || { foo: 0, bar: '' }  // Default to empty object with defaults if content is not provided
-            });
+            const response = await updateSchema(schemaId.toString(), updatedData);
 
             if (response.status === 200) {
                 toast({
@@ -70,8 +68,12 @@ export default function Schema() {
                 setSchemas(response.data.map((schema) => ({
                     id: schema.id.toString(),
                     name: schema.name,
-                    fields: schema.content != undefined ? Object.keys(schema.content.properties).length : 0,
-                    lastUpdated: schema.createdAt ?? (new Date).toLocaleDateString(),
+                    fields: schema.content && schema.content.properties
+                        ? Object.keys(schema.content.properties).length
+                        : 0,
+                    lastUpdated: schema.createdAt
+                        ? new Date(schema.createdAt).toLocaleDateString()
+                        : new Date().toLocaleDateString(),
                 })));
             }
             else {
