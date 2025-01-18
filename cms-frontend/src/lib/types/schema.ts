@@ -8,6 +8,11 @@ export interface SchemaData {
     };
     projectId: number;
     createdAt: string;
+    fields?: {
+      id: number;
+      name: string;
+      type: string;
+  }[]; // Add fields array
 }
 
 export interface SchemaRequestData {
