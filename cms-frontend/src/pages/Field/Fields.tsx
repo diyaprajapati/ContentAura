@@ -141,7 +141,7 @@ export default function Fields() {
             schemaId={schemaId}
             onFieldCreated={handleFieldAdded}
           />
-          <Button onClick={onSave}>Save</Button>
+          <Button onClick={onSave} className="ml-5">Save</Button>
         </div>
       </div>
       {/* table */}

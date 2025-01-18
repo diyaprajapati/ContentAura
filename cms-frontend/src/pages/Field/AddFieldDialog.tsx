@@ -126,7 +126,8 @@ export function AddFieldDialog({
         <DialogHeader>
           <DialogTitle>Add New Field</DialogTitle>
           <DialogDescription>
-            Fill all fields and Click save when you're done.
+            Fill all fields and Click submit when you're done. After adding all the fields, click on Save.
+            Note: You can't change it if you save it.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -153,11 +154,11 @@ export function AddFieldDialog({
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Types</SelectLabel>
-                  <SelectItem value="num">Number</SelectItem>
-                  <SelectItem value="str">String</SelectItem>
-                  <SelectItem value="list">List</SelectItem>
-                  <SelectItem value="bool">Boolean</SelectItem>
-                  <SelectItem value="link">Link</SelectItem>
+                  <SelectItem value="Number">Number</SelectItem>
+                  <SelectItem value="String">String</SelectItem>
+                  <SelectItem value="List">List</SelectItem>
+                  <SelectItem value="Bool">Boolean</SelectItem>
+                  <SelectItem value="Link">Link</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
