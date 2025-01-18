@@ -4,6 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { MoreHorizontal } from "lucide-react";
 import { EditNameDialog } from "./EditNameDialog";
 
+// edit and delete dropdown
 export default function DropDownField() {
     return (
         <div>

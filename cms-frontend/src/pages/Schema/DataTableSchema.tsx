@@ -35,6 +35,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { EditSchemaDialog } from "./EditSchemaDialog"
 import { SchemaRequestData } from "@/lib/types/schema"
 
+// schema column
 export type SchemaColumn = {
     id: string;
     fields: number;
@@ -42,6 +43,7 @@ export type SchemaColumn = {
     lastUpdated: string;
 }
 
+// data table props
 type DataTableSchemaProps = {
     data: SchemaColumn[];
     onDelete: (id: string) => Promise<void>;
@@ -61,8 +63,10 @@ export function DataTableSchema({
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
 
+    // columns
     const columns = React.useMemo<ColumnDef<SchemaColumn>[]>(() => [
         {
+            // name
             accessorKey: "name",
             header: ({ column }) => (
                 <div className="flex-1">
@@ -72,6 +76,7 @@ export function DataTableSchema({
                         className="text-left"
                     >
                         Name
+                        {/* for sorting */}
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
                 </div>
@@ -91,6 +96,7 @@ export function DataTableSchema({
             header: () => null,
             cell: () => <div className="flex-1" />,
         },
+        // fields
         {
             accessorKey: "fields",
             header: () => <div className="text-right whitespace-nowrap">Fields</div>,
@@ -106,6 +112,7 @@ export function DataTableSchema({
                 <div className="text-right font-medium">{row.getValue("lastUpdated")}</div>
             ),
         },
+        // actions like edit and delete
         {
             id: "actions",
             cell: ({ row }) => {
@@ -119,6 +126,7 @@ export function DataTableSchema({
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
+                                {/* edit dialog */}
                                 <EditSchemaDialog
                                     schemaId={Number(row.original.id)}
                                     currentName={row.original.name}
@@ -139,6 +147,7 @@ export function DataTableSchema({
                                         <Pencil className="mr-2 h-4 w-4" />  Edit Name
                                     </DropdownMenuItem>
                                 </EditSchemaDialog>
+                                {/* alert box before delete */}
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
                                         <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-red-400 hover:!text-red-600 cursor-pointer">
@@ -190,6 +199,7 @@ export function DataTableSchema({
     return (
         <div className="w-full">
             <div className="flex items-center py-4">
+                {/* search the schema name */}
                 <Input
                     placeholder="Search schema type..."
                     value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}

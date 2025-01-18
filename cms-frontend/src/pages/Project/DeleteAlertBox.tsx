@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import React from "react"
 
+// props
 interface AlertBoxProps {
     children: React.ReactNode;
     onConfirm: () => void;
@@ -31,7 +32,9 @@ export function DeleteAlertBox({ children, onConfirm }: AlertBoxProps) {
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
+                    {/* cancle button */}
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    {/* delete button */}
                     <AlertDialogAction onClick={onConfirm} className="bg-red-600 hover:bg-red-900">Delete</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

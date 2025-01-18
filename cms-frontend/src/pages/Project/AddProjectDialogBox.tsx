@@ -103,6 +103,7 @@ export function AddProjectDialogBox({ onProjectAdded }: AddProjectDialogBoxProps
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
+                        {/* title */}
                         <Label htmlFor="title" className="text-right">
                             Title
                         </Label>
@@ -112,11 +113,13 @@ export function AddProjectDialogBox({ onProjectAdded }: AddProjectDialogBoxProps
                             value={formData.title}
                             onChange={handleChange}
                         />
+                        {/* error if title is empty or more than 30 len */}
                         {errors.title && (
                             <p className="text-red-500 text-sm col-span-4 text-center">{errors.title}</p>
                         )}
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
+                        {/* description */}
                         <Label htmlFor="description" className="text-right">
                             Description
                         </Label>
@@ -126,27 +129,30 @@ export function AddProjectDialogBox({ onProjectAdded }: AddProjectDialogBoxProps
                             value={formData.description}
                             onChange={handleChange}
                         />
+                        {/* error if desc is empty or more than 100 len */}
                         {errors.description && (
                             <p className="text-red-500 text-sm col-span-4 text-center">{errors.description}</p>
                         )}
                     </div>
                     <div className="flex justify-start ml-32">
                         <div className="flex items-center space-x-2">
+                            {/* check box for api */}
                             <Checkbox id="apiKey"
                                 checked={formData.generateApiKey}
                                 // onCheckedChange={handleChange}
                                 onCheckedChange={(checked: boolean) => setFromData((prev) => ({ ...prev, generateApiKey: checked }))}
                             />
-                            <label
+                            <Label
                                 htmlFor="apiKey"
                                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                             >
                                 Generate API key
-                            </label>
+                            </Label>
                         </div>
                     </div>
                 </div>
                 <DialogFooter>
+                    {/* submit button */}
                     <Button type="submit" onClick={handleSubmit}>Submit</Button>
                 </DialogFooter>
             </DialogContent>

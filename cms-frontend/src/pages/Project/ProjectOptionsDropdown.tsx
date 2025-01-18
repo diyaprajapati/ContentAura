@@ -6,6 +6,7 @@ import axios from "axios";
 import { toast } from "@/hooks/use-toast";
 import { EditDialog } from "./EditDialog";
 
+// drop down props
 type DropDownMenuProps = {
     projectId: number;
     currentTitle: string;
@@ -16,6 +17,7 @@ type DropDownMenuProps = {
 
 export default function DropDownMenu({ projectId, onDelete, currentDescription, currentTitle, onUpdate }: DropDownMenuProps) {
 
+    // delete handle
     const deleteProject = async () => {
         try {
             const token = localStorage.getItem("token");
@@ -55,7 +57,7 @@ export default function DropDownMenu({ projectId, onDelete, currentDescription, 
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-40">
                 <DropdownMenuGroup>
-                    {/* Edit button */}
+                    {/* edit project */}
                     <EditDialog
                         projectId={projectId}
                         currentTitle={currentTitle}

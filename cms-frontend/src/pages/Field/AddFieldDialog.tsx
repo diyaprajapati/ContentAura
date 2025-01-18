@@ -23,6 +23,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
 
+// props.. add fields via schema id
 interface AddFieldDialogProps {
   schemaId: string | undefined;
   onFieldCreated: (name: string, type: string) => void;
@@ -35,6 +36,7 @@ export function AddFieldDialog({
   const [type, setType] = useState<string>("");
   const [open, setOpen] = useState(false);
 
+  // submit 
   const handleSubmit = () => {
     if (!name.trim()) {
       toast({
@@ -132,6 +134,7 @@ export function AddFieldDialog({
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
+            {/* name */}
             <Label htmlFor="name" className="text-right">
               Name
             </Label>
@@ -144,9 +147,12 @@ export function AddFieldDialog({
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
+            {/* type */}
             <Label htmlFor="type" className="text-right">
               Type
             </Label>
+
+            {/* Select any one types */}
             <Select value={type} onValueChange={(value) => setType(value)}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select a type" />
@@ -165,6 +171,7 @@ export function AddFieldDialog({
           </div>
         </div>
         <DialogFooter>
+          {/* submit button */}
           <Button type="submit" onClick={handleSubmit}>
             Submit
           </Button>

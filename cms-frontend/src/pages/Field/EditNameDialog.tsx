@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
+// edit name props
 type EditNameDialogProps = {
     children: React.ReactNode
 }
@@ -30,6 +31,7 @@ export function EditNameDialog({ children }: EditNameDialogProps) {
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
+                        {/* name edit */}
                         <Label htmlFor="name" className="text-right">
                             Name
                         </Label>
@@ -39,6 +41,7 @@ export function EditNameDialog({ children }: EditNameDialogProps) {
                         />
                     </div>
                 </div>
+                {/* save button */}
                 <DialogFooter>
                     <Button type="submit">Save</Button>
                 </DialogFooter>

@@ -8,6 +8,7 @@ import { toast } from "@/hooks/use-toast";
 import { SchemaRequestData } from "@/lib/types/schema";
 
 export default function Schema() {
+    // convert to string
     const { projectId } = useParams();
     const [schemas, setSchemas] = useState<SchemaColumn[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -37,6 +38,7 @@ export default function Schema() {
     //     }
     // };
 
+    // update schema to add field
     const handleUpdateSchema = async (schemaId: number, updatedData: SchemaRequestData) => {
         try {
             const response = await updateSchema(schemaId.toString(), updatedData);
@@ -57,6 +59,7 @@ export default function Schema() {
         }
     };
 
+    // fetch schemas via project id
     const fetchSchemas = async () => {
         if (!projectId) return;
 
@@ -64,6 +67,7 @@ export default function Schema() {
         try {
             const response = await getAllSchemasByProjectId(projectId);
             console.log(response.data)
+            // if there is schemas then show
             if (response && response.status === 200) {
                 setSchemas(response.data.map((schema) => ({
                     id: schema.id.toString(),
@@ -100,6 +104,7 @@ export default function Schema() {
         fetchSchemas();
     }, [projectId]);
 
+    // for delete schema
     const handleDeleteSchema = async (id: string) => {
         try {
             const response = await deleteSchema(Number(id));

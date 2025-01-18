@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { updateSchema } from "@/lib/api/schema";
 import { SchemaRequestData } from "@/lib/types/schema";
 import React, { useState } from "react"
 
+// edit schema name props
 type EditSchemaDialogProps = {
     children: React.ReactNode;
     schemaId: number;
@@ -18,6 +20,7 @@ export const EditSchemaDialog: React.FC<EditSchemaDialogProps> = ({ children, sc
     const [name, setName] = useState(currentName);
     const [loading, setLoading] = useState(false);
 
+    // handle edit name
     const handleEdit = async () => {
         setLoading(true);
         try {
@@ -32,6 +35,7 @@ export const EditSchemaDialog: React.FC<EditSchemaDialogProps> = ({ children, sc
             const response = await updateSchema(schemaId.toString(), updatedData)
             console.log(response);
 
+            // if response ok
             if (response && response.status === 200) {
                 toast({
                     title: "Schema name updated successfully!",
@@ -64,7 +68,8 @@ export const EditSchemaDialog: React.FC<EditSchemaDialogProps> = ({ children, sc
                 <form onSubmit={(e) => e.preventDefault()}>
                     <div className="space-y-4">
                         <div>
-                            <label htmlFor="name" className="block text-sm font-medium">Title</label>
+                            {/* name */}
+                            <Label htmlFor="name" className="block text-sm font-medium">Title</Label>
                             <Input
                                 id="name"
                                 type="text"
@@ -75,6 +80,7 @@ export const EditSchemaDialog: React.FC<EditSchemaDialogProps> = ({ children, sc
                         </div>
                     </div>
                     <DialogFooter className="mt-3">
+                        {/* save button */}
                         <Button
                             type="button"
                             onClick={handleEdit}
@@ -82,6 +88,7 @@ export const EditSchemaDialog: React.FC<EditSchemaDialogProps> = ({ children, sc
                         >
                             {loading ? "Saving..." : "Save"}
                         </Button>
+                        {/* cancle button */}
                         <Button type="button" variant="ghost" className="border-2">
                             Cancel
                         </Button>

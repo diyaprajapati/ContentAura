@@ -1,6 +1,7 @@
 "use client"
 
 import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label";
 
 export type CheckboxDataProps = {
     checked: boolean;
@@ -16,12 +17,12 @@ export function CheckboxData({ checked, onChange }: CheckboxDataProps) {
                 checked={checked}
                 onChange={handleCheckboxChange}
             />
-            <label
+            <Label
                 htmlFor="apiKey"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
                 Generate API key
-            </label>
+            </Label>
         </div>
     )
 }

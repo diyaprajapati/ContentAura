@@ -15,6 +15,7 @@ import { toast } from "@/hooks/use-toast"
 import { createSchema } from "@/lib/api/schema"
 import { useState } from "react"
 
+// add schema props
 interface AddSchemaDialogboxProps {
     projectId: string | undefined;
     onSchemaCreated: () => void;
@@ -26,6 +27,7 @@ export function AddSchemaDialogbox({ projectId, onSchemaCreated }: AddSchemaDial
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [open, setOpen] = useState(false);
 
+    // handle submit for name, project id
     const handleSubmit = async () => {
         if (!name.trim()) {
             toast({
@@ -48,6 +50,7 @@ export function AddSchemaDialogbox({ projectId, onSchemaCreated }: AddSchemaDial
             const response = await createSchema(projectId as string, name);
             console.log("API Response:", response);
 
+            // if response success
             if (response.status === 201 || response.status === 200) {
                 toast({
                     title: "Success",
@@ -86,6 +89,7 @@ export function AddSchemaDialogbox({ projectId, onSchemaCreated }: AddSchemaDial
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
+                        {/* name */}
                         <Label htmlFor="name" className="text-right">
                             Name
                         </Label>
@@ -99,6 +103,7 @@ export function AddSchemaDialogbox({ projectId, onSchemaCreated }: AddSchemaDial
                     </div>
                 </div>
                 <DialogFooter>
+                    {/* submit button */}
                     <Button type="submit" onClick={handleSubmit} disabled={isSubmitting}>
                         {isSubmitting ? "Creating..." : "Submit"}
                     </Button>

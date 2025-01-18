@@ -12,7 +12,9 @@ import { toast } from "@/hooks/use-toast";
 import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
+// props for edit project name
 type EditDialogProps = {
   children: React.ReactNode;
   projectId: number;
@@ -26,6 +28,7 @@ export const EditDialog: React.FC<EditDialogProps> = ({ children, projectId, cur
   const [description, setDescription] = useState(currentDescription);
   const [loading, setLoading] = useState(false);
 
+  // edit
   const handleEdit = async () => {
     setLoading(true);
     try {
@@ -65,18 +68,19 @@ export const EditDialog: React.FC<EditDialogProps> = ({ children, projectId, cur
         <form onSubmit={(e) => e.preventDefault()}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="title" className="block text-sm font-medium">Title</label>
+              {/* title */}
+              <Label htmlFor="title" className="block text-sm font-medium">Title</Label>
               <Input
                 id="title"
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-
                 required
               />
             </div>
             <div>
-              <label htmlFor="description" className="block text-sm font-medium">Description</label>
+              {/* Description */}
+              <Label htmlFor="description" className="block text-sm font-medium">Description</Label>
               <Input
                 id="description"
                 value={description}
@@ -87,6 +91,7 @@ export const EditDialog: React.FC<EditDialogProps> = ({ children, projectId, cur
             </div>
           </div>
           <DialogFooter className="mt-3">
+            {/* save button */}
             <Button
               type="button"
               onClick={handleEdit}
@@ -94,6 +99,7 @@ export const EditDialog: React.FC<EditDialogProps> = ({ children, projectId, cur
             >
               {loading ? "Saving..." : "Save"}
             </Button>
+            {/* cancle button */}
             <Button type="button" variant="ghost" className="border-2">
               Cancel
             </Button>

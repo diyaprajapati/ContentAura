@@ -36,6 +36,7 @@ export default function Fields() {
     return null; // or a loading spinner
   }
 
+  // fetch fields via schema id
   const fetchFields = async () => {
     if (!schemaId) return;
 
@@ -79,6 +80,7 @@ export default function Fields() {
     }
   };
 
+  // handle fields to add
   function handleFieldAdded(name: string, type: string) {
     setData((prev) => ({
       ...prev,
@@ -97,6 +99,8 @@ export default function Fields() {
 
     setFields((prev) => [...prev, { name, type }]);
   }
+
+  // save button fun
   async function onSave() {
     try {
       console.log("data", data);
@@ -136,11 +140,12 @@ export default function Fields() {
         </div>
         {/* Button */}
         <div className="md:mr-28">
-          {/* dialog box to add schema */}
+          {/* dialog box to add fields */}
           <AddFieldDialog
             schemaId={schemaId}
             onFieldCreated={handleFieldAdded}
           />
+          {/* button to save the fields */}
           <Button onClick={onSave} className="ml-5">Save</Button>
         </div>
       </div>
