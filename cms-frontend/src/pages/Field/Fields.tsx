@@ -51,6 +51,7 @@ export default function Fields() {
         setData(response.data);
         if (!response.data.content) {
           setFields([]);
+          return;
         }
         //@ts-ignore
         setFields(
@@ -89,10 +90,10 @@ export default function Fields() {
           ...(prev.content?.properties || {}),
           [name]: {
             type: type,
-            required: false,
+            required: true,
           },
         },
-        required: false,
+        required: true,
         type: "object",
       },
     }));
