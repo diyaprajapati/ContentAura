@@ -30,6 +30,7 @@ const SchemaTab = () => {
         fetchProjects();
     }, []);
 
+    // fetch schema
     useEffect(() => {
         if (!selectedProject) return;
 
@@ -48,6 +49,7 @@ const SchemaTab = () => {
         fetchSchemas();
     }, [selectedProject]);
 
+    // handle selected project
     const handleProjectChange = (value: string) => {
         setSelectedProject(value);
         setSchemas([]);
@@ -64,6 +66,7 @@ const SchemaTab = () => {
     //         .join(' ');
     // };
 
+    // show schema according to project
     const formatFields = (schema: SchemaData) => {
         if (!schema.content?.properties) return 'No fields';
 
@@ -77,7 +80,7 @@ const SchemaTab = () => {
         });
     };
 
-
+    // number of fields
     const getFieldCount = (schema: SchemaData) => {
         if (!schema.content?.properties) return 0;
         return Object.keys(schema.content.properties).length;
@@ -86,9 +89,11 @@ const SchemaTab = () => {
     return (
         <div className="flex flex-col gap-8 mx-8 my-4">
             <div className="flex justify-between w-full items-center">
+                {/* label */}
                 <div>
                     <Label className="font-bold md:text-5xl text-4xl">Schemas</Label>
                 </div>
+                {/* dropdown to select project name */}
                 <div>
                     <Select onValueChange={handleProjectChange} value={selectedProject}>
                         <SelectTrigger className="w-[200px]">
@@ -117,6 +122,7 @@ const SchemaTab = () => {
                 </div>
             </div>
 
+            {/* show schema according to selected project */}
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -128,6 +134,7 @@ const SchemaTab = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
+                        {/* loading effect */}
                         {loading ? (
                             [...Array(3)].map((_, index) => (
                                 <TableRow key={index}>
@@ -137,6 +144,7 @@ const SchemaTab = () => {
                                     {/* <TableCell><Skeleton className="h-4 w-20" /></TableCell> */}
                                 </TableRow>
                             ))
+                            // data of schema according to project
                         ) : schemas.length > 0 ? (
                             schemas.map((schema) => (
                                 <TableRow key={schema.id}>
@@ -153,6 +161,7 @@ const SchemaTab = () => {
                                 </TableRow>
                             ))
                         ) : (
+                            // if there is no selected project or there is no schema of project
                             <TableRow>
                                 <TableCell colSpan={4} className="text-center text-gray-500">
                                     {selectedProject ? 'No schemas found for this project' : 'Select a project to view schemas'}
