@@ -53,7 +53,7 @@ const items = [
     },
     {
         title: "Content",
-        url: "#",
+        url: "/content",
         icon: FileText,
     },
     {
