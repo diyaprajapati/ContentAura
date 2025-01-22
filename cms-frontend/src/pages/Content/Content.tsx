@@ -18,6 +18,7 @@ const Content = () => {
     const [schemas, setSchemas] = useState<SchemaData[]>([]);
     const [initialLoading, setInitialLoading] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
+    console.log(loading);
 
     // fetch the list of projects
     useEffect(() => {
