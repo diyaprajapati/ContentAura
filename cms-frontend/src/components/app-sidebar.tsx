@@ -99,6 +99,8 @@ export function AppSidebar() {
 
     function handleLogout() {
         localStorage.removeItem('token');
+        localStorage.removeItem('selectedProject');
+        localStorage.removeItem('selectedSchemas');
         navigate('/auth');
     }
 
