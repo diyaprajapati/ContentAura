@@ -5,6 +5,7 @@ import { getAllSchemasByProjectId } from "@/lib/api/schema";
 import { ProjectData } from "@/lib/types/project";
 import { SchemaData } from "@/lib/types/schema";
 import { useEffect, useState } from "react";
+import DynamicForm from "./DynamicForm";
 
 const Content = () => {
     const [projects, setProjects] = useState<ProjectData[]>([]);
@@ -147,6 +148,10 @@ const Content = () => {
             {/* Fields according to selected schema and project */}
             <div className="flex flex-col">
                 {formatFields(schemas.find((schema) => schema.id.toString() === selectedSchema))}
+            </div>
+
+            <div>
+                <DynamicForm />
             </div>
         </div>
     );

@@ -18,22 +18,6 @@ export const getAllSchemasByProjectId = async (projectId: string): Promise<Axios
   }
 };
 
-// export const createSchema = async (projectId: string, data: { name: string, content: string }): Promise<AxiosResponse<SchemaData>> => {
-//     const token = getAuthToken();
-//     try {
-//         const response = await axios.post<SchemaData>(`${import.meta.env.VITE_API_BASE_URL}/schema/${projectId}`, data,
-//         {
-//             headers: {
-//                 Authorization: `Bearer ${token}`,
-//             },
-//         })
-//         return response;
-//     } catch (error) {
-//         console.error('Error creating schema:', error);
-//         throw error;
-//     }
-// };
-
 export const createSchema = async (projectId: string, name: string): Promise<AxiosResponse<SchemaData>> => {
   const token = getAuthToken();
   try {
@@ -54,23 +38,6 @@ export const createSchema = async (projectId: string, name: string): Promise<Axi
     throw error;
   }
 };
-
-
-// export const updateSchema = async (id: number, data: { name: string, content: string }): Promise<AxiosResponse<SchemaData>> => {
-//     const token = getAuthToken();
-//     try {
-//         const response = await axios.put<SchemaData>(`${import.meta.env.VITE_API_BASE_URL}/schema/${id}`, data,
-//             {
-//                 headers: {
-//                     Authorization: `Bearer ${token}`,
-//                 },
-//             });
-//         return response;
-//     } catch (error) {
-//         console.error('Error updating schema:', error);
-//         throw error;
-//     }
-// };
 
 export const updateSchema = async (id: string, schemaData: SchemaRequestData): Promise<AxiosResponse<SchemaData>> => {
   const token = getAuthToken();
