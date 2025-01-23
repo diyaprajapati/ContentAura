@@ -33,13 +33,17 @@ import {
 } from "@/components/ui/table";
 import { ContentResponse } from "@/lib/types/content";
 
-export type Content = {
-    id: number;
-    schemaId: string;
-    data: Record<string, any>; // Flexible to handle dynamic content data
-    createdAt: string;
-    updatedAt: string;
-};
+// export type Content = {
+//     id: number;
+//     schemaId: string;
+//     data: {
+//         id: number;
+//         data: Record<string, any>; // Nested dynamic data
+//         createdAt: string | null;
+//     };
+//     createdAt: string;
+//     updatedAt: string;
+// };
 
 interface ContentTableProps {
     contentData: ContentResponse[]; // Pass content data dynamically
@@ -53,24 +57,26 @@ export function ContentTable({ contentData, onEdit, onDelete }: ContentTableProp
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
 
-    const columns: ColumnDef<Content>[] = [
-        {
-            accessorKey: "data", // Rendering specific fields dynamically
-            header: "Content Fields",
-            cell: ({ row }) => (
-                <div className="flex flex-col space-y-1">
-                    {Object.entries(row.original.data)
-                        .filter(([key]) => !['id', 'createdAt', 'updatedAt', 'schemaId'].includes(key))
-                        .map(([key, value]) => (
-                            <div key={key} className="flex items-center space-x-2">
-                                <span className="text-gray-200">
-                                    {typeof value === 'object' ? JSON.stringify(value) : String(value)}
-                                </span>
-                            </div>
-                        ))}
-                </div>
-            ),
+    // Extract the schema from the nested `data.data` object
+    const schema = contentData.length > 0 ? Object.keys(contentData[0].data.data) : [];
+
+    // Generate columns dynamically based on the schema
+    const dynamicColumns: ColumnDef<ContentResponse>[] = schema.map((key) => ({
+        accessorKey: `data.data.${key}`, // Access nested data
+        header: key,
+        cell: ({ row }) => {
+            //@ts-ignore
+            const value = row.original.data.data[key];
+            return (
+                <span className="text-gray-200">
+                    {typeof value === 'object' ? JSON.stringify(value) : String(value)}
+                </span>
+            );
         },
+    }));
+
+    const columns: ColumnDef<ContentResponse>[] = [
+        ...dynamicColumns,
         {
             accessorKey: "createdAt",
             header: "Created At",

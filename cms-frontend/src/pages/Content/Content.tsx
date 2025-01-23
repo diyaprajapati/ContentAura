@@ -278,6 +278,7 @@ const Content = () => {
     const [initialLoading, setInitialLoading] = useState<boolean>(true);
     const [loadingSchemas, setLoadingSchemas] = useState<boolean>(false);
 
+    console.log(contentData);
     // Fetch all projects on mount
     useEffect(() => {
         const fetchProjects = async () => {
