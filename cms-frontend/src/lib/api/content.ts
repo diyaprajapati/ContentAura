@@ -60,7 +60,7 @@ export const updateContent = async (
 
 // Delete content by ID
 export const deleteContent = async (
-    contentId: string
+    contentId: number
   ): Promise<AxiosResponse<ContentData>> => {
     const token = getAuthToken();
   

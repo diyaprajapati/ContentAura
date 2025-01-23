@@ -57,7 +57,7 @@ export enum ContentType {
   
   export interface ContentResponse {
     id: number;
-    schemaId: number;
+    schemaId: string;
     data: ContentData;
     createdAt: string; // ISO 8601 format or Date
     updatedAt: string; // ISO 8601 format or Date

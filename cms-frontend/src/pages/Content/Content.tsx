@@ -1,28 +1,291 @@
+// import { Label } from "@/components/ui/label";
+// import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+// import { getAllProjects } from "@/lib/api/project";
+// import { getAllSchemasByProjectId } from "@/lib/api/schema";
+// import { deleteContent, getAllContentBySchemaId } from "@/lib/api/content";
+// import { ProjectData } from "@/lib/types/project";
+// import { SchemaData } from "@/lib/types/schema";
+// import { ContentData, ContentResponse } from "@/lib/types/content";
+// import { useEffect, useState } from "react";
+// import DynamicForm from "./DynamicForm";
+// import { ContentTable } from "./ContentTable";
+// import { Button } from "@/components/ui/button";
+
+// const Content = () => {
+//     const [projects, setProjects] = useState<ProjectData[]>([]);
+//     const [selectedProject, setSelectedProject] = useState<string>('');
+//     const [schemas, setSchemas] = useState<SchemaData[]>([]);
+//     const [selectedSchema, setSelectedSchema] = useState<string>('');
+//     const [contentData, setContentData] = useState<ContentResponse[]>([]);
+//     const [editingContent, setEditingContent] = useState<ContentResponse | null>(null);
+//     const [initialLoading, setInitialLoading] = useState<boolean>(true);
+//     const [loadingSchemas, setLoadingSchemas] = useState<boolean>(false);
+
+//     // Fetch all projects on mount
+//     useEffect(() => {
+//         const fetchProjects = async () => {
+//             try {
+//                 const response = await getAllProjects();
+//                 setProjects(response?.data || []);
+//             } catch (error) {
+//                 console.error("Error fetching projects:", error);
+//             } finally {
+//                 setInitialLoading(false);
+//             }
+//         };
+
+//         fetchProjects();
+//     }, []);
+
+//     // Fetch schemas when the selected project changes
+//     useEffect(() => {
+//         if (!selectedProject) return;
+
+//         const fetchSchemas = async () => {
+//             setLoadingSchemas(true);
+//             try {
+//                 const response = await getAllSchemasByProjectId(selectedProject);
+//                 setSchemas(response?.data || []);
+//             } catch (error) {
+//                 console.error("Error fetching schemas:", error);
+//             } finally {
+//                 setLoadingSchemas(false);
+//             }
+//         };
+
+//         fetchSchemas();
+//     }, [selectedProject]);
+
+//     // Fetch content when schema is selected
+//     useEffect(() => {
+//         if (!selectedSchema) return;
+
+//         const fetchContentData = async () => {
+//             try {
+//                 const response = await getAllContentBySchemaId(selectedSchema);
+//                 const contentResponses: ContentResponse[] = response?.data.map((data) => ({
+//                     id: typeof data.id === 'number' ? data.id : 0,  // Assuming `id` is part of `ContentData`
+//                     schemaId: selectedSchema,
+//                     data: data as ContentData, // Casting to ensure it's `ContentData`
+//                     createdAt: typeof data.createdAt === 'string' ? data.createdAt : new Date().toISOString(),
+//                     updatedAt: new Date().toISOString(),
+//                 })) || [];
+//                 setContentData(contentResponses);
+//             } catch (error) {
+//                 console.error("Error fetching content data:", error);
+//             }
+//         };
+
+//         fetchContentData();
+//     }, [selectedSchema]);
+
+
+
+//     useEffect(() => {
+//         const storedProject = localStorage.getItem("selectedProject");
+//         const storedSchema = localStorage.getItem("selectedSchema");
+
+//         if (storedProject) setSelectedProject(storedProject);
+//         if (storedSchema) setSelectedSchema(storedSchema);
+//     }, []);
+
+
+//     const handleProjectChange = (value: string) => {
+//         setSelectedProject(value);
+//         setSelectedSchema('');
+//         setSchemas([]);
+//         setContentData([]);
+//         localStorage.setItem("selectedProject", value);
+//         localStorage.removeItem("selectedSchema");
+//     };
+
+//     const handleSchemaChange = (value: string) => {
+//         setSelectedSchema(value);
+//         localStorage.setItem("selectedSchema", value);
+//         setContentData([]); // Reset content data when schema changes
+//     };
+
+//     const handleEdit = (content: ContentResponse) => {
+//         setEditingContent(content);
+//     };
+
+//     const handleDelete = async (contentId: number) => {
+//         try {
+//             await deleteContent(contentId);
+//             setContentData((prev) => prev.filter((item) => item.id !== contentId));
+//         } catch (error) {
+//             console.error("Error deleting content:", error);
+//         }
+//     };
+
+//     const handleFormSubmit = (updatedContent: ContentResponse) => {
+//         setContentData((prev) =>
+//             prev.some((item) => item.id === updatedContent.id)
+//                 ? prev.map((item) => (item.id === updatedContent.id ? updatedContent : item))
+//                 : [...prev, updatedContent]
+//         );
+//         setEditingContent(null);
+//     };
+
+//     const formatFields = (schema: SchemaData | undefined) => {
+//         if (!schema?.content?.properties) return "No fields";
+
+//         return Object.entries(schema.content.properties).map(([name, details]: [string, any]) => (
+//             <div key={name}>
+//                 <strong>{name}</strong>: {details.type} {details.required ? "(Required)" : "(Optional)"}
+//             </div>
+//         ));
+//     };
+
+//     return (
+//         <div className="flex flex-col gap-8 mx-8 my-4">
+//             {/* Header */}
+//             <div className="flex justify-between items-center gap-6">
+//                 <Label className="font-bold text-4xl md:text-5xl">Content</Label>
+//                 <div className="flex flex-col md:flex-row gap-4">
+//                     {/* Project Selector */}
+//                     <Select onValueChange={handleProjectChange} value={selectedProject}>
+//                         <SelectTrigger className="w-[200px]">
+//                             <SelectValue placeholder="Select a project" />
+//                         </SelectTrigger>
+//                         <SelectContent>
+//                             <SelectGroup>
+//                                 <SelectLabel>Projects</SelectLabel>
+//                                 {initialLoading ? (
+//                                     <SelectItem value="loading" disabled>
+//                                         Loading projects...
+//                                     </SelectItem>
+//                                 ) : (
+//                                     projects.map((project) => (
+//                                         <SelectItem key={project.id} value={project.id.toString()}>
+//                                             {project.title}
+//                                         </SelectItem>
+//                                     ))
+//                                 )}
+//                             </SelectGroup>
+//                         </SelectContent>
+//                     </Select>
+
+//                     {/* Schema Selector */}
+//                     <Select onValueChange={handleSchemaChange} value={selectedSchema}>
+//                         <SelectTrigger className="w-[200px]">
+//                             <SelectValue placeholder="Select a schema" />
+//                         </SelectTrigger>
+//                         <SelectContent>
+//                             <SelectGroup>
+//                                 <SelectLabel>Schemas</SelectLabel>
+//                                 {loadingSchemas ? (
+//                                     <SelectItem value="loading" disabled>
+//                                         Loading schemas...
+//                                     </SelectItem>
+//                                 ) : (
+//                                     schemas.map((schema) => (
+//                                         <SelectItem key={schema.id} value={schema.id.toString()}>
+//                                             {schema.name}
+//                                         </SelectItem>
+//                                     ))
+//                                 )}
+//                             </SelectGroup>
+//                         </SelectContent>
+//                     </Select>
+//                 </div>
+//             </div>
+
+//             {/* Schema Fields */}
+//             <div>
+//                 {selectedSchema ? (
+//                     <div>
+//                         <h2 className="font-bold">Schema Fields:</h2>
+//                         {formatFields(schemas.find((schema) => schema.id.toString() === selectedSchema))}
+//                     </div>
+//                 ) : (
+//                     <p>Select a schema to view its fields.</p>
+//                 )}
+//             </div>
+
+//             {/* Content Table and Dynamic Form */}
+//             <div>
+//                 {selectedSchema ? (
+//                     <>
+//                         <ContentTable
+//                             contentData={contentData}
+//                             onEdit={(content: ContentResponse) => handleEdit(content)}
+//                             onDelete={(contentId: number) => handleDelete(contentId)}
+//                         />
+//                         {editingContent ? (
+//                             <DynamicForm
+//                                 schema={schemas.find((schema) => schema.id.toString() === selectedSchema)}
+//                                 schemaId={selectedSchema}
+//                                 initialValues={editingContent?.data || {}}
+//                                 onSubmit={(updatedContent: Record<string, any>) => {
+//                                     // Convert updatedContent back to ContentResponse
+//                                     const contentResponse: ContentResponse = {
+//                                         id: editingContent?.id || 0, // Use editingContent or default ID
+//                                         schemaId: selectedSchema,
+//                                         data: updatedContent as ContentData,
+//                                         createdAt: editingContent?.createdAt || new Date().toISOString(),
+//                                         updatedAt: new Date().toISOString(),
+//                                     };
+
+//                                     handleFormSubmit(contentResponse);
+//                                 }}
+//                             />
+//                         ) : (
+//                             <Button
+//                                 onClick={() =>
+//                                     setEditingContent({
+//                                         id: 0, // Temporary ID for new content
+//                                         schemaId: selectedSchema,
+//                                         data: {},
+//                                         createdAt: new Date().toISOString(),
+//                                         updatedAt: new Date().toISOString(),
+//                                     })
+//                                 }
+//                             >
+//                                 Add New Content
+//                             </Button>
+//                         )}
+//                     </>
+//                 ) : (
+//                     <p>Select a schema to manage its content.</p>
+//                 )}
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default Content;
+
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getAllProjects } from "@/lib/api/project";
 import { getAllSchemasByProjectId } from "@/lib/api/schema";
+import { deleteContent, getAllContentBySchemaId } from "@/lib/api/content";
 import { ProjectData } from "@/lib/types/project";
 import { SchemaData } from "@/lib/types/schema";
+import { ContentData, ContentResponse } from "@/lib/types/content";
 import { useEffect, useState } from "react";
 import DynamicForm from "./DynamicForm";
+import { ContentTable } from "./ContentTable";
 
 const Content = () => {
     const [projects, setProjects] = useState<ProjectData[]>([]);
     const [selectedProject, setSelectedProject] = useState<string>('');
-    const [selectedSchema, setSelectedSchema] = useState<string>('');
     const [schemas, setSchemas] = useState<SchemaData[]>([]);
+    const [selectedSchema, setSelectedSchema] = useState<string>('');
+    const [contentData, setContentData] = useState<ContentResponse[]>([]);
+    const [editingContent, setEditingContent] = useState<ContentResponse | null>(null);
     const [initialLoading, setInitialLoading] = useState<boolean>(true);
     const [loadingSchemas, setLoadingSchemas] = useState<boolean>(false);
 
-    // Fetch projects when the component mounts
+    // Fetch all projects on mount
     useEffect(() => {
         const fetchProjects = async () => {
             try {
                 const response = await getAllProjects();
                 setProjects(response?.data || []);
             } catch (error) {
-                console.error("Error fetching projects: ", error);
+                console.error("Error fetching projects:", error);
             } finally {
                 setInitialLoading(false);
             }
@@ -31,15 +294,7 @@ const Content = () => {
         fetchProjects();
     }, []);
 
-    // Initialize selected project and schema from localStorage
-    useEffect(() => {
-        const storedProject = localStorage.getItem("selectedProject") || '';
-        const storedSchema = localStorage.getItem("selectedSchema") || '';
-        setSelectedProject(storedProject);
-        setSelectedSchema(storedSchema);
-    }, []);
-
-    // Fetch schemas when `selectedProject` changes
+    // Fetch schemas when the selected project changes
     useEffect(() => {
         if (!selectedProject) return;
 
@@ -47,7 +302,7 @@ const Content = () => {
             setLoadingSchemas(true);
             try {
                 const response = await getAllSchemasByProjectId(selectedProject);
-                setSchemas(response.data || []);
+                setSchemas(response?.data || []);
             } catch (error) {
                 console.error("Error fetching schemas:", error);
             } finally {
@@ -58,104 +313,182 @@ const Content = () => {
         fetchSchemas();
     }, [selectedProject]);
 
-    // Handle project selection change
+    // Fetch content when schema is selected
+    useEffect(() => {
+        if (!selectedSchema) return;
+
+        const fetchContentData = async () => {
+            try {
+                const response = await getAllContentBySchemaId(selectedSchema);
+                const contentResponses: ContentResponse[] = response?.data.map((data) => ({
+                    id: typeof data.id === 'number' ? data.id : 0,
+                    schemaId: selectedSchema,
+                    data: data as ContentData,
+                    createdAt: typeof data.createdAt === 'string' ? data.createdAt : new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                })) || [];
+                setContentData(contentResponses);
+            } catch (error) {
+                console.error("Error fetching content data:", error);
+            }
+        };
+
+        fetchContentData();
+    }, [selectedSchema]);
+
+    useEffect(() => {
+        const storedProject = localStorage.getItem("selectedProject");
+        const storedSchema = localStorage.getItem("selectedSchema");
+
+        if (storedProject) setSelectedProject(storedProject);
+        if (storedSchema) setSelectedSchema(storedSchema);
+    }, []);
+
     const handleProjectChange = (value: string) => {
         setSelectedProject(value);
-        setSchemas([]);
         setSelectedSchema('');
+        setSchemas([]);
+        setContentData([]);
         localStorage.setItem("selectedProject", value);
         localStorage.removeItem("selectedSchema");
     };
 
-    // Handle schema selection change
     const handleSchemaChange = (value: string) => {
         setSelectedSchema(value);
         localStorage.setItem("selectedSchema", value);
+        setContentData([]); // Reset content data when schema changes
+    };
+
+    const handleEdit = (content: ContentResponse) => {
+        setEditingContent(content);
+    };
+
+    const handleDelete = async (contentId: number) => {
+        try {
+            await deleteContent(contentId);
+            setContentData((prev) => prev.filter((item) => item.id !== contentId));
+        } catch (error) {
+            console.error("Error deleting content:", error);
+        }
+    };
+
+    const handleFormSubmit = (updatedContent: ContentResponse) => {
+        setContentData((prev) =>
+            prev.some((item) => item.id === updatedContent.id)
+                ? prev.map((item) => (item.id === updatedContent.id ? updatedContent : item))
+                : [...prev, updatedContent]
+        );
+        setEditingContent(null);
     };
 
     const formatFields = (schema: SchemaData | undefined) => {
         if (!schema?.content?.properties) return "No fields";
 
-        return Object.entries(schema.content.properties).map(([name, details]: [string, any]) => {
-            const isRequired = details.required;
-            return (
-                <div key={name}>
-                    <strong>{name}</strong>: {details.type} {isRequired ? "(Required)" : "(Optional)"}
-                </div>
-            );
-        });
+        return Object.entries(schema.content.properties).map(([name, details]: [string, any]) => (
+            <div key={name}>
+                <strong>{name}</strong>: {details.type} {details.required ? "(Required)" : "(Optional)"}
+            </div>
+        ));
     };
 
     return (
         <div className="flex flex-col gap-8 mx-8 my-4">
-            <div className="flex justify-between w-full md:items-center gap-6">
-                {/* Label */}
-                <div>
-                    <Label className="font-bold md:text-5xl text-4xl">Content</Label>
-                </div>
-                {/* Dropdowns */}
-                <div className="flex flex-col gap-3 md:flex md:flex-row md:gap-6">
-                    {/* Project Dropdown */}
-                    <div>
-                        <Select onValueChange={handleProjectChange} value={selectedProject}>
-                            <SelectTrigger className="w-[200px]">
-                                <SelectValue placeholder="Select a project name" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Projects</SelectLabel>
-                                    {initialLoading ? (
-                                        <SelectItem value="loading" disabled>
-                                            Loading projects...
+            {/* Header */}
+            <div className="flex justify-between items-center gap-6">
+                <Label className="font-bold text-4xl md:text-5xl">Content</Label>
+                <div className="flex flex-col md:flex-row gap-4">
+                    {/* Project Selector */}
+                    <Select onValueChange={handleProjectChange} value={selectedProject}>
+                        <SelectTrigger className="w-[200px]">
+                            <SelectValue placeholder="Select a project" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectLabel>Projects</SelectLabel>
+                                {initialLoading ? (
+                                    <SelectItem value="loading" disabled>
+                                        Loading projects...
+                                    </SelectItem>
+                                ) : (
+                                    projects.map((project) => (
+                                        <SelectItem key={project.id} value={project.id.toString()}>
+                                            {project.title}
                                         </SelectItem>
-                                    ) : (
-                                        projects.map((project) => (
-                                            <SelectItem key={project.id} value={project.id.toString()}>
-                                                {project.title}
-                                            </SelectItem>
-                                        ))
-                                    )}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    {/* Schema Dropdown */}
-                    <div>
-                        <Select onValueChange={handleSchemaChange} value={selectedSchema}>
-                            <SelectTrigger className="w-[200px]">
-                                <SelectValue placeholder="Select a Schema" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Schemas</SelectLabel>
-                                    {loadingSchemas ? (
-                                        <SelectItem value="loading" disabled>
-                                            Loading schemas...
+                                    ))
+                                )}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+
+                    {/* Schema Selector */}
+                    <Select onValueChange={handleSchemaChange} value={selectedSchema}>
+                        <SelectTrigger className="w-[200px]">
+                            <SelectValue placeholder="Select a schema" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectLabel>Schemas</SelectLabel>
+                                {loadingSchemas ? (
+                                    <SelectItem value="loading" disabled>
+                                        Loading schemas...
+                                    </SelectItem>
+                                ) : (
+                                    schemas.map((schema) => (
+                                        <SelectItem key={schema.id} value={schema.id.toString()}>
+                                            {schema.name}
                                         </SelectItem>
-                                    ) : (
-                                        schemas.map((schema) => (
-                                            <SelectItem key={schema.id} value={schema.id.toString()}>
-                                                {schema.name}
-                                            </SelectItem>
-                                        ))
-                                    )}
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </div>
+                                    ))
+                                )}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
                 </div>
-            </div>
-            {/* Fields according to selected schema and project */}
-            <div className="flex flex-col">
-                {formatFields(schemas.find((schema) => schema.id.toString() === selectedSchema))}
             </div>
 
+            {/* Schema Fields */}
             <div>
-                <DynamicForm
-                    schema={schemas.find((schema) => schema.id.toString() === selectedSchema)}
-                    schemaId={selectedSchema}
-                />
+                {selectedSchema ? (
+                    <div>
+                        <h2 className="font-bold">Schema Fields:</h2>
+                        {formatFields(schemas.find((schema) => schema.id.toString() === selectedSchema))}
+                    </div>
+                ) : (
+                    <p>Select a schema to view its fields.</p>
+                )}
+            </div>
 
+            {/* Form and Table */}
+            <div className="flex flex-col gap-8">
+                {selectedSchema ? (
+                    <>
+                        {/* Form */}
+                        <DynamicForm
+                            schema={schemas.find((schema) => schema.id.toString() === selectedSchema)}
+                            schemaId={selectedSchema}
+                            initialValues={editingContent?.data || {}}
+                            onSubmit={(updatedContent: Record<string, any>) => {
+                                const contentResponse: ContentResponse = {
+                                    id: editingContent?.id || 0,
+                                    schemaId: selectedSchema,
+                                    data: updatedContent as ContentData,
+                                    createdAt: editingContent?.createdAt || new Date().toISOString(),
+                                    updatedAt: new Date().toISOString(),
+                                };
+
+                                handleFormSubmit(contentResponse);
+                            }}
+                        />
+
+                        {/* Table */}
+                        <ContentTable
+                            contentData={contentData}
+                            onEdit={(content: ContentResponse) => handleEdit(content)}
+                            onDelete={(contentId: number) => handleDelete(contentId)}
+                        />
+                    </>
+                ) : (
+                    <p>Select a schema to manage its content.</p>
+                )}
             </div>
         </div>
     );
