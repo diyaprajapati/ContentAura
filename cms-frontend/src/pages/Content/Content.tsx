@@ -151,7 +151,11 @@ const Content = () => {
             </div>
 
             <div>
-                <DynamicForm />
+                <DynamicForm
+                    schema={schemas.find((schema) => schema.id.toString() === selectedSchema)}
+                    schemaId={selectedSchema}
+                />
+
             </div>
         </div>
     );
