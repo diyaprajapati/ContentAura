@@ -66,32 +66,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ schema, schemaId, initialValu
     };
 
     // Render fields dynamically
-    // const renderFields = () => {
-    //     if (!schema?.content?.properties) return <p>No fields available</p>;
-
-    //     return Object.entries(schema.content.properties).map(([name, details]: [string, any]) => {
-    //         const isRequired = details.required;
-    //         const inputType = details.type === "integer" ? "number" : details.type;
-
-    //         return (
-    //             <div key={name} className="flex flex-col gap-2 mb-4">
-    //                 <Label htmlFor={name} className="font-semibold">
-    //                     {name} {isRequired && <span className="text-red-500">*</span>}
-    //                 </Label>
-    //                 <Input
-    //                     id={name}
-    //                     type={inputType}
-    //                     required={isRequired}
-    //                     value={formData[name] || ""}
-    //                     className="hover:border-violet-400/60 transition-all w-full"
-    //                     onChange={(e) => handleInputChange(name, e.target.value)}
-    //                 />
-    //             </div>
-    //         );
-    //     });
-    // };
-
-    // Updated renderFields method
     const renderFields = () => {
         if (!schema?.content?.properties) return <p>No fields available</p>;
 
