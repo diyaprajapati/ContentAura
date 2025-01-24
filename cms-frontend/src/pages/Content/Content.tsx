@@ -137,7 +137,7 @@ const Content = () => {
     // };
 
     return (
-        <div className="flex flex-col gap-8 mx-8 my-4">
+        <div className="flex flex-col gap-8 mx-8 my-4 pb-6">
             {/* Header */}
             <div className="flex justify-between items-center gap-6">
                 <Label className="font-bold text-4xl md:text-5xl">Content</Label>
