@@ -20,7 +20,6 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -32,6 +31,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { ContentResponse } from "@/lib/types/content";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 // export type Content = {
 //     id: number;
@@ -49,6 +49,7 @@ interface ContentTableProps {
     contentData: ContentResponse[]; // Pass content data dynamically
     onEdit: (content: ContentResponse) => void; // Function to handle editing
     onDelete: (contentId: number) => void; // Function to handle deletion
+    editingContentId?: number | null;
 }
 
 export function ContentTable({ contentData, onEdit, onDelete }: ContentTableProps) {
@@ -105,10 +106,24 @@ export function ContentTable({ contentData, onEdit, onDelete }: ContentTableProp
                             <DropdownMenuItem onClick={() => onEdit(content)}>
                                 Edit
                             </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => onDelete(content.id)}>
-                                Delete
-                            </DropdownMenuItem>
+                            {/* Delete */}
+                            <AlertDialog >
+                                <AlertDialogTrigger asChild>
+                                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}> Delete</DropdownMenuItem>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            This action cannot be undone. This will permanently delete your data from our servers.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction onClick={() => onDelete(content.id)}>Delete</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );
