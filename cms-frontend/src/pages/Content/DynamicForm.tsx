@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { SchemaData } from "@/lib/types/schema";
-import { createContent, updateContent } from "@/lib/api/content"; // Adjust the import path for your API logic
+import { createContent, updateContent } from "@/lib/api/content";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 interface DynamicFormProps {
     schema?: SchemaData;
-    schemaId: string; // Pass schema ID for API requests
+    schemaId: string;
     initialValues?: ContentData;
     onSubmit: (updatedContent: ContentResponse) => void;
     onCancel?: () => void;
