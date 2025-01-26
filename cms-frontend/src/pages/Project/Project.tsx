@@ -33,8 +33,8 @@ export default function Project() {
                 ),
             })
             console.log("Error", res);
-            setLoading(false);
         }
+        setLoading(false);
     }
 
     // handle delete project

@@ -82,26 +82,6 @@ const Content = () => {
         fetchContentData();
     }, [selectedSchema]);
 
-    // Skeleton loader
-    if (isLoading) {
-        return (
-            <div className="flex flex-col gap-8 mx-8 my-4 pb-6">
-                <div className="flex justify-between items-center gap-6">
-                    <Skeleton className="h-12 w-48" />
-                    <div className="flex flex-col md:flex-row gap-4">
-                        <Skeleton className="h-10 w-[200px]" />
-                        <Skeleton className="h-10 w-[200px]" />
-                    </div>
-                </div>
-                <div className="space-y-4">
-                    {[1, 2, 3].map((_, index) => (
-                        <Skeleton key={index} className="h-16 w-full" />
-                    ))}
-                </div>
-            </div>
-        );
-    }
-
     useEffect(() => {
         const storedProject = localStorage.getItem("selectedProject");
         const storedSchema = localStorage.getItem("selectedSchema");
@@ -158,6 +138,26 @@ const Content = () => {
     //         </div>
     //     ));
     // };
+
+    // Skeleton loader
+    if (isLoading) {
+        return (
+            <div className="flex flex-col gap-8 mx-8 my-4 pb-6">
+                <div className="flex justify-between items-center gap-6">
+                    <Skeleton className="h-12 w-48" />
+                    <div className="flex flex-col md:flex-row gap-4">
+                        <Skeleton className="h-10 w-[200px]" />
+                        <Skeleton className="h-10 w-[200px]" />
+                    </div>
+                </div>
+                <div className="space-y-4">
+                    {[1, 2, 3].map((_, index) => (
+                        <Skeleton key={index} className="h-16 w-full" />
+                    ))}
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-col gap-8 mx-8 my-4 pb-6">

@@ -31,7 +31,7 @@ public class Content {
 
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "schema_id", nullable = false)
     @JsonIgnore
     private Schema schema;

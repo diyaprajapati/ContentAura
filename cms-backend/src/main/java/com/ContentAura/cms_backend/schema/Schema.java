@@ -1,5 +1,6 @@
 package com.ContentAura.cms_backend.schema;
 
+import com.ContentAura.cms_backend.content.Content;
 import com.ContentAura.cms_backend.project.Project;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -31,6 +33,9 @@ public class Schema {
     @Column(columnDefinition = "jsonb", nullable = true)
     @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode content;
+
+    @OneToMany(mappedBy = "schema", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Content> contents;
 
     private LocalDateTime createdAt;
 
