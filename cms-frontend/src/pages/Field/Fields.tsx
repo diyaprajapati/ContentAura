@@ -7,6 +7,7 @@ import { getFieldsBySchemaId, updateSchema } from "@/lib/api/schema";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { SchemaRequestData } from "@/lib/types/schema";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Fields() {
   const { schemaId } = useParams<{ schemaId: string }>();
@@ -44,10 +45,6 @@ export default function Fields() {
     try {
       const response = await getFieldsBySchemaId(schemaId);
       if (response && response.status === 200) {
-        //setFields(response.data.content.properties.map((field: any) => ({
-        //    name: field,
-        //    type: field.type
-        //})))
         setData(response.data);
         if (!response.data.content) {
           setFields([]);
@@ -129,6 +126,31 @@ export default function Fields() {
         variant: "destructive",
       });
     }
+  }
+
+  // Skeleton loader
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-8 mx-8 my-4">
+        <div className="flex justify-between w-full items-center ml-5 md:mx-16">
+          <div>
+            <Skeleton className="h-12 w-48 mb-2" />
+            <Skeleton className="h-6 w-64" />
+          </div>
+          <div className="flex gap-4">
+            <Skeleton className="h-10 w-24" />
+            <Skeleton className="h-10 w-24" />
+          </div>
+        </div>
+        <div className="mt-4">
+          {[1, 2, 3].map((_, index) => (
+            <div key={index} className="flex items-center mb-4">
+              <Skeleton className="h-10 w-full" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (

@@ -8,15 +8,18 @@ import { AddProjectDialogBox } from "./AddProjectDialogBox";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ProjectOptionsDropdown from "./ProjectOptionsDropdown";
 import { useNavigate } from "react-router-dom";
+import { Skeleton } from "@/components/ui/skeleton";
 
 
 export default function Project() {
 
     const [projects, setProjects] = useState<ProjectData[]>([]);
     const [filter, setFilter] = useState<string>("date");
+    const [loading, setLoading] = useState<boolean>(true);
 
     // apicall
     const fetchProject = async () => {
+        setLoading(true);
         const res = await getAllProjects();
 
         if (res?.status === 200) {
@@ -30,6 +33,7 @@ export default function Project() {
                 ),
             })
             console.log("Error", res);
+            setLoading(false);
         }
     }
 
@@ -57,6 +61,21 @@ export default function Project() {
     const handleNavigateToSchema = (projectId: number) => {
         navigate(`/schema/${projectId}`);
     }
+
+    // Skeleton loader component
+    const ProjectSkeleton = () => (
+        <div className="mx-5 px-5 py-2 flex flex-col gap-7">
+            <div className="flex flex-row justify-between mx-2 items-center">
+                <div className="flex flex-col gap-2 w-full">
+                    <Skeleton className="h-6 w-1/2 mb-2" />
+                    <Skeleton className="h-4 w-3/4 mb-1" />
+                    <Skeleton className="h-3 w-1/4" />
+                </div>
+                <Skeleton className="h-8 w-8 rounded-full" />
+            </div>
+            <hr />
+        </div>
+    );
 
     return (
         <div className="flex flex-col gap-8 mx-8 my-4">
@@ -90,7 +109,13 @@ export default function Project() {
             {/* project layout */}
             <div>
                 <hr className="ml-10 mr-10 mb-2" />
-                {sortedProjects.length > 0 ? (
+                {loading ? (
+                    <>
+                        <ProjectSkeleton />
+                        <ProjectSkeleton />
+                        <ProjectSkeleton />
+                    </>
+                ) : sortedProjects.length > 0 ? (
                     sortedProjects.map((proj) => (
                         <div
                             className="mx-5 px-5 py-2 flex flex-col gap-7"

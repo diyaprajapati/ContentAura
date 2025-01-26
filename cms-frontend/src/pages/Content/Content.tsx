@@ -9,6 +9,7 @@ import { ContentData, ContentResponse } from "@/lib/types/content";
 import { useEffect, useState } from "react";
 import DynamicForm from "./DynamicForm";
 import { ContentTable } from "./ContentTable";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Content = () => {
     const [projects, setProjects] = useState<ProjectData[]>([]);
@@ -19,6 +20,7 @@ const Content = () => {
     const [editingContent, setEditingContent] = useState<ContentResponse | null>(null);
     const [initialLoading, setInitialLoading] = useState<boolean>(true);
     const [loadingSchemas, setLoadingSchemas] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     console.log(contentData);
     // Fetch all projects on mount
@@ -31,6 +33,7 @@ const Content = () => {
                 console.error("Error fetching projects:", error);
             } finally {
                 setInitialLoading(false);
+                setIsLoading(false);
             }
         };
 
@@ -78,6 +81,26 @@ const Content = () => {
 
         fetchContentData();
     }, [selectedSchema]);
+
+    // Skeleton loader
+    if (isLoading) {
+        return (
+            <div className="flex flex-col gap-8 mx-8 my-4 pb-6">
+                <div className="flex justify-between items-center gap-6">
+                    <Skeleton className="h-12 w-48" />
+                    <div className="flex flex-col md:flex-row gap-4">
+                        <Skeleton className="h-10 w-[200px]" />
+                        <Skeleton className="h-10 w-[200px]" />
+                    </div>
+                </div>
+                <div className="space-y-4">
+                    {[1, 2, 3].map((_, index) => (
+                        <Skeleton key={index} className="h-16 w-full" />
+                    ))}
+                </div>
+            </div>
+        );
+    }
 
     useEffect(() => {
         const storedProject = localStorage.getItem("selectedProject");

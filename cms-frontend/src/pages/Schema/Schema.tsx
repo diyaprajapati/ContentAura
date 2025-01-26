@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { deleteSchema, getAllSchemasByProjectId, updateSchema } from "@/lib/api/schema";
 import { toast } from "@/hooks/use-toast";
 import { SchemaRequestData } from "@/lib/types/schema";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Schema() {
     // convert to string
@@ -13,7 +14,7 @@ export default function Schema() {
     const [schemas, setSchemas] = useState<SchemaColumn[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    console.log(schemas, isLoading);
+    console.log(schemas);
 
     // const handleUpdateSchema = async (schemaId: number, updatedData: { name: string }) => {
     //     try {
@@ -127,6 +128,23 @@ export default function Schema() {
     };
     function handleSchemaAdded() {
         fetchSchemas();
+    }
+
+    // Skeleton loader
+    if (isLoading) {
+        return (
+            <div className="flex flex-col gap-8 mx-8 my-4">
+                <div className="flex justify-between w-full items-center ml-5">
+                    <Skeleton className="h-12 w-48" />
+                    <Skeleton className="h-10 w-24" />
+                </div>
+                <div className="space-y-4">
+                    {[1, 2, 3].map((_, index) => (
+                        <Skeleton key={index} className="h-16 w-full" />
+                    ))}
+                </div>
+            </div>
+        );
     }
 
     return (
