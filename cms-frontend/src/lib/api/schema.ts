@@ -111,3 +111,34 @@ export const getFieldsBySchemaId = async (schemaId: string): Promise<AxiosRespon
     throw error;
   }
 };
+
+export const deleteSchemaField = async (schemaId: number, fieldName: string): Promise<void> => {
+  const token = getAuthToken();
+  await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/schema/${schemaId}/property/${fieldName}`, {
+      headers: {
+          Authorization: `Bearer ${token}`,
+      },
+  });
+};
+
+// export const renameSchemaField = async (schemaId: number, oldName: string, newName: string): Promise<void> => {
+//   const token = getAuthToken();
+//   const response = await axios.put(
+//       `${import.meta.env.VITE_API_BASE_URL}/schema/${schemaId}/property/rename`,
+//       { oldName, newName },
+//       {
+//           headers: {
+//               Authorization: `Bearer ${token}`,
+//           },
+//       }
+//   );
+//   return response;
+// };
+
+export async function renameSchemaField(schemaId: number, oldName: string, newName: string) {
+  const response = await axios.put(`${import.meta.env.VITE_API_BASE_URL}/schema/${schemaId}/property/rename`, {
+      oldName,
+      newName
+  });
+  return response.data;
+}
