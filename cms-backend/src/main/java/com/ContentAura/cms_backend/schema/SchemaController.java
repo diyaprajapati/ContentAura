@@ -49,6 +49,24 @@ public class SchemaController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAuthority('UPDATE_SCHEMA')")
+    @DeleteMapping("/{id}/property/{propertyPath}")
+    public ResponseEntity<SchemaResponse> deleteSchemaProperty(
+            @PathVariable Long id,
+            @PathVariable String propertyPath) {
+        Schema schema = schemaService.deleteSchemaProperty(id, propertyPath);
+        return ResponseEntity.ok(toResponse(schema));
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_SCHEMA')")
+    @PutMapping("/{id}/property/rename")
+    public ResponseEntity<SchemaResponse> renameProperty(
+            @PathVariable Long id,
+            @RequestBody PropertyRenameRequest request) {
+        Schema schema = schemaService.renameProperty(id, request);
+        return ResponseEntity.ok(toResponse(schema));
+    }
+
     private SchemaResponse toResponse(Schema schema) {
         return SchemaResponse.builder()
                 .id(schema.getId())

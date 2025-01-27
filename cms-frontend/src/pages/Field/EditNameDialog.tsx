@@ -13,10 +13,14 @@ import { Label } from "@/components/ui/label"
 
 // edit name props
 type EditNameDialogProps = {
-    children: React.ReactNode
+    children: React.ReactNode,
+    schemaId: number;
+    currentTitle: string;
+    onUpdate: (schemaId: number, updatedData: { title: string }) => void;
 }
 
-export function EditNameDialog({ children }: EditNameDialogProps) {
+export function EditNameDialog({ children, schemaId, currentTitle, onUpdate }: EditNameDialogProps) {
+    // export function EditNameDialog({ children }: EditNameDialogProps) {
     return (
         <Dialog>
             <DialogTrigger asChild>

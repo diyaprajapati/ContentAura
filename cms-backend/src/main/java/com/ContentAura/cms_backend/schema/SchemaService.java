@@ -2,7 +2,10 @@ package com.ContentAura.cms_backend.schema;
 
 import com.ContentAura.cms_backend.project.Project;
 import com.ContentAura.cms_backend.project.ProjectRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 // import org.springframework.web.client.RestTemplate;
@@ -15,6 +18,8 @@ public class SchemaService {
 
     private final SchemaRepository schemaRepository;
     private final ProjectRepository projectRepository;
+    private final ObjectMapper objectMapper;
+
     // private final RestTemplate restTemplate;
 
     // @Value("${node.schema.validation.url}")
@@ -56,6 +61,73 @@ public class SchemaService {
             throw new SchemaNotFoundException("Schema not found with id " + id);
         }
         schemaRepository.deleteById(id);
+    }
+
+    public Schema deleteSchemaProperty(Long id, String propertyPath) {
+        Schema schema = getSchemaById(id);
+
+        try {
+            // Convert JSONB content to JsonNode for manipulation
+            JsonNode contentNode = objectMapper.readTree(schema.getContent().toString());
+
+            // Create a mutable copy of the JSON structure
+            ObjectNode rootNode = (ObjectNode) contentNode;
+
+            // Split the property path (e.g., "properties.title")
+            String[] pathParts = propertyPath.split("\\.");
+
+            // Navigate to the parent node
+            ObjectNode currentNode = rootNode;
+            for (int i = 0; i < pathParts.length - 1; i++) {
+                currentNode = (ObjectNode) currentNode.get(pathParts[i]);
+                if (currentNode == null) {
+                    throw new RuntimeException("Invalid property path: " + propertyPath);
+                }
+            }
+
+            // Remove the specified property
+            currentNode.remove(pathParts[pathParts.length - 1]);
+
+            // Update the schema with modified content - keeping it as JsonNode
+            schema.setContent(rootNode);
+            return schemaRepository.save(schema);
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error processing JSON content", e);
+        }
+    }
+
+    public Schema renameProperty(Long id, PropertyRenameRequest request) {
+        Schema schema = getSchemaById(id);
+
+        try {
+            // Convert JSONB content to JsonNode for manipulation
+            JsonNode contentNode = objectMapper.readTree(schema.getContent().toString());
+            ObjectNode rootNode = (ObjectNode) contentNode;
+
+            // Get the properties object
+            JsonNode propertiesNode = rootNode.get("properties");
+            if (propertiesNode == null || !propertiesNode.isObject()) {
+                throw new RuntimeException("Schema doesn't have a valid properties object");
+            }
+
+            // Get the property we want to rename
+            JsonNode propertyNode = propertiesNode.get(request.getOldName());
+            if (propertyNode == null) {
+                throw new RuntimeException("Property " + request.getOldName() + " not found");
+            }
+
+            // Remove old property and add with new name
+            ((ObjectNode) propertiesNode).remove(request.getOldName());
+            ((ObjectNode) propertiesNode).set(request.getNewName(), propertyNode);
+
+            // Update the schema with modified content
+            schema.setContent(rootNode);
+            return schemaRepository.save(schema);
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error processing JSON content", e);
+        }
     }
 
     // private void validateSchemaWithNode(JsonNode content) {

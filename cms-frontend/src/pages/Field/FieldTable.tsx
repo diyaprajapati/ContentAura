@@ -6,7 +6,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { MoreHorizontal } from "lucide-react"
+import FieldsOptionsDropdown from "./FieldsOptionsDropdown";
+import { MoreHorizontal } from "lucide-react";
 
 
 export type FieldColumn = {
@@ -33,6 +34,7 @@ export function FieldTable({ fields }: { fields: FieldColumn[] }) {
                         <div className="flex items-center justify-end pt-2 gap-16 md:gap-40">
                             <TableCell>{field.type}</TableCell>
                             <MoreHorizontal />
+                            {/* <FieldsOptionsDropdown /> */}
                         </div>
                     </TableRow>
                 )) : (
