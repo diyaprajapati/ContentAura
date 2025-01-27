@@ -19,8 +19,8 @@ type EditNameDialogProps = {
     onUpdate: (schemaId: number, updatedData: { title: string }) => void;
 }
 
-export function EditNameDialog({ children, schemaId, currentTitle, onUpdate }: EditNameDialogProps) {
-    // export function EditNameDialog({ children }: EditNameDialogProps) {
+// export function EditNameDialog({ children, schemaId, currentTitle, onUpdate }: EditNameDialogProps) {
+export function EditNameDialog({ children }: EditNameDialogProps) {
     return (
         <Dialog>
             <DialogTrigger asChild>
