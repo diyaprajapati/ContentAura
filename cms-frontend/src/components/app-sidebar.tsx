@@ -43,7 +43,7 @@ const items = [
     },
     {
         title: "Api Keys",
-        url: "#",
+        url: "/api",
         icon: Key,
     },
     {

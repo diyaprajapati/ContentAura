@@ -9,6 +9,7 @@ import Schema from "./pages/Schema/Schema";
 import Fields from "./pages/Field/Fields";
 import SchemaTab from "./pages/Schema/SchemaTab";
 import Content from "./pages/Content/Content";
+import Api from './pages/Api/Api'
 
 function App() {
   return (
@@ -27,6 +28,9 @@ function App() {
           </Route>
           <Route path='/content' element={<Layout />}>
             <Route index element={<Content />} />
+          </Route>
+          <Route path='/api' element={<Layout />}>
+            <Route index element={<Api />} />
           </Route>
           <Route path='/schema/:projectId' element={<Layout />}>
             <Route index element={<Schema />} />
