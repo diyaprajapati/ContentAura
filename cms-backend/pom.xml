@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.ContentAura</groupId>
 	<artifactId>cms-backend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>CMS Backend</name>
 	<description>A Content Management System Backend for Developers</description>
 	<url/>
