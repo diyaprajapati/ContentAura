@@ -104,6 +104,10 @@ export function AppSidebar() {
         navigate('/auth');
     }
 
+    function handleSettings() {
+        navigate('/settings');
+    }
+
     return (
         <Sidebar>
             <SidebarContent>
@@ -145,8 +149,8 @@ export function AppSidebar() {
                                 </SidebarMenuButton>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
-                                <DropdownMenuItem className="flex justify-between">
-                                    <span>Account</span>
+                                <DropdownMenuItem onClick={handleSettings} className="flex justify-between">
+                                    <span>Settings</span>
                                     <Settings />
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={handleLogout} className="flex justify-between">

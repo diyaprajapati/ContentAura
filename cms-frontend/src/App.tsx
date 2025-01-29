@@ -10,6 +10,11 @@ import Fields from "./pages/Field/Fields";
 import SchemaTab from "./pages/Schema/SchemaTab";
 import Content from "./pages/Content/Content";
 import Api from './pages/Api/Api'
+// import Setting from './pages/Settings/Setting'
+import SettingsLayout from './pages/setting-forms/SettingsLayout'
+import { ProfileForm } from './pages/setting-forms/ProfileForm'
+import SettingsAccountPage from './pages/setting-forms/Account/SettingsAccountPage'
+import SettingsAppearencePage from './pages/setting-forms/Appearence/SettingsAppearencePage'
 
 function App() {
   return (
@@ -17,6 +22,7 @@ function App() {
       {/* routers */}
       <BrowserRouter>
         <Routes>
+          {/*  */}
           <Route path='/dashboard' element={<Layout />}>
             <Route index element={<Dashboard />} />
           </Route>
@@ -32,12 +38,24 @@ function App() {
           <Route path='/api' element={<Layout />}>
             <Route index element={<Api />} />
           </Route>
+          {/* <Route path='/settings' element={<Layout />}>
+            <Route index element={<Setting />} />
+          </Route> */}
           <Route path='/schema/:projectId' element={<Layout />}>
             <Route index element={<Schema />} />
           </Route>
           <Route path='/fields/:schemaId' element={<Layout />}>
             <Route index element={<Fields />} />
           </Route>
+
+          {/*  */}
+          <Route path='/settings' element={<SettingsLayout />}>
+            <Route index element={<ProfileForm />} />
+            <Route path='/settings/appearence' element={<SettingsAppearencePage />} />
+            <Route path='/settings/account' element={<SettingsAccountPage />} />
+          </Route>
+
+          {/*  */}
           <Route path='/auth' element={<Authentication />} />
           <Route path="/" element={<HomePage />} />
         </Routes>

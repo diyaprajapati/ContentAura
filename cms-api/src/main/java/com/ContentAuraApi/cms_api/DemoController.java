@@ -3,7 +3,7 @@ package com.ContentAuraApi.cms_api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.contentaura.cms_backend.project.ProjectResponse;
 
 @RestController
 public class DemoController {
@@ -14,7 +14,7 @@ public class DemoController {
     }
 
     @GetMapping("/projects")
-    public ResponseEntity<com.ContentAura.cms_backend.project.ProjectResponse> projects() {
+    public ResponseEntity<ProjectResponse> projects() {
 
     }
 }

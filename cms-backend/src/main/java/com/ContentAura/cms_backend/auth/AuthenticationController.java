@@ -30,6 +30,10 @@ public class AuthenticationController {
         String email = principal.getName();
         User user = service.getUserByEmail(email);
 
-        return ResponseEntity.ok(Map.of("firstname", user.getFirstname()));
+        return ResponseEntity.ok(Map.of(
+                "firstname", user.getFirstname(),
+                "lastname", user.getLastname(),
+                "email", user.getEmail()
+        ));
     }
 }

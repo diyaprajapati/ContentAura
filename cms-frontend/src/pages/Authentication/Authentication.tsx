@@ -2,34 +2,8 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { TabsContent } from '@radix-ui/react-tabs'
 import Login from './Login'
 import Signup from './Signup'
-import { useEffect, useState } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Authentication() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (isLoading) {
-    return (
-      <div className="w-full h-screen flex justify-center items-center">
-        <div className="w-[90%] md:w-[50%]">
-          <div className="w-full flex justify-center mb-4">
-            <Skeleton className="h-12 w-full" />
-          </div>
-          <div className="w-full flex justify-center">
-            <Skeleton className="h-[360px] w-full" />
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     // routers and tab to see login signup in one page

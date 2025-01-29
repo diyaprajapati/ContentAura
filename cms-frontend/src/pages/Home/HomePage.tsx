@@ -3,40 +3,15 @@ import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 import KeyFeature from './KeyFeature'
 import WhyUs from './WhyUs'
-import { useEffect, useRef, useState } from 'react';
-import { Skeleton } from '@/components/ui/skeleton'
+import { useRef } from 'react';
 
 // useRef is used for smooth scroll after click on the button
 function HomePage() {
   const ref = useRef<HTMLDivElement>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const handleClick = () => {
     ref.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  useEffect(() => {
-    // Simulate loading time
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (isLoading) {
-    return (
-      <div className='flex flex-col space-y-10 h-dvh justify-center items-center w-full p-10'>
-        <div className='space-y-5 md:w-[70%] md:self-center'>
-          <Skeleton className='h-16 w-full mb-4' />
-          <Skeleton className='h-8 w-3/4 mx-auto mb-4' />
-        </div>
-        <div className='flex flex-row gap-8'>
-          <Skeleton className='h-16 w-40 rounded-full' />
-          <Skeleton className='h-16 w-40 rounded-full' />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <>
