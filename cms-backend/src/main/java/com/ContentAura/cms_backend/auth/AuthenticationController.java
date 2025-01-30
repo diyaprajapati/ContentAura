@@ -1,5 +1,7 @@
 package com.ContentAura.cms_backend.auth;
 
+import com.ContentAura.cms_backend.user.UpdatePasswordRequest;
+import com.ContentAura.cms_backend.user.UpdateProfileRequest;
 import com.ContentAura.cms_backend.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,5 +37,35 @@ public class AuthenticationController {
                 "lastname", user.getLastname(),
                 "email", user.getEmail()
         ));
+    }
+
+    @PutMapping("/update-profile")
+    public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest request, Principal principal) {
+        String email = principal.getName();
+        service.updateProfile(email, request);
+        return ResponseEntity.ok(Map.of("message", "profile updated Successfully"));
+    }
+
+    @PutMapping("/update-password")
+    public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest request, Principal principal) {
+        String email = principal.getName();
+        service.updatePassword(email, request);
+        return ResponseEntity.ok(Map.of("message", "password updated Successfully"));
+    }
+
+    @PostMapping("/request-password-change")
+    public ResponseEntity<?> requestPasswordChange(Principal principal) {
+        String email = principal.getName();
+        service.initiatePasswordChange(email);
+        return ResponseEntity.ok(Map.of("message", "OTP sent to your email"));
+    }
+
+    @PutMapping("/verify-and-update-password")
+    public ResponseEntity<?> verifyAndUpdatePassword(
+            @RequestBody UpdatePasswordRequest request,
+            Principal principal) {
+        String email = principal.getName();
+        service.verifyAndUpdatePassword(email, request);
+        return ResponseEntity.ok(Map.of("message", "Password updated successfully"));
     }
 }
