@@ -13,7 +13,7 @@ import Api from './pages/Api/Api'
 // import Setting from './pages/Settings/Setting'
 import SettingsLayout from './pages/setting-forms/SettingsLayout'
 import { ProfileForm } from './pages/setting-forms/ProfileForm'
-import SettingsAccountPage from './pages/setting-forms/Account/SettingsAccountPage'
+import SettingsPasswordPage from './pages/setting-forms/ConfPassword/SettingsPasswordPage'
 import SettingsAppearencePage from './pages/setting-forms/Appearence/SettingsAppearencePage'
 
 function App() {
@@ -52,7 +52,7 @@ function App() {
           <Route path='/settings' element={<SettingsLayout />}>
             <Route index element={<ProfileForm />} />
             <Route path='/settings/appearence' element={<SettingsAppearencePage />} />
-            <Route path='/settings/account' element={<SettingsAccountPage />} />
+            <Route path='/settings/password' element={<SettingsPasswordPage />} />
           </Route>
 
           {/*  */}

@@ -67,12 +67,12 @@ public class AuthenticationService {
         User user = userRepository.findByEmail(currentEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        if(request.getFirstName() != null) {
-            user.setFirstname(request.getFirstName());
+        if(request.getFirstname() != null) {
+            user.setFirstname(request.getFirstname());
         }
 
-        if(request.getLastName() != null) {
-            user.setLastname(request.getLastName());
+        if(request.getLastname() != null) {
+            user.setLastname(request.getLastname());
         }
 
         if(request.getEmail() != null && !request.getEmail().equals(currentEmail)) {

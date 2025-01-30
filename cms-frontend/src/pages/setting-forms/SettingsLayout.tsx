@@ -51,7 +51,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 
 const sidebarNavItems = [
   { title: "Profile", href: "/settings", },
-  { title: "Account", href: "/settings/account", },
+  { title: "Change Password", href: "/settings/password", },
   { title: "Appearance", href: "/settings/appearence", },
 ]
 
