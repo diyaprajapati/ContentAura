@@ -1,0 +1,32 @@
+spring:
+    datasource:
+        url: jdbc:postgresql://localhost:5432/contentaura
+        username: postgres
+        password: diya555
+        driver-class-name: org.postgresql.Driver
+
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: ${MAIL_USERNAME}
+        password: ${MAIL_PASSWORD}
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+
+jpa:
+    hibernate:
+        ddl-auto: none
+    show-sql: true
+    properties:
+        hibernate:
+            format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+
+server:
+    port: 8081
