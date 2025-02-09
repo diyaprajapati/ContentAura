@@ -3,7 +3,9 @@ package com.ContentAura.cms_service.project;
 import com.ContentAura.cms_service.user.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,6 +28,14 @@ public class ProjectService {
 
         var savedProject = projectRepository.save(project);
         return mapToResponse(savedProject);
+    }
+
+    public Project getProjectById(Long id) {
+        return projectRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Project not found with id: " + id
+                ));
     }
 
     @Transactional

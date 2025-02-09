@@ -1,13 +1,45 @@
+//package com.ContentAura.cms_api.controller;
+//
+//import com.ContentAura.cms_service.content.ContentResponse;
+//import com.ContentAura.cms_service.content.ContentService;
+//import com.ContentAura.cms_service.project.ProjectService;
+//import lombok.RequiredArgsConstructor;
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.web.bind.annotation.*;
+//
+//import java.util.List;
+//import java.util.stream.Collectors;
+//
+//@RestController
+//@RequestMapping("/api")
+//@RequiredArgsConstructor
+//public class Content {
+//    private final ContentService contentService;
+//    private final ProjectService projectService;
+//
+//    @GetMapping("/{schemaId}")
+//    public ResponseEntity<List<ContentResponse>> getAllContentBySchemaId(@PathVariable Long schemaId) {
+//        List<com.ContentAura.cms_service.content.Content> contents = contentService.getContentBySchemaId(schemaId);
+//        return ResponseEntity.ok(contents.stream().map(this::toResponse).collect(Collectors.toList()));
+//    }
+//
+//    private ContentResponse toResponse(com.ContentAura.cms_service.content.Content content) {
+//        return ContentResponse.builder()
+//                .id(content.getId())
+//                .data(content.getData())
+//                .build();
+//    }
+//}
+
 package com.ContentAura.cms_api.controller;
 
-import com.ContentAura.cms_service.content.ContentResponse;
 import com.ContentAura.cms_service.content.ContentService;
+import com.ContentAura.cms_service.project.Project;
+import com.ContentAura.cms_service.project.ProjectService;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,17 +49,29 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class Content {
     private final ContentService contentService;
+    private final ProjectService projectService;
 
-    @GetMapping("/{schemaId}")
-    public ResponseEntity<List<ContentResponse>> getAllContentBySchemaId(@PathVariable Long schemaId) {
-        List<com.ContentAura.cms_service.content.Content> contents = contentService.getContentBySchemaId(schemaId);
-        return ResponseEntity.ok(contents.stream().map(this::toResponse).collect(Collectors.toList()));
-    }
+    @GetMapping("/{projectId}/{schemaId}")
+    public ResponseEntity<List<JsonNode>> getAllContentBySchemaId(
+            @PathVariable Long projectId,
+            @PathVariable Long schemaId,
+            @RequestHeader("X-API-Key") String apiKey
+    ) {
+        // Validate API key against project
+        Project project = projectService.getProjectById(projectId);
+        if (!project.getApiKey().equals(apiKey)) {
+            return ResponseEntity.status(401).build();
+        }
 
-    private ContentResponse toResponse(com.ContentAura.cms_service.content.Content content) {
-        return ContentResponse.builder()
-                .id(content.getId())
-                .data(content.getData())
-                .build();
+        // Get content and transform to only return data
+        List<com.ContentAura.cms_service.content.Content> contents =
+                contentService.getContentBySchemaId(schemaId);
+
+        // Extract only the JSONB data field
+        List<JsonNode> response = contents.stream()
+                .map(content -> content.getData())
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(response);
     }
 }
