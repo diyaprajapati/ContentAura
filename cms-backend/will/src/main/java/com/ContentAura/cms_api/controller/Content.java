@@ -47,6 +47,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class Content {
     private final ContentService contentService;
     private final ProjectService projectService;

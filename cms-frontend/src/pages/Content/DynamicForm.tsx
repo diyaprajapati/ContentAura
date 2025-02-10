@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ContentData, ContentResponse } from "@/lib/types/content";
 import { Plus, Trash2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 interface DynamicFormProps {
     schema?: SchemaData;
@@ -174,6 +175,28 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ schema, schemaId, initialValu
                         />
                     </div>
                 );
+            }
+
+            if (fieldType === "String") {
+                return (
+                    <div key={name} className="flex flex-col gap-2 mb-4">
+                        <Label htmlFor={name} className="font-semibold">
+                            {name} (String) {isRequired && <span className="text-red-500">*</span>}
+                        </Label>
+                        <Textarea
+                            id={name}
+                            required={isRequired}
+                            value={formData[name] || ""}
+                            onChange={(e) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    [name]: e.target.value,
+                                }))
+                            }
+                            className="hover:border-violet-400/60 transition-all w-full"
+                        />
+                    </div>
+                )
             }
 
             // Default case for other types
