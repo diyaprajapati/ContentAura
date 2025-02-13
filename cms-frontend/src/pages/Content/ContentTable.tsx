@@ -13,7 +13,6 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -42,17 +41,29 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { ContentDialog } from "./ContentDialog";
 
 // Helper function to truncate text
 const truncateText = (text: string, maxLength: number = 50): string => {
     if (text.length <= maxLength) return text;
     return `${text.slice(0, maxLength)}...`;
+};
+
+// Helper function to format content for display
+const formatContent = (value: any): string => {
+    if (value === null || value === undefined) return '';
+
+    if (typeof value === 'string') return value;
+
+    if (Array.isArray(value)) {
+        return value.map((item, index) => `${index + 1}. ${JSON.stringify(item)}`).join('\n');
+    }
+
+    if (typeof value === 'object') {
+        return JSON.stringify(value, null, 2);
+    }
+
+    return String(value);
 };
 
 // Helper function to format different data types
@@ -61,37 +72,11 @@ const formatCellContent = (value: any): { displayText: string; fullText: string;
         return { displayText: '', fullText: '', needsTruncation: false };
     }
 
-    if (typeof value === 'string') {
-        return {
-            displayText: truncateText(value),
-            fullText: value,
-            needsTruncation: value.length > 50
-        };
-    }
-
-    if (Array.isArray(value)) {
-        const fullText = JSON.stringify(value);
-        return {
-            displayText: truncateText(fullText),
-            fullText,
-            needsTruncation: fullText.length > 50
-        };
-    }
-
-    if (typeof value === 'object') {
-        const fullText = JSON.stringify(value);
-        return {
-            displayText: truncateText(fullText),
-            fullText,
-            needsTruncation: fullText.length > 50
-        };
-    }
-
-    const stringValue = String(value);
+    const fullText = formatContent(value);
     return {
-        displayText: stringValue,
-        fullText: stringValue,
-        needsTruncation: false
+        displayText: truncateText(fullText),
+        fullText,
+        needsTruncation: fullText.length > 50
     };
 };
 
@@ -107,8 +92,21 @@ export function ContentTable({ contentData, onEdit, onDelete }: ContentTableProp
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
+    const [dialogContent, setDialogContent] = React.useState<{ isOpen: boolean; title: string; content: string }>({
+        isOpen: false,
+        title: '',
+        content: ''
+    });
 
     const schema = contentData.length > 0 ? Object.keys(contentData[0].data.data) : [];
+
+    const handleContentClick = (title: string, content: string) => {
+        setDialogContent({
+            isOpen: true,
+            title,
+            content
+        });
+    };
 
     const dynamicColumns: ColumnDef<ContentResponse>[] = schema.map((key) => ({
         accessorKey: `data.data.${key}`,
@@ -119,18 +117,12 @@ export function ContentTable({ contentData, onEdit, onDelete }: ContentTableProp
             const { displayText, fullText, needsTruncation } = formatCellContent(value);
 
             return needsTruncation ? (
-                <TooltipProvider>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <span className="text-gray-200 cursor-help">
-                                {displayText}
-                            </span>
-                        </TooltipTrigger>
-                        <TooltipContent className="max-w-[300px] whitespace-pre-wrap">
-                            {fullText}
-                        </TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
+                <button
+                    onClick={() => handleContentClick(key, fullText)}
+                    className="text-gray-200 hover:text-blue-400 text-left cursor-pointer"
+                >
+                    {displayText}
+                </button>
             ) : (
                 <span className="text-gray-200">{displayText}</span>
             );
@@ -257,6 +249,13 @@ export function ContentTable({ contentData, onEdit, onDelete }: ContentTableProp
                     </TableBody>
                 </Table>
             </div>
+
+            <ContentDialog
+                isOpen={dialogContent.isOpen}
+                onClose={() => setDialogContent(prev => ({ ...prev, isOpen: false }))}
+                title={dialogContent.title}
+                content={dialogContent.content}
+            />
         </div>
     );
 }
