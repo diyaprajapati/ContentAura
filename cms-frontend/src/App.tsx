@@ -15,6 +15,7 @@ import SettingsLayout from './pages/setting-forms/SettingsLayout'
 import { ProfileForm } from './pages/setting-forms/ProfileForm'
 import SettingsPasswordPage from './pages/setting-forms/ConfPassword/SettingsPasswordPage'
 import SettingsAppearencePage from './pages/setting-forms/Appearence/SettingsAppearencePage'
+import Docs from './pages/Documentation/Docs'
 
 function App() {
   return (
@@ -25,6 +26,9 @@ function App() {
           {/*  */}
           <Route path='/dashboard' element={<Layout />}>
             <Route index element={<Dashboard />} />
+          </Route>
+          <Route path='/documentation' element={<Layout />}>
+            <Route index element={<Docs />} />
           </Route>
           <Route path='/project' element={<Layout />}>
             <Route index element={<Project />} />

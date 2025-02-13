@@ -1,0 +1,57 @@
+{
+    "steps": [
+      {
+        "step_number": 1,
+        "title": "Create a Project",
+        "instructions": [
+          "Navigate to the Projects Tab.",
+          "Click on Create Project.",
+          "Enter the Project Name and Description for your project.",
+          "After filling in the details, click on Save to create the project."
+        ]
+      },
+      {
+        "step_number": 2,
+        "title": "Create a Schema",
+        "instructions": [
+          "Click on the project you just created.",
+          "Now, click on Create Schema.",
+          "Enter the Schema Name and click Save."
+        ]
+      },
+      {
+        "step_number": 3,
+        "title": "Add Fields to the Schema",
+        "instructions": [
+          "Once the schema is created, click on the schema name.",
+          "You will be directed to a page where you can add fields.",
+          "For each field, provide:",
+          {
+            "field_name": "The name of the field.",
+            "field_type": "The data type (e.g., text, number, date)."
+          },
+          "After adding all necessary fields, click Save."
+        ]
+      },
+      {
+        "step_number": 4,
+        "title": "Insert Data",
+        "instructions": [
+          "Go to the Content Tab.",
+          "Select the Project and Schema you want to insert data for.",
+          "A dynamic form will be generated based on the schema fields you created.",
+          "Fill in the data for each field and click Submit to save the content."
+        ]
+      },
+      {
+        "step_number": 5,
+        "title": "View Dynamic URLs and API",
+        "instructions": [
+          "Go to the Schema Tab to see the dynamic URLs for the schema.",
+          "Copy the Dynamic URL for use in your frontend.",
+          "You can also copy the API Key for the project from the API Tab."
+        ]
+      }
+    ]
+  }
+  

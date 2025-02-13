@@ -6,9 +6,9 @@ import {
     Key,
     Database,
     FileText,
-    BarChart,
     LogOut,
-    Settings
+    Settings,
+    File
 } from "lucide-react"
 
 import {
@@ -37,14 +37,14 @@ const items = [
         icon: Home,
     },
     {
+        title: "Documentation",
+        url: "/documentation",
+        icon: File,
+    },
+    {
         title: "Projects",
         url: "/project",
         icon: Folder,
-    },
-    {
-        title: "Api Keys",
-        url: "/api",
-        icon: Key,
     },
     {
         title: "Schemas",
@@ -57,9 +57,9 @@ const items = [
         icon: FileText,
     },
     {
-        title: "Analytics",
-        url: "#",
-        icon: BarChart,
+        title: "Api Keys",
+        url: "/api",
+        icon: Key,
     },
 ]
 
