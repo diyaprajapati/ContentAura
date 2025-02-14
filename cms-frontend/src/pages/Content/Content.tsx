@@ -108,7 +108,14 @@ const Content = () => {
     };
 
     const handleEdit = (content: ContentResponse) => {
-        setEditingContent(content);
+        // setEditingContent(content);
+        setEditingContent({
+            id: content.id,
+            schemaId: content.schemaId,
+            data: content.data,
+            createdAt: content.createdAt,
+            updatedAt: content.updatedAt
+        });
     };
 
     const handleDelete = async (contentId: number) => {
@@ -230,6 +237,23 @@ const Content = () => {
                 {selectedSchema ? (
                     <>
                         {/* Form */}
+                        {/* <DynamicForm
+                            schema={schemas.find((schema) => schema.id.toString() === selectedSchema)}
+                            schemaId={selectedSchema}
+                            initialValues={editingContent?.data || {}}
+                            onSubmit={(updatedContent: Record<string, any>) => {
+                                const contentResponse: ContentResponse = {
+                                    id: editingContent?.id || 0,
+                                    schemaId: selectedSchema,
+                                    data: updatedContent as ContentData,
+                                    createdAt: editingContent?.createdAt || new Date().toISOString(),
+                                    updatedAt: new Date().toISOString(),
+                                };
+
+                                handleFormSubmit(contentResponse);
+                            }}
+                            onCancel={() => setEditingContent(null)}
+                        /> */}
                         <DynamicForm
                             schema={schemas.find((schema) => schema.id.toString() === selectedSchema)}
                             schemaId={selectedSchema}

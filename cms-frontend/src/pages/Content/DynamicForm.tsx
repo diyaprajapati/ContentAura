@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SchemaData } from "@/lib/types/schema";
 import { createContent, updateContent } from "@/lib/api/content";
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,13 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ schema, schemaId, initialValu
     const [isSubmitting, setIsSubmitting] = useState(false);
     const isEditMode = !!initialValues && Object.keys(initialValues).length > 0;
 
+    // Add this useEffect to update form data when initialValues change
+    useEffect(() => {
+        if (initialValues && Object.keys(initialValues).length > 0) {
+            setFormData(initialValues);
+        }
+    }, [initialValues]);
+
     // Handle input changes
     const handleInputChange = (fieldName: string, value: any) => {
         setFormData((prev) => ({
@@ -30,6 +37,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ schema, schemaId, initialValu
         }));
     };
 
+    // Modified handleSubmit to clear form after submission
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -40,16 +48,13 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ schema, schemaId, initialValu
             let response;
 
             if (isEditMode) {
-                // Update content if in edit mode
-                response = await updateContent(schemaId, requestData); // Use the existing content ID
+                response = await updateContent(schemaId, requestData);
             } else {
-                // Create new content if not in edit mode
                 response = await createContent(schemaId, requestData);
             }
 
-            // Construct a valid ContentResponse object
             const updatedContent: ContentResponse = {
-                id: response.data.id || initialValues?.id, // Retain the ID from the response or initialValues
+                id: response.data.id || initialValues?.id,
                 schemaId: schemaId,
                 data: formData,
                 createdAt: response.data.createdAt || initialValues?.createdAt || new Date().toISOString(),
@@ -57,7 +62,12 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ schema, schemaId, initialValu
             };
 
             alert(`Content ${isEditMode ? "updated" : "created"} successfully!`);
-            onSubmit(updatedContent); // Notify parent with updated content
+            onSubmit(updatedContent);
+
+            // Clear form after successful submission
+            if (!isEditMode) {
+                setFormData({});
+            }
         } catch (error) {
             console.error(`Error ${isEditMode ? "updating" : "creating"} content:`, error);
             alert(`Failed to ${isEditMode ? "update" : "create"} content.`);
