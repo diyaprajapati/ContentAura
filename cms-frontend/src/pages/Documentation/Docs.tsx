@@ -1,5 +1,5 @@
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import data from './data.json';
 import CodeBlockComponent from "./CodeBlockComponent";
 
@@ -19,9 +19,19 @@ export default function Docs() {
     // Initialize state with proper type
     const [steps, setSteps] = useState<Step[]>([]);
 
+    // Create refs for each section
+    const gettingStartedRef = useRef<HTMLDivElement>(null);
+    const apiStepRef = useRef<HTMLDivElement>(null);
+    const conclusionRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
         setSteps(data.steps);
     }, []);
+
+    // Scroll handler function
+    const scrollToSection = (ref: React.RefObject<HTMLDivElement>) => {
+        ref.current?.scrollIntoView({ behavior: 'smooth' });
+    };
 
     return (
         <div className="flex flex-col gap-8 mx-8 my-4 pb-8">
@@ -34,17 +44,37 @@ export default function Docs() {
             {/* intro */}
             <div className="ml-5 md:w-[90%] self-center w-screen">
                 <div className="mb-2">
-                    <Label className="font-semibold text-2xl text-violet-400">Introduction</Label>
+                    <Label className="font-semibold text-2xl text-violet-200">Introduction</Label>
                 </div>
                 <div className="text-gray-200">
                     <p>ContentAura allows you to create, manage, and use dynamic content schemas, making it easy to integrate structured content into your applications via APIs. This guide walks you through how to create projects, define schemas, insert data, and use the provided API for seamless integration into your front-end applications.</p>
                 </div>
                 {/* Table of contents */}
-                <div className="mt-5 text-violet-400">
-                    <Label className="font-semibold text-2xl">Table Of Contents</Label>
+                <div className="mt-5">
+                    <Label className="font-semibold text-2xl text-violet-200">Table Of Contents</Label>
+                    <ul className="mt-3 space-y-2 text-lg">
+                        <li
+                            onClick={() => scrollToSection(gettingStartedRef)}
+                            className="cursor-pointer text-white hover:text-violet-200 transition-colors"
+                        >
+                            1. Getting Started
+                        </li>
+                        <li
+                            onClick={() => scrollToSection(apiStepRef)}
+                            className="cursor-pointer text-white hover:text-violet-200 transition-colors"
+                        >
+                            2. Using the API in React
+                        </li>
+                        <li
+                            onClick={() => scrollToSection(conclusionRef)}
+                            className="cursor-pointer text-white hover:text-violet-200 transition-colors"
+                        >
+                            3. Conclusion
+                        </li>
+                    </ul>
                 </div>
                 {/* getting started */}
-                <div className="mt-5 text-violet-400">
+                <div ref={gettingStartedRef} className="mt-5 text-violet-200">
                     <Label className="font-semibold text-2xl">Getting Started</Label>
                 </div>
                 <div>
@@ -75,7 +105,7 @@ export default function Docs() {
                 </div>
 
                 {/* code */}
-                <div className="mt-4 flex flex-col gap-2">
+                <div ref={apiStepRef} className="mt-4 flex flex-col gap-2">
                     <div>
                         <Label className="text-xl font-semibold text-violet-300">Step 6: Using the API in React</Label>
                     </div>
@@ -88,10 +118,10 @@ export default function Docs() {
                         <CodeBlockComponent />
                     </div>
 
-                    {/* explaination */}
+                    {/* explanation */}
                     <div className="flex flex-col gap-2">
                         <div>
-                            <Label className="text-xl text-violet-300">Explaination</Label>
+                            <Label className="text-xl text-violet-300">Explanation</Label>
                         </div>
                         <div className="flex flex-col gap-2">
                             <li><span className="font-semibold">CMS_URL:</span> Replace this with the dynamic URL from the Schema Tab. </li>
@@ -103,9 +133,9 @@ export default function Docs() {
                     </div>
 
                     {/* Conclusion */}
-                    <div className=" flex flex-col gap-3">
+                    <div ref={conclusionRef} className="flex flex-col gap-3">
                         <div>
-                            <Label className="text-2xl text-violet-300 font-semibold"> Conclusion </Label>
+                            <Label className="text-2xl text-violet-300 font-semibold">Conclusion</Label>
                         </div>
                         <div className="text-gray-200">
                             ContentAura makes it easy to manage structured content through dynamic forms and APIs. By following the steps outlined in this guide, you can create projects, define schemas, insert data, and use the API in your applications seamlessly.
@@ -115,7 +145,6 @@ export default function Docs() {
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     );
