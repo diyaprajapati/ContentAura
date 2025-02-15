@@ -29,14 +29,12 @@ interface AddFieldDialogProps {
   onFieldCreated: (name: string, type: string) => void;
 }
 
-export function AddFieldDialog({
-  onFieldCreated,
-}: AddFieldDialogProps) {
+export function AddFieldDialog({ onFieldCreated }: AddFieldDialogProps) {
   const [name, setName] = useState<string>("");
   const [type, setType] = useState<string>("");
   const [open, setOpen] = useState(false);
 
-  // submit 
+  // submit
   const handleSubmit = () => {
     if (!name.trim()) {
       toast({
@@ -128,8 +126,8 @@ export function AddFieldDialog({
         <DialogHeader>
           <DialogTitle>Add New Field</DialogTitle>
           <DialogDescription>
-            Fill all fields and Click submit when you're done. After adding all the fields, click on Save.
-            Note: You can't change it if you save it.
+            Fill all fields and Click submit when you're done. After adding all
+            the fields, click on Save. Note: You can't change it if you save it.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -160,11 +158,11 @@ export function AddFieldDialog({
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Types</SelectLabel>
-                  <SelectItem value="Number">Number</SelectItem>
-                  <SelectItem value="String">String</SelectItem>
-                  <SelectItem value="List">List</SelectItem>
-                  <SelectItem value="Bool">Boolean</SelectItem>
-                  <SelectItem value="Link">Link</SelectItem>
+                  <SelectItem value="integer">Number</SelectItem>
+                  <SelectItem value="string">String</SelectItem>
+                  <SelectItem value="array">List</SelectItem>
+                  <SelectItem value="boolean">Boolean</SelectItem>
+                  <SelectItem value="string">Link</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
