@@ -5,9 +5,10 @@ import { Label } from '@/components/ui/label'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios';
+import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import { User, Lock } from 'lucide-react'
 
 // validation schema 
 const loginSchema = z.object({
@@ -60,14 +61,10 @@ export default function Login() {
         localStorage.setItem('token', response.data.token);
         navigate("/dashboard");
       }
-      // Perform any redirection or state update here
     } catch (error: any) {
-      // Handle error response
       const errorMessage =
         error.response?.data?.message || 'Something went wrong. Please try again.';
       console.error('Login error:', errorMessage);
-
-      // You can show this message to the user, for example:
       alert(errorMessage);
     }
   }
@@ -80,13 +77,16 @@ export default function Login() {
             {/* email */}
             <div className="space-y-1">
               <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Email"
-                className="hover:drop-shadow-sm hover:shadow-violet-800 hover:transition-all ease-in-out focus:drop-shadow-sm focus:shadow-violet-800"
-                {...register('email')}
-              />
+              <div className="relative">
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Email"
+                  className="pl-10 hover:drop-shadow-sm hover:shadow-violet-800 hover:transition-all ease-in-out focus:drop-shadow-sm focus:shadow-violet-800"
+                  {...register('email')}
+                />
+                <User className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+              </div>
               {errors.email && (
                 <p className="text-sm text-red-500 mt-1">
                   {errors.email.message}
@@ -97,13 +97,16 @@ export default function Login() {
             {/* password */}
             <div className="space-y-1">
               <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Password"
-                className="hover:drop-shadow-sm hover:shadow-violet-800 hover:transition-all ease-in-out focus:drop-shadow-sm focus:shadow-violet-800"
-                {...register('password')}
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Password"
+                  className="pl-10 hover:drop-shadow-sm hover:shadow-violet-800 hover:transition-all ease-in-out focus:drop-shadow-sm focus:shadow-violet-800"
+                  {...register('password')}
+                />
+                <Lock className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+              </div>
               {errors.password && (
                 <p className="text-sm text-red-500 mt-1">
                   {errors.password.message}

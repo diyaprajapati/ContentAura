@@ -131,7 +131,7 @@ export default function Signup() {
             {/* First name */}
             <div>
               <Label>First name</Label>
-              <Input id='fname' name='firstname' type='text' placeholder='First name' value={formData.firstname} onChange={handleChange} />
+              <Input id='fname' name='firstname' type='text' placeholder='First name' value={formData.firstname} onChange={handleChange} className="hover:drop-shadow-sm hover:shadow-violet-800 hover:transition-all ease-in-out focus:drop-shadow-sm focus:shadow-violet-800" />
               {errors.firstname && (
                 <p className="text-sm text-red-500 mt-1">
                   {errors.firstname}
@@ -142,7 +142,7 @@ export default function Signup() {
             {/* Last name */}
             <div>
               <Label>Last name</Label>
-              <Input id='lname' name='lastname' type='text' placeholder='Last name' value={formData.lastname} onChange={handleChange} />
+              <Input id='lname' name='lastname' type='text' placeholder='Last name' value={formData.lastname} onChange={handleChange} className="hover:drop-shadow-sm hover:shadow-violet-800 hover:transition-all ease-in-out focus:drop-shadow-sm focus:shadow-violet-800" />
             </div>
             {/* email */}
             <div className="space-y-1">
