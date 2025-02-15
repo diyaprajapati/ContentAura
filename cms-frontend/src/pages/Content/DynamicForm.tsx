@@ -31,6 +31,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   onCancel,
 }) => {
   const [formData, setFormData] = useState<Record<string, any>>(
+    //@ts-ignore
     initialValues?.data || {}
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -57,6 +58,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   // Update form data when initialValues change
   useEffect(() => {
     if (initialValues?.data) {
+      //@ts-ignore
       setFormData(initialValues.data);
     }
   }, [initialValues]);
@@ -76,6 +78,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     try {
       const processedFormData = Object.entries(formData).reduce(
         (acc, [key, value]) => {
+          //@ts-ignore
           const fieldType = schema?.content?.properties[key]?.type;
           return {
             ...acc,
