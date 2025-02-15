@@ -101,3 +101,71 @@
     @apply bg-background text-foreground;
   }
 }
+
+.glowing-cursor {
+  /* Base positioning */
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+  z-index: 9999;
+  
+  /* Centered positioning */
+  transform: translate(-50%, -50%);
+  
+  /* Smooth cursor movement */
+  transition: all 0.1s cubic-bezier(0.23, 1, 0.32, 1);
+  
+  /* Core cursor style */
+  background-color: rgba(138, 43, 226, 0.85);
+  border-radius: 50%;
+  
+  /* Multiple layered glows */
+  box-shadow: 
+    0 0 10px 2px rgba(138, 43, 226, 0.8),
+    0 0 20px 6px rgba(138, 43, 226, 0.4),
+    0 0 30px 12px rgba(138, 43, 226, 0.2);
+  
+  /* Pulse animation */
+  animation: cursor-pulse 1.5s ease-in-out infinite;
+}
+
+/* Outer ring */
+.glowing-cursor::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(138, 43, 226, 0.4);
+  border-radius: 50%;
+  animation: cursor-ring 2s ease-out infinite;
+}
+
+/* Click effect */
+.glowing-cursor.clicking {
+  transform: translate(-50%, -50%) scale(0.8);
+  background-color: rgba(138, 43, 226, 1);
+  transition: transform 0.2s ease-out;
+}
+
+@keyframes cursor-pulse {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes cursor-ring {
+  0% { 
+    width: 24px;
+    height: 24px;
+    opacity: 0.8;
+  }
+  100% { 
+    width: 48px;
+    height: 48px;
+    opacity: 0;
+  }
+}
