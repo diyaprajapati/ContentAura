@@ -1,14 +1,36 @@
 package com.ContentAura.cms_service.kafka.producer;
 
+import com.ContentAura.analytics.model.AnalyticsEvent;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-@Service
-public class KafkaProducerService {
-    private KafkaTemplate<String, String> kafkaTemplate;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
-    public KafkaProducerService(KafkaTemplate<String, String> kafkaTemplate) {
+@Service
+@Slf4j
+public class KafkaProducerService {
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+
+    public KafkaProducerService(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
+    }
+
+    public void sendEvent(String eventType, Long projectId, Long schemaId, Integer userId) {
+        Map<String, Object> event = new HashMap<>();
+        event.put("eventType", eventType);
+        event.put("projectId", projectId);
+        event.put("schemaId", schemaId);
+        event.put("userId", userId);
+        event.put("timestamp", Instant.now().toString());
+
+        kafkaTemplate.send("contentaura.analytics.events", event);
+        System.out.println("Sent event: " + event);
     }
 
     public void sendMessage(String topic ,String message) {
