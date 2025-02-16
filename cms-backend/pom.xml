@@ -17,6 +17,7 @@
     <modules>
         <module>vecna</module>
         <module>will</module>
+        <module>contentaura-analytics</module>
     </modules>
 
     <properties>
