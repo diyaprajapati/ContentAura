@@ -12,9 +12,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 })
 @EntityScan({
 		"com.ContentAura.cms_service", // for entities from first backend
+		"com.ContentAura.cms_api",
 })
 @EnableJpaRepositories({
 		"com.ContentAura.cms_service", // for repositories from first backend
+		"com.ContentAura.cms_api.analytics",
 })
 public class CmsApiApplication {
 	public static void main(String[] args) {
