@@ -1,6 +1,5 @@
 package com.ContentAura.cms_service.project;
 
-import com.ContentAura.cms_service.kafka.producer.KafkaProducerService;
 import com.ContentAura.cms_service.user.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProjectService {
     private final ProjectRepository projectRepository;
-    private final KafkaProducerService kafkaProducerService;
 
     public ProjectResponse createProject(ProjectRequest request, User user) {
         var project = Project.builder()
@@ -29,9 +27,6 @@ public class ProjectService {
                 .build();
 
         var savedProject = projectRepository.save(project);
-
-        // Send Kafka event after saving the project
-        kafkaProducerService.sendEvent("NEW_PROJECT", savedProject.getId(), null, savedProject.getUser().getId());
 
         return mapToResponse(savedProject);
     }

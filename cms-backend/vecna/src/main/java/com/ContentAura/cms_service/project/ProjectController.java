@@ -1,6 +1,5 @@
 package com.ContentAura.cms_service.project;
 
-import com.ContentAura.cms_service.kafka.producer.KafkaProducerService;
 import com.ContentAura.cms_service.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,6 @@ import java.util.Optional;
 public class ProjectController {
     private final ProjectService projectService;
     private final ProjectRepository projectRepository;
-    private KafkaProducerService kafkaProducerService;
 
     @PostMapping
     public ResponseEntity<ProjectResponse> createProject(

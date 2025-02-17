@@ -20,11 +20,6 @@ public class SchemaService {
     private final ProjectRepository projectRepository;
     private final ObjectMapper objectMapper;
 
-    // private final RestTemplate restTemplate;
-
-    // @Value("${node.schema.validation.url}")
-    // private String nodeValidationUrl;
-
     public Schema createSchema(String name, JsonNode content, Long projectId) {
         // validateSchemaWithNode(content);
         Project project = projectRepository.findById(projectId)
