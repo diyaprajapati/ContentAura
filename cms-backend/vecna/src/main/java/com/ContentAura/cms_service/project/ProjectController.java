@@ -17,6 +17,12 @@ public class ProjectController {
     private final ProjectService projectService;
     private final ProjectRepository projectRepository;
 
+//    @GetMapping("/count/{userId}")
+//    public ResponseEntity<Long> getTotalProjects(@PathVariable Integer userId) {
+//        Long count = projectService.getProjectCount(userId);
+//        return ResponseEntity.ok(count);
+//    }
+
     @PostMapping
     public ResponseEntity<ProjectResponse> createProject(
             @RequestBody ProjectRequest request,

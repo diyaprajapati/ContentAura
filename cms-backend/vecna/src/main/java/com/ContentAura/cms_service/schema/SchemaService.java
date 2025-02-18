@@ -34,6 +34,10 @@ public class SchemaService {
         return schemaRepository.save(schema);
     }
 
+//    public Long getSchemaCount(Long projectId) {
+//        return schemaRepository.countByProjectId(projectId);
+//    }
+
     public List<Schema> getSchemasByProjectId(Long projectId) {
         return schemaRepository.findByProjectId(projectId);
     }
