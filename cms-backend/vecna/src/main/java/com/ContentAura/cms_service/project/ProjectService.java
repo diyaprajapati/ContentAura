@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ProjectService {
     private final ProjectRepository projectRepository;
-    private final ApplicationEventPublisher eventPublisher;
-    private final UserRepository userRepository;
 
     public Long getProjectCount(User user) {
         return (long) user.getProjects().size();
@@ -38,15 +36,17 @@ public class ProjectService {
 
         var savedProject = projectRepository.save(project);
 
-        log.info("Publishing ProjectEvent for creation - userId: {}", user.getId());
-        eventPublisher.publishEvent(new ProjectEvent(this, user.getId(), true));
-
         return mapToResponse(savedProject);
     }
 
-//    public Long getProjectCount(Integer userId) {
-//        return projectRepository.countByUserId(userId);
-//    }
+    public Long getTotalSchemaCount(User user) {
+        List<Project> projects = user.getProjects();
+        long count = 0;
+        for (Project project : projects) {
+            count += project.getSchemas().size();
+        }
+        return count;
+    }
 
     public Project getProjectById(Long id) {
         return projectRepository.findById(id)
@@ -56,33 +56,15 @@ public class ProjectService {
                 ));
     }
 
-//    @Transactional
-//    public boolean deleteProject(Long projectId) {
-//        if (projectRepository.existsById(projectId)) {
-//            projectRepository.deleteById(projectId);
-//            return true;
-//        }
-//        System.out.println("Project ID not found: " + projectId);
-//        return false;
-//    }
-
     @Transactional
     public boolean deleteProject(Long projectId) {
-        var project = projectRepository.findById(projectId).orElse(null);
-        if (project != null && project.getUser() != null) {
+        if (projectRepository.existsById(projectId)) {
             projectRepository.deleteById(projectId);
-
-            log.info("Publishing ProjectEvent for deletion - userId: {}",
-                    project.getUser().getId());
-            eventPublisher.publishEvent(new ProjectEvent(this,
-                    project.getUser().getId(), false));
-
             return true;
         }
-        log.warn("Project ID not found or user is null: {}", projectId);
+        System.out.println("Project ID not found: " + projectId);
         return false;
     }
-
 
     public List<ProjectResponse> getUserProjects(Integer userId) {
         return projectRepository.findByUserId(userId).stream()

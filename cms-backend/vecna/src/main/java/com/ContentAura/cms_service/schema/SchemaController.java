@@ -2,9 +2,15 @@ package com.ContentAura.cms_service.schema;
 
 import com.ContentAura.cms_service.project.Project;
 import com.ContentAura.cms_service.project.ProjectService;
+import com.ContentAura.cms_service.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +23,7 @@ import java.util.stream.Collectors;
 public class SchemaController {
     private final SchemaService schemaService;
     private final ProjectService projectService;
+    private final SchemaRepository schemaRepository;
 
     @PreAuthorize("hasAuthority('CREATE_SCHEMA')")
     @PostMapping("/{projectId}")
@@ -30,6 +37,14 @@ public class SchemaController {
     public ResponseEntity<Integer> getAllSchemas(@PathVariable Long projectId) {
         Project project = projectService.getProjectById(projectId);
         return ResponseEntity.ok(project.getSchemas().size());
+    }
+
+    @GetMapping("/count/all")
+    public ResponseEntity<?> getAllSchemas(@AuthenticationPrincipal User user) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
+        }
+        return ResponseEntity.ok(projectService.getTotalSchemaCount(user));
     }
 
     @PreAuthorize("hasAuthority('VIEW_SCHEMA')")
