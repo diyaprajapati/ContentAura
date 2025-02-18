@@ -1,8 +1,11 @@
 package com.ContentAura.cms_service.schema;
 
+import com.ContentAura.cms_service.project.Project;
+import com.ContentAura.cms_service.project.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SchemaController {
     private final SchemaService schemaService;
+    private final ProjectService projectService;
 
     @PreAuthorize("hasAuthority('CREATE_SCHEMA')")
     @PostMapping("/{projectId}")
@@ -20,6 +24,12 @@ public class SchemaController {
             @RequestBody SchemaRequest request) {
         Schema schema = schemaService.createSchema(request.getName(), request.getContent(), projectId);
         return ResponseEntity.ok(toResponse(schema));
+    }
+
+    @GetMapping("/count/{projectId}")
+    public ResponseEntity<Integer> getAllSchemas(@PathVariable Long projectId) {
+        Project project = projectService.getProjectById(projectId);
+        return ResponseEntity.ok(project.getSchemas().size());
     }
 
     @PreAuthorize("hasAuthority('VIEW_SCHEMA')")

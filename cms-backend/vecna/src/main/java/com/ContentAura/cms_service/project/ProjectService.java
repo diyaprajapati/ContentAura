@@ -1,6 +1,7 @@
 package com.ContentAura.cms_service.project;
 
 import com.ContentAura.cms_service.user.User;
+import com.ContentAura.cms_service.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,11 @@ import java.util.stream.Collectors;
 public class ProjectService {
     private final ProjectRepository projectRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final UserRepository userRepository;
+
+    public Long getProjectCount(User user) {
+        return (long) user.getProjects().size();
+    }
 
     public ProjectResponse createProject(ProjectRequest request, User user) {
         var project = Project.builder()
@@ -76,6 +82,7 @@ public class ProjectService {
         log.warn("Project ID not found or user is null: {}", projectId);
         return false;
     }
+
 
     public List<ProjectResponse> getUserProjects(Integer userId) {
         return projectRepository.findByUserId(userId).stream()
