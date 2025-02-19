@@ -4,6 +4,7 @@ import com.ContentAura.cms_service.project.Project;
 import com.ContentAura.cms_service.project.ProjectService;
 import com.ContentAura.cms_service.user.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/schema")
 @RequiredArgsConstructor
+@Slf4j
 public class SchemaController {
     private final SchemaService schemaService;
     private final ProjectService projectService;
@@ -33,10 +35,20 @@ public class SchemaController {
         return ResponseEntity.ok(toResponse(schema));
     }
 
+//    @GetMapping("/count/{projectId}")
+//    public ResponseEntity<Integer> getAllSchemas(@PathVariable Long projectId) {
+//        Project project = projectService.getProjectById(projectId);
+//        return ResponseEntity.ok(project.getSchemas().size());
+//    }
+
     @GetMapping("/count/{projectId}")
-    public ResponseEntity<Integer> getAllSchemas(@PathVariable Long projectId) {
+    public ResponseEntity<SchemaCountResponse> getAllSchemas(@PathVariable Long projectId) {
         Project project = projectService.getProjectById(projectId);
-        return ResponseEntity.ok(project.getSchemas().size());
+        SchemaCountResponse response = new SchemaCountResponse(
+                project.getTitle(),
+                project.getSchemas().size()
+        );
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/count/all")
