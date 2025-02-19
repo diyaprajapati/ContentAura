@@ -34,7 +34,7 @@ public class Schema {
     @JdbcTypeCode(SqlTypes.JSON)
     private JsonNode content;
 
-    @OneToMany(mappedBy = "schema", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "schema", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Content> contents;
 
     private LocalDateTime createdAt;

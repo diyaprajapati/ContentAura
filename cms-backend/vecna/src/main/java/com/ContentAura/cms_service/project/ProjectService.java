@@ -1,5 +1,6 @@
 package com.ContentAura.cms_service.project;
 
+import com.ContentAura.cms_service.schema.Schema;
 import com.ContentAura.cms_service.user.User;
 import com.ContentAura.cms_service.user.UserRepository;
 import jakarta.transaction.Transactional;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class ProjectService {
     private final ProjectRepository projectRepository;
@@ -54,6 +56,17 @@ public class ProjectService {
                         HttpStatus.NOT_FOUND,
                         "Project not found with id: " + id
                 ));
+    }
+
+    public Long getTotalContentCount(User user) {
+        List<Project> projects = user.getProjects();
+        long count = 0;
+        for (Project project : projects) {
+            for (Schema schema : project.getSchemas()) {
+                count += schema.getContents().size();
+            }
+        }
+        return count;
     }
 
     @Transactional
