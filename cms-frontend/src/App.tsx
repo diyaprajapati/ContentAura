@@ -16,12 +16,12 @@ import { ProfileForm } from './pages/setting-forms/ProfileForm'
 import SettingsPasswordPage from './pages/setting-forms/ConfPassword/SettingsPasswordPage'
 import SettingsAppearencePage from './pages/setting-forms/Appearence/SettingsAppearencePage'
 import Docs from './pages/Documentation/Docs'
-import GlowingCursor from './GlowingCursor'
+// import GlowingCursor from './GlowingCursor'
 
 function App() {
   return (
     <>
-      <GlowingCursor />
+      {/* <GlowingCursor /> */}
       {/* routers */}
       <BrowserRouter>
         <Routes>
