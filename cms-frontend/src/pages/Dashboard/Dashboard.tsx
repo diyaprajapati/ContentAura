@@ -3,15 +3,18 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import TypingAnimation from "@/components/ui/typing-animation";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { PieChartGraph } from "./PiChartGraph";
 import { Overview } from "./Overview";
 import { RecentSales } from "./RecentSales";
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
+import { PieChartGraph } from "./PieChartGraph";
+import axios from "axios";
+import { SwatchBook, TableOfContents } from "lucide-react";
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const [firstname, setFirstname] = useState("");
+  const [schemaCount, setSchemaCount] = useState<number | null>(null);
+  const [contentCount, setContentCount] = useState<number | null>(null);
+
 
   // fetch firstname from the backend
   useEffect(() => {
@@ -23,7 +26,7 @@ export default function Dashboard() {
       }
 
       try {
-        const response = await fetch(`${API_URL}/api/auth/user-details`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/user-details`, {
           headers: { Authorization: `Bearer ${token}` }
         })
 
@@ -37,9 +40,35 @@ export default function Dashboard() {
         localStorage.removeItem('token')
         navigate('/auth')
       }
-    }
+    };
+    const fetchCounts = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/auth");
+        return;
+      }
 
-    fetchUserDetails()
+      try {
+        const [schemaRes, contentRes] = await Promise.all([
+          axios.get("http://localhost:8080/api/schema/count/all", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get("http://localhost:8080/api/content/count/all", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+
+        setSchemaCount(schemaRes.data);
+        setContentCount(contentRes.data);
+
+      } catch {
+        localStorage.removeItem("token");
+        navigate("/auth");
+      }
+    };
+
+    fetchUserDetails();
+    fetchCounts();
   }, [navigate]);
 
   return (
@@ -64,52 +93,33 @@ export default function Dashboard() {
               <PieChartGraph />
             </div>
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Sales</CardTitle>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="h-4 w-4 text-muted-foreground"
-                >
-                  <rect width="20" height="14" x="2" y="5" rx="2" />
-                  <path d="M2 10h20" />
-                </svg>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                <CardTitle className="text-sm font-medium">Schemas</CardTitle>
+                <SwatchBook className="text-gray-400 w-5" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">+12,234</div>
-                <p className="text-xs text-muted-foreground">
+                <div className="text-3xl md:text-5xl font-bold">
+                  {schemaCount !== null ? `${schemaCount}` : "Loading..."}
+                </div>
+                {/* <p className="text-xs text-muted-foreground">
                   +19% from last month
-                </p>
+                </p> */}
               </CardContent>
             </Card>
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0">
                 <CardTitle className="text-sm font-medium">
-                  Active Now
+                  Contents
                 </CardTitle>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  className="h-4 w-4 text-muted-foreground"
-                >
-                  <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                </svg>
+                <TableOfContents className="text-gray-400 w-5" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">+573</div>
-                <p className="text-xs text-muted-foreground">
+                <div className="text-3xl md:text-5xl font-bold">
+                  {contentCount !== null ? `${contentCount}` : "Loading..."}
+                </div>
+                {/* <p className="text-xs text-muted-foreground">
                   +201 since last hour
-                </p>
+                </p> */}
               </CardContent>
             </Card>
           </div>
