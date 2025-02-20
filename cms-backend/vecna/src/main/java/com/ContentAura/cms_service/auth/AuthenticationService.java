@@ -79,18 +79,6 @@ public class AuthenticationService {
     }
 
     public void updatePassword(String email, UpdatePasswordRequest request) {
-//        User user = userRepository.findByEmail(email)
-//                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-//
-////        Verify current password
-//        if(!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-//            throw new IllegalArgumentException("Current password is incorrect");
-//        }
-//
-////        Update to new password
-//        user.setPassword((passwordEncoder.encode(request.getNewPassword())));
-//        userRepository.save(user);
-
         // Input validation
         if (request.getNewPassword() == null || request.getNewPassword().trim().isEmpty()) {
             throw new IllegalArgumentException("New password cannot be empty");
@@ -143,5 +131,20 @@ public class AuthenticationService {
 //        if (!password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*")) {
 //            throw new IllegalArgumentException("Password must contain at least one special character");
 //        }
+    }
+
+    public void forgotPassword(ForgotPasswordRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        validatePasswordComplexity(request.getNewPassword());
+
+        // Update to new password
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+
+        // Optional: You might want to add password history check
+        // Optional: You might want to add password complexity validation
+
+        userRepository.save(user);
     }
 }

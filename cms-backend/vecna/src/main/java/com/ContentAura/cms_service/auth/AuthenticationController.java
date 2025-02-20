@@ -7,7 +7,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -74,6 +76,27 @@ public class AuthenticationController {
                     "timestamp", LocalDateTime.now()
             ));
         } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        try {
+            service.forgotPassword(request);
+            logger.info("Password reset successful for user: {}", request.getEmail());
+
+            return ResponseEntity.ok(Map.of(
+                    "message", "Password has been reset successfully",
+                    "timestamp", LocalDateTime.now()
+            ));
+        } catch (UsernameNotFoundException e) {
+            logger.warn("Failed password reset attempt for non-existent email: {}", request.getEmail());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Email address not found"));
+        } catch (Exception e) {
+            logger.error("Error during password reset for email: {}", request.getEmail(), e);
             return ResponseEntity.badRequest()
                     .body(Map.of("error", e.getMessage()));
         }
