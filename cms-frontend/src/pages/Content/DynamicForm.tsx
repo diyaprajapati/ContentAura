@@ -71,6 +71,11 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     }));
   };
 
+  // reset to empty state
+  const clearForm = () => {
+    setFormData({});
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -109,6 +114,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
       };
 
       onSubmit(updatedContent);
+      clearForm();
 
       if (!isEditMode) {
         setFormData({});
@@ -293,7 +299,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           </Button>
           {isEditMode && (
             <Button
-              onClick={onCancel}
+              onClick={() => {
+                if (onCancel) onCancel();
+                clearForm();
+              }}
               className="w-full bg-transparent border hover:bg-slate-200/10"
             >
               Cancel
