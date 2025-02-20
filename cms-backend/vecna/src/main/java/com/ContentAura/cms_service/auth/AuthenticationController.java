@@ -3,19 +3,23 @@ package com.ContentAura.cms_service.auth;
 import com.ContentAura.cms_service.user.UpdatePasswordRequest;
 import com.ContentAura.cms_service.user.UpdateProfileRequest;
 import com.ContentAura.cms_service.user.User;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-//@CrossOrigin(origins = {"http://localhost:5173", "https://content-aura.vercel.app/"})
 public class AuthenticationController {
     private final AuthenticationService service;
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
@@ -46,26 +50,32 @@ public class AuthenticationController {
         return ResponseEntity.ok(Map.of("message", "profile updated Successfully"));
     }
 
+//    @PutMapping("/update-password")
+//    public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest request, Principal principal) {
+//        String email = principal.getName();
+//        service.updatePassword(email, request);
+//        return ResponseEntity.ok(Map.of("message", "password updated Successfully"));
+//    }
+
     @PutMapping("/update-password")
-    public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest request, Principal principal) {
-        String email = principal.getName();
-        service.updatePassword(email, request);
-        return ResponseEntity.ok(Map.of("message", "password updated Successfully"));
-    }
+    public ResponseEntity<?> updatePassword(
+            @Valid @RequestBody UpdatePasswordRequest request,
+            Principal principal
+    ) {
+        try {
+            String email = principal.getName();
+            service.updatePassword(email, request);
 
-    @PostMapping("/request-password-change")
-    public ResponseEntity<?> requestPasswordChange(Principal principal) {
-        String email = principal.getName();
-        service.initiatePasswordChange(email);
-        return ResponseEntity.ok(Map.of("message", "OTP sent to your email"));
-    }
+            // Log password change success (exclude sensitive data)
+            logger.info("Password successfully updated for user: {}", email);
 
-    @PutMapping("/verify-and-update-password")
-    public ResponseEntity<?> verifyAndUpdatePassword(
-            @RequestBody UpdatePasswordRequest request,
-            Principal principal) {
-        String email = principal.getName();
-        service.verifyAndUpdatePassword(email, request);
-        return ResponseEntity.ok(Map.of("message", "Password updated successfully"));
+            return ResponseEntity.ok(Map.of(
+                    "message", "Password updated successfully",
+                    "timestamp", LocalDateTime.now()
+            ));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", e.getMessage()));
+        }
     }
 }

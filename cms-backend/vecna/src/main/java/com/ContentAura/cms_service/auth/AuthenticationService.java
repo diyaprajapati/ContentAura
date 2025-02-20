@@ -1,12 +1,8 @@
 package com.ContentAura.cms_service.auth;
 
 import com.ContentAura.cms_service.config.JwtService;
-import com.ContentAura.cms_service.otp.OTP;
-import com.ContentAura.cms_service.otp.OTPRepository;
 import com.ContentAura.cms_service.user.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +18,6 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
-    private final OTPRepository otpRepository;
-    private final JavaMailSender mailSender;
 
     public AuthenticationResponse register(RegisterRequest request) {
         User existingUser = userRepository.findByEmail(request.getEmail()).orElse(null);
@@ -86,65 +79,69 @@ public class AuthenticationService {
     }
 
     public void updatePassword(String email, UpdatePasswordRequest request) {
+//        User user = userRepository.findByEmail(email)
+//                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+//
+////        Verify current password
+//        if(!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+//            throw new IllegalArgumentException("Current password is incorrect");
+//        }
+//
+////        Update to new password
+//        user.setPassword((passwordEncoder.encode(request.getNewPassword())));
+//        userRepository.save(user);
+
+        // Input validation
+        if (request.getNewPassword() == null || request.getNewPassword().trim().isEmpty()) {
+            throw new IllegalArgumentException("New password cannot be empty");
+        }
+
+        if (request.getCurrentPassword() == null || request.getCurrentPassword().trim().isEmpty()) {
+            throw new IllegalArgumentException("Current password cannot be empty");
+        }
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-//        Verify current password
-        if(!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+        // Verify current password with constant-time comparison
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Current password is incorrect");
         }
 
-//        Update to new password
-        user.setPassword((passwordEncoder.encode(request.getNewPassword())));
-        userRepository.save(user);
-    }
-
-    public void initiatePasswordChange(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        // Generate 6-digit OTP
-        String otp = String.format("%06d", new Random().nextInt(999999));
-
-        // Save OTP
-        OTP otpEntity = OTP.builder()
-                .email(email)
-                .code(otp)
-                .expiryTime(LocalDateTime.now().plusMinutes(10))
-                .used(false)
-                .build();
-        otpRepository.save(otpEntity);
-
-        // Send email
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject("Password Change Request");
-        message.setText("Your OTP for password change is: " + otp +
-                "\nThis OTP will expire in 10 minutes.");
-        mailSender.send(message);
-    }
-
-    public void verifyAndUpdatePassword(String email, UpdatePasswordRequest request) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        // Verify current password
-        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-            throw new IllegalStateException("Current password is incorrect");
+        // Validate new password against current password
+        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("New password must be different from current password");
         }
 
-        // Verify OTP
-        OTP otp = otpRepository
-                .findByEmailAndCodeAndUsedFalseAndExpiryTimeAfter(
-                        email, request.getOtp(), LocalDateTime.now())
-                .orElseThrow(() -> new IllegalStateException("Invalid or expired OTP"));
+        // Validate password complexity requirements
+        validatePasswordComplexity(request.getNewPassword());
 
-        // Update password
+        // Update to new password
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-        userRepository.save(user);
 
-        // Mark OTP as used
-        otp.setUsed(true);
-        otpRepository.save(otp);
+        userRepository.save(user);
+    }
+
+    private void validatePasswordComplexity(String password) {
+        // Example password policy - adjust according to your requirements
+        if (password.length() < 6) {
+            throw new IllegalArgumentException("Password must be at least 6 characters long");
+        }
+
+        if (!password.matches(".*[A-Z].*")) {
+            throw new IllegalArgumentException("Password must contain at least one uppercase letter");
+        }
+
+        if (!password.matches(".*[a-z].*")) {
+            throw new IllegalArgumentException("Password must contain at least one lowercase letter");
+        }
+
+        if (!password.matches(".*\\d.*")) {
+            throw new IllegalArgumentException("Password must contain at least one number");
+        }
+
+//        if (!password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*")) {
+//            throw new IllegalArgumentException("Password must contain at least one special character");
+//        }
     }
 }
