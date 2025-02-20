@@ -9,6 +9,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { User, Lock } from 'lucide-react'
+import { ForgotPassword } from '../ForgotPassword/ForgotPassword'
 
 // validation schema 
 const loginSchema = z.object({
@@ -123,6 +124,9 @@ export default function Login() {
               >
                 {isSubmitting ? 'Logging in...' : 'Login'}
               </Button>
+            </div>
+            <div className='flex justify-center'>
+              <ForgotPassword />
             </div>
           </form>
         </CardContent>

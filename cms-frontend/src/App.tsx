@@ -16,6 +16,8 @@ import { ProfileForm } from './pages/setting-forms/ProfileForm'
 import SettingsPasswordPage from './pages/setting-forms/ConfPassword/SettingsPasswordPage'
 import SettingsAppearencePage from './pages/setting-forms/Appearence/SettingsAppearencePage'
 import Docs from './pages/Documentation/Docs'
+import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
+
 // import GlowingCursor from './GlowingCursor'
 
 function App() {
@@ -64,6 +66,7 @@ function App() {
           {/*  */}
           <Route path='/auth' element={<Authentication />} />
           <Route path="/" element={<HomePage />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
         </Routes>
       </BrowserRouter>
     </>
