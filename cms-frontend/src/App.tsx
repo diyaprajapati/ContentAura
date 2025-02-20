@@ -17,6 +17,7 @@ import SettingsPasswordPage from './pages/setting-forms/ConfPassword/SettingsPas
 import SettingsAppearencePage from './pages/setting-forms/Appearence/SettingsAppearencePage'
 import Docs from './pages/Documentation/Docs'
 import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
+import NotFound from './pages/NotFound'
 
 // import GlowingCursor from './GlowingCursor'
 
@@ -67,6 +68,9 @@ function App() {
           <Route path='/auth' element={<Authentication />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
+
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </>
