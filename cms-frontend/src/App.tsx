@@ -14,7 +14,6 @@ import Api from './pages/Api/Api'
 import SettingsLayout from './pages/setting-forms/SettingsLayout'
 import { ProfileForm } from './pages/setting-forms/ProfileForm'
 import SettingsPasswordPage from './pages/setting-forms/ConfPassword/SettingsPasswordPage'
-import SettingsAppearencePage from './pages/setting-forms/Appearence/SettingsAppearencePage'
 import Docs from './pages/Documentation/Docs'
 import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import NotFound from './pages/NotFound'
@@ -60,7 +59,6 @@ function App() {
           {/*  */}
           <Route path='/settings' element={<SettingsLayout />}>
             <Route index element={<ProfileForm />} />
-            <Route path='/settings/appearence' element={<SettingsAppearencePage />} />
             <Route path='/settings/password' element={<SettingsPasswordPage />} />
           </Route>
 

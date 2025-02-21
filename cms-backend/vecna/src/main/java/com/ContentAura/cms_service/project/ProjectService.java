@@ -2,11 +2,9 @@ package com.ContentAura.cms_service.project;
 
 import com.ContentAura.cms_service.schema.Schema;
 import com.ContentAura.cms_service.user.User;
-import com.ContentAura.cms_service.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
