@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/sheet"
 import { toast } from "@/hooks/use-toast"
 
-
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/
 
 // Define the schema using Zod
@@ -69,9 +68,11 @@ export function ForgotPassword() {
                 email,
                 newPassword,
             })
-            toast({ title: "Success", description: response.data })
+            if (response.status === 200) {
+                toast({ title: "Success" })
+            }
+            console.log(response.status);
             console.log("success", response.data);
-            // Optionally clear fields or close sheet/modal here
         } catch (error: any) {
             // Check for error response message
             const message = error.response?.data?.message || "Something went wrong!"
