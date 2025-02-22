@@ -26,11 +26,6 @@ export const EditSchemaDialog: React.FC<EditSchemaDialogProps> = ({ children, sc
         try {
             const updatedData: SchemaRequestData = {
                 name,
-                content: {
-                    properties: {},
-                    required: true,
-                    type: "object",
-                },
             };
             const response = await updateSchema(schemaId.toString(), updatedData)
             console.log(response);

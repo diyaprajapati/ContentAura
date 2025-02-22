@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 // import org.springframework.web.client.RestTemplate;
@@ -46,14 +47,31 @@ public class SchemaService {
         return schemaRepository.findById(id).orElseThrow(() -> new RuntimeException("Schema not found with ID: " + id));
     }
 
-    public Schema updateSchema(Long id, String name, JsonNode content) {
-        // validateSchemaWithNode(content);
-        return schemaRepository.findById(id).map(schema -> {
-            schema.setName(name);
-            schema.setContent(content);
-            return schemaRepository.save(schema);
-        }).orElseThrow(() -> new SchemaNotFoundException("Schema not found with id " + id));
+//    public Schema updateSchema(Long id, String name, JsonNode content) {
+//        // validateSchemaWithNode(content);
+//        return schemaRepository.findById(id).map(schema -> {
+//            schema.setName(name);
+//            schema.setContent(content);
+//            return schemaRepository.save(schema);
+//        }).orElseThrow(() -> new SchemaNotFoundException("Schema not found with id " + id));
+//    }
+@Transactional
+public Schema updateSchema(Long id, String name, JsonNode content) {
+    Schema existingSchema = schemaRepository.findById(id)
+            .orElseThrow(() -> new SchemaNotFoundException("Schema not found with id " + id));
+
+    // Update name
+    existingSchema.setName(name);
+
+    // Only update content if provided
+    if (content != null) {
+        existingSchema.setContent(content);
     }
+
+    Schema savedSchema = schemaRepository.save(existingSchema);
+
+    return savedSchema;
+}
 
     public void deleteSchema(Long id) {
         if (!schemaRepository.existsById(id)) {

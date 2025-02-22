@@ -16,33 +16,21 @@ export default function Schema() {
 
     console.log(schemas);
 
-    // const handleUpdateSchema = async (schemaId: number, updatedData: { name: string }) => {
-    //     try {
-    //         const response = await updateSchema(schemaId, {
-    //             name: updatedData.name,
-    //             content: "" // or pass the existing content if needed
-    //         });
-
-    //         if (response.status === 200) {
-    //             toast({
-    //                 title: "Success",
-    //                 description: "Schema name updated successfully",
-    //             });
-    //             await fetchSchemas(); // Refresh the schemas list
-    //         }
-    //     } catch (error) {
-    //         toast({
-    //             title: "Error",
-    //             description: "Failed to update schema name",
-    //             variant: "destructive",
-    //         });
-    //     }
-    // };
-
     // update schema to add field
-    const handleUpdateSchema = async (schemaId: number, updatedData: SchemaRequestData) => {
+    const handleUpdateSchema = async (schemaId: number, updatedData: { name: string }) => {
         try {
-            const response = await updateSchema(schemaId.toString(), updatedData);
+            // Find existing schema to preserve its content
+            const existingSchema = schemas.find(schema => schema.id === schemaId.toString());
+            if (!existingSchema) {
+                throw new Error("Schema not found");
+            }
+
+            const requestData: SchemaRequestData = {
+                name: updatedData.name,
+                // Don't include content field when only updating name
+            };
+
+            const response = await updateSchema(schemaId.toString(), requestData);
 
             if (response.status === 200) {
                 toast({

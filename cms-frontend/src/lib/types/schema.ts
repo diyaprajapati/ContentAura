@@ -17,7 +17,7 @@ export interface SchemaData {
 
 export interface SchemaRequestData {
   name: string;
-  content: {
+  content?: {
     properties: object;
     required: boolean;
     type: string;

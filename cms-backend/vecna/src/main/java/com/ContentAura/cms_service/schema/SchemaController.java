@@ -3,6 +3,7 @@ package com.ContentAura.cms_service.schema;
 import com.ContentAura.cms_service.project.Project;
 import com.ContentAura.cms_service.project.ProjectService;
 import com.ContentAura.cms_service.user.User;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -72,11 +73,22 @@ public class SchemaController {
         return ResponseEntity.ok(toResponse(schema));
     }
 
+//    @PreAuthorize("hasAuthority('UPDATE_SCHEMA')")
+//    @PutMapping("/{id}")
+//    public ResponseEntity<SchemaResponse> updateSchema(@PathVariable Long id, @RequestBody SchemaRequest request) {
+//        Schema schema = schemaService.updateSchema(id, request.getName(), request.getContent());
+//        return ResponseEntity.ok(toResponse(schema));
+//    }
+
     @PreAuthorize("hasAuthority('UPDATE_SCHEMA')")
     @PutMapping("/{id}")
     public ResponseEntity<SchemaResponse> updateSchema(@PathVariable Long id, @RequestBody SchemaRequest request) {
-        Schema schema = schemaService.updateSchema(id, request.getName(), request.getContent());
-        return ResponseEntity.ok(toResponse(schema));
+        // If we're only updating name, get the existing schema first
+        Schema existingSchema = schemaService.getSchemaById(id);
+        JsonNode contentToUpdate = request.getContent() != null ? request.getContent() : existingSchema.getContent();
+
+        Schema updated = schemaService.updateSchema(id, request.getName(), contentToUpdate);
+        return ResponseEntity.ok(toResponse(updated));
     }
 
     @PreAuthorize("hasAuthority('DELETE_SCHEMA')")
