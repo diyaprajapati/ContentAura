@@ -3,7 +3,6 @@ package com.ContentAura.cms_service.api_request;
 
 import jakarta.persistence.*;
 import lombok.*;
-import com.ContentAura.cms_service.project.Project;
 
 import java.time.LocalDateTime;
 
@@ -15,28 +14,24 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "api_requests",
         indexes = {
-                @Index(name = "idx_project_id", columnList = "projectId"),
-                @Index(name = "idx_schema_id", columnList = "schemaId"),
-                @Index(name = "idx_timestamp", columnList = "timestamp"),
-                @Index(name = "idx_composite", columnList = "projectId, schemaId, timestamp")
+                @Index(name = "idx_project_schema", columnList = "projectId, schemaId"),
+                @Index(name = "idx_timestamp", columnList = "timestamp")
         })
 public class ApiRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = true)
-    private String userId;
-
-//    @Column(nullable = false)
-//    private String apiKey;
+    @Column(nullable = false)
+    private Integer requestCount = 1;
 
     @Column(nullable = false)
-    private String projectId;
+    private Long projectId;
 
     @Column(nullable = true)
-    private String schemaId;
+    private Long schemaId;
 
+    // Keep these for informational purposes in the last request
     @Column(nullable = false)
     private String endpoint;
 
