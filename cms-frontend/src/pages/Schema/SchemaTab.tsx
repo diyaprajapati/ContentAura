@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -12,6 +13,7 @@ import { ProjectData } from '@/lib/types/project';
 import { toast } from 'sonner';
 
 const SchemaTab = () => {
+    const navigate = useNavigate(); // Initialize navigate function
     const [projects, setProjects] = useState<ProjectData[]>([]);
     const [selectedProject, setSelectedProject] = useState<string>(() => {
         return localStorage.getItem('selectedProject') || '';
@@ -122,7 +124,14 @@ const SchemaTab = () => {
                         ) : schemas.length > 0 ? (
                             schemas.map((schema) => (
                                 <TableRow key={schema.id}>
-                                    <TableCell className="font-medium">{schema.name}</TableCell>
+                                    <TableCell className="font-medium">
+                                        <span
+                                            className="cursor-pointer hover:text-blue-500 hover:underline"
+                                            onClick={() => navigate(`/fields/${schema.id}`)}
+                                        >
+                                            {schema.name}
+                                        </span>
+                                    </TableCell>
                                     <TableCell className="text-center">{getFieldCount(schema)}</TableCell>
                                     <TableCell className="text-right">
                                         <Button
