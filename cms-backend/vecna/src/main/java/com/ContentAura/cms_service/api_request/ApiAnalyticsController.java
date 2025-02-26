@@ -1,5 +1,9 @@
 package com.ContentAura.cms_service.api_request;
 
+import com.ContentAura.cms_service.project.Project;
+import com.ContentAura.cms_service.project.ProjectRepository;
+import com.ContentAura.cms_service.schema.Schema;
+import com.ContentAura.cms_service.schema.SchemaRepository;
 import com.ContentAura.cms_service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/analytics")
@@ -22,19 +27,39 @@ import java.util.*;
 public class ApiAnalyticsController {
     private final ApiRequestRepository repository;
     private final UserService userService;
-
+    private final ProjectRepository projectRepository;
+    private final SchemaRepository schemaRepository;
+    
     @GetMapping("/recent")
-    public ResponseEntity<List<ApiRequest>> getRecentApiRequests() {
-        // Get current logged-in user's ID
+    public ResponseEntity<List<ApiRequestDTO>> getRecentApiRequests() {
         Integer userId = getCurrentUserId();
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        // Fetch only requests for the current user
+        // Fetch recent API requests for the current user
         List<ApiRequest> recentRequests = repository.findTop10ByUserIdOrderByTimestampDesc(userId);
-        return ResponseEntity.ok(recentRequests);
+
+        List<ApiRequestDTO> response = recentRequests.stream()
+                .map(request -> new ApiRequestDTO(
+                        request.getId(),
+                        projectRepository.findById(request.getProjectId())
+                                .map(Project::getTitle)
+                                .orElse("Unknown Project"),
+                        schemaRepository.findById(request.getSchemaId())
+                                .map(Schema::getName)
+                                .orElse("Unknown Schema"),
+                        request.getEndpoint(),
+                        request.getRequestMethod(),
+                        request.getStatusCode(),
+                        request.getTimestamp()
+                ))
+                .collect(Collectors.toList());
+
+
+        return ResponseEntity.ok(response);
     }
+
 
     @GetMapping("/overview")
     public ResponseEntity<Map<String, Object>> getUserApiOverview() {

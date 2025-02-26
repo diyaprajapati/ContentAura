@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { TrendingUp } from "lucide-react";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
 import {
@@ -116,7 +115,7 @@ export function Overview() {
             </CardContent>
             <CardFooter className="flex-col items-start gap-2 text-sm">
                 <div className="flex gap-2 font-medium leading-none">
-                    Data for the selected timeframe <TrendingUp className="h-4 w-4" />
+                    Data for the selected timeframe
                 </div>
                 <div className="leading-none text-muted-foreground">
                     Displaying API request counts for {selectedRange}

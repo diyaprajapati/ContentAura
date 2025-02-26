@@ -7,7 +7,7 @@ import { Overview } from "./Overview";
 import { RecentApis } from "./RecentApis";
 import { PieChartGraph } from "./PieChartGraph";
 import axios from "axios";
-import { Activity, SwatchBook, TableOfContents } from "lucide-react";
+import { Activity, SwatchBook, TableOfContents, TrendingUp } from "lucide-react";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -125,8 +125,9 @@ export default function Dashboard() {
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <Card>
-              <CardHeader>
+              <CardHeader className="flex flex-row justify-between">
                 <CardTitle>Overview</CardTitle>
+                <TrendingUp className="h-4 w-4" />
               </CardHeader>
               <CardContent className="pl-2">
                 <Overview />

@@ -1,7 +1,7 @@
 export interface ApiRequest {
     id: number;
-    projectId: number;
-    schemaId?: number;
+    projectName: string;
+    schemaName?: string;
     userId?: number;  // Add this to match API response
     endpoint: string;
     statusCode: number;
