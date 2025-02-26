@@ -31,7 +31,7 @@ public class SecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll());
         http.authorizeHttpRequests(request -> request.requestMatchers("/api/auth/**", "/health").permitAll());
-        http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET, "/api/projects/count", "/api/schema/count/", "/api/schema/count/all" ).permitAll());
+        http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET, "/api/projects/count", "/api/schema/count/", "/api/schema/count/all", "/api/requests/recent", "/api/requests/overview" ).permitAll());
         http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authenticationProvider(authenticationProvider);

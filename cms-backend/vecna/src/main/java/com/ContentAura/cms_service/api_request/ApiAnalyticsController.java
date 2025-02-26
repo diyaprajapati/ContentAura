@@ -1,80 +1,131 @@
 package com.ContentAura.cms_service.api_request;
 
+import com.ContentAura.cms_service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.time.YearMonth;
+import java.time.format.TextStyle;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/analytics")
 @RequiredArgsConstructor
 public class ApiAnalyticsController {
-
     private final ApiRequestRepository repository;
+    private final UserService userService;
 
     @GetMapping("/recent")
-    public ResponseEntity<List<ApiRequest>> getRecentAnalytics() {
-        List<ApiRequest> recentRequests = repository.findTop10ByOrderByTimestampDesc();
+    public ResponseEntity<List<ApiRequest>> getRecentApiRequests() {
+        // Get current logged-in user's ID
+        Integer userId = getCurrentUserId();
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // Fetch only requests for the current user
+        List<ApiRequest> recentRequests = repository.findTop10ByUserIdOrderByTimestampDesc(userId);
         return ResponseEntity.ok(recentRequests);
     }
 
     @GetMapping("/overview")
-    public ResponseEntity<List<OverviewDataPoint>> getOverview(
-            @RequestParam(defaultValue = "week") String timeframe) {
-
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime start;
-        DateTimeFormatter formatter;
-
-        switch (timeframe.toLowerCase()) {
-            case "month":
-                start = now.minusDays(30);
-                formatter = DateTimeFormatter.ofPattern("MM-dd");
-                break;
-            case "year":
-                start = now.minusYears(1);
-                formatter = DateTimeFormatter.ofPattern("MMM");
-                break;
-            case "week":
-            default:
-                start = now.minusDays(7);
-                formatter = DateTimeFormatter.ofPattern("EEE");
-                break;
+    public ResponseEntity<Map<String, Object>> getUserApiOverview() {
+        // Get current logged-in user's ID
+        Integer userId = getCurrentUserId();
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        List<ApiRequest> requests = repository.findByTimestampAfter(start);
+        LocalDateTime now = LocalDateTime.now();
 
-        Map<String, List<ApiRequest>> grouped = requests.stream()
-                .collect(Collectors.groupingBy(
-                        req -> req.getTimestamp().format(formatter)
-                ));
+        // Create result containers
+        List<Map<String, Object>> weeklyData = new ArrayList<>();
+        List<Map<String, Object>> monthlyData = new ArrayList<>();
+        List<Map<String, Object>> yearlyData = new ArrayList<>();
 
-        List<OverviewDataPoint> result = new ArrayList<>();
+        // Get weekly data (past 7 days)
+        for (int i = 6; i >= 0; i--) {
+            LocalDate date = now.toLocalDate().minusDays(i);
+            LocalDateTime startOfDay = date.atStartOfDay();
+            LocalDateTime endOfDay = date.plusDays(1).atStartOfDay().minusNanos(1);
 
-        grouped.forEach((timeLabel, reqs) -> {
-            int totalCount = reqs.stream()
-                    .mapToInt(ApiRequest::getRequestCount)
-                    .sum();
+            long count = repository.countByUserIdAndTimestampBetween(
+                    userId, startOfDay, endOfDay);
 
-            int schemaCount = reqs.stream()
-                    .filter(r -> r.getSchemaId() != null)
-                    .mapToInt(ApiRequest::getRequestCount)
-                    .sum();
+            Map<String, Object> dayData = new HashMap<>();
+            dayData.put("date", date.toString());
+            dayData.put("count", count);
+            weeklyData.add(dayData);
+        }
 
-            int projectCount = totalCount - schemaCount;
+        // Get monthly data (past 12 months)
+        for (int i = 11; i >= 0; i--) {
+            YearMonth month = YearMonth.from(now.toLocalDate()).minusMonths(i);
+            LocalDateTime startOfMonth = month.atDay(1).atStartOfDay();
+            LocalDateTime endOfMonth = month.atEndOfMonth().plusDays(1).atStartOfDay().minusNanos(1);
 
-            result.add(new OverviewDataPoint(timeLabel, projectCount, schemaCount));
-        });
+            long count = repository.countByUserIdAndTimestampBetween(
+                    userId, startOfMonth, endOfMonth);
 
-        result.sort(Comparator.comparing(OverviewDataPoint::getTime));
+            Map<String, Object> monthData = new HashMap<>();
+            monthData.put("month", month.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()));
+            monthData.put("count", count);
+            monthlyData.add(monthData);
+        }
 
-        return ResponseEntity.ok(result);
+        // Get yearly data (past 5 years)
+        for (int i = 4; i >= 0; i--) {
+            int year = now.getYear() - i;
+            LocalDateTime startOfYear = LocalDate.of(year, 1, 1).atStartOfDay();
+            LocalDateTime endOfYear = LocalDate.of(year, 12, 31).plusDays(1).atStartOfDay().minusNanos(1);
+
+            long count = repository.countByUserIdAndTimestampBetween(
+                    userId, startOfYear, endOfYear);
+
+            Map<String, Object> yearData = new HashMap<>();
+            yearData.put("year", String.valueOf(year));
+            yearData.put("count", count);
+            yearlyData.add(yearData);
+        }
+
+        // Calculate total count
+        long totalCount = repository.countByUserId(userId);
+
+        // Build the complete response
+        Map<String, Object> overview = new HashMap<>();
+        overview.put("weekly", weeklyData);
+        overview.put("monthly", monthlyData);
+        overview.put("yearly", yearlyData);
+        overview.put("total", totalCount);
+
+        return ResponseEntity.ok(overview);
+    }
+
+    /**
+     * Helper method to get the current authenticated user's ID
+     */
+    private Integer getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return null;
+        }
+
+        try {
+            String email = authentication.getName();
+            return userService.getUserIdByEmail(email);
+        } catch (Exception e) {
+            // Failed to get ID from email
+            return null;
+        }
     }
 }

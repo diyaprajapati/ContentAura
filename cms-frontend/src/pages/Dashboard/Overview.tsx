@@ -1,8 +1,9 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from 'react';
-import { TrendingUp } from "lucide-react"
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import { useEffect, useState } from "react";
+import { TrendingUp } from "lucide-react";
+import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+
 import {
     Card,
     CardContent,
@@ -10,144 +11,115 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-import {
-    ChartConfig,
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
-} from "@/components/ui/chart"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { AlertCircle } from "lucide-react"
-import api from '@/lib/api/axios'
-
-interface ChartData {
-    name: string;
-    projectRequests: number;
-    schemaRequests: number;
-}
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import api from "@/lib/api/axios";
 
 const chartConfig = {
-    projectRequests: {
-        label: "Project Requests",
+    apiUsage: {
+        label: "API Requests",
         color: "hsl(var(--chart-1))",
     },
-    schemaRequests: {
-        label: "Schema Requests",
-        color: "hsl(var(--chart-2))",
-    },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export function Overview() {
-    const [timeframe, setTimeframe] = useState('week');
-    const [data, setData] = useState<ChartData[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState<{ label: string; count: number }[]>([]);
+    const [selectedRange, setSelectedRange] = useState<"weekly" | "monthly" | "yearly">("weekly");
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
+            setError(null);
             try {
-                setLoading(true);
-                const { data: responseData } = await api.get(`/analytics/overview?timeframe=${timeframe}`);
-                const chartData = responseData.map((item: any) => ({
-                    name: item.time,
-                    projectRequests: item.projectRequests,
-                    schemaRequests: item.schemaRequests,
-                }));
-                setData(chartData);
+                const response = await api.get("/analytics/overview");
+                const apiData = response.data;
+
+                const formattedData = {
+                    weekly: apiData.weekly.map((item: { date: string; count: number }) => ({
+                        label: new Date(item.date).toLocaleDateString("en-US", { weekday: "short", day: "numeric" }),
+                        count: item.count,
+                    })),
+                    monthly: apiData.monthly.map((item: { month: string; count: number }) => ({
+                        label: item.month,
+                        count: item.count,
+                    })),
+                    yearly: apiData.yearly.map((item: { year: string; count: number }) => ({
+                        label: item.year,
+                        count: item.count,
+                    })),
+                };
+                //@ts-ignore
+                setData(formattedData);
             } catch (err) {
-                setError('Failed to load analytics data. Please check your authentication.');
+                setError("Failed to load API overview. Please check your authentication.");
             } finally {
                 setLoading(false);
             }
         };
 
         fetchData();
-    }, [timeframe]);
-
-    if (error) {
-        return (
-            <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
-            </Alert>
-        );
-    }
+    }, []);
 
     return (
         <Card className="border-none">
-            <CardHeader>
-                <div className="flex items-center justify-between">
-                    <div>
-                        <CardTitle>API Requests Overview</CardTitle>
-                        <CardDescription>Request analytics over time</CardDescription>
-                    </div>
-                    <Select
-                        value={timeframe}
-                        onValueChange={(value) => setTimeframe(value)}
-                    >
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Select timeframe" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="week">Last 7 days</SelectItem>
-                            <SelectItem value="month">Last 30 days</SelectItem>
-                            <SelectItem value="year">Last year</SelectItem>
-                        </SelectContent>
-                    </Select>
+            <CardHeader className="flex flex-row justify-between">
+                <div>
+                    <CardTitle>API Usage Overview</CardTitle>
+                    <CardDescription>See API requests over different timeframes</CardDescription>
                 </div>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline">{selectedRange.toUpperCase()}</Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuItem onClick={() => setSelectedRange("weekly")}>Weekly</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setSelectedRange("monthly")}>Monthly</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setSelectedRange("yearly")}>Yearly</DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </CardHeader>
             <CardContent>
                 {loading ? (
-                    <div className="h-[400px] w-full flex items-center justify-center">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                    </div>
+                    <p>Loading...</p>
+                ) : error ? (
+                    <p className="text-red-500">{error}</p>
                 ) : (
                     <ChartContainer config={chartConfig}>
-                        <BarChart
-                            accessibilityLayer
-                            data={data}
-                            className="h-[400px]"
+                        <LineChart
+                            //@ts-ignore
+                            data={data[selectedRange]}
+                            margin={{ left: 12, right: 12 }}
                         >
                             <CartesianGrid vertical={false} />
                             <XAxis
-                                dataKey="name"
+                                dataKey="label"
                                 tickLine={false}
-                                tickMargin={10}
                                 axisLine={false}
-                                tickFormatter={(value) => value.slice(0, 3)}
+                                tickMargin={8}
                             />
-                            <ChartTooltip
-                                cursor={false}
-                                content={<ChartTooltipContent indicator="dashed" />}
+                            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                            <Line
+                                dataKey="count"
+                                type="natural"
+                                stroke="var(--color-apiUsage)"
+                                strokeWidth={2}
+                                dot={{ fill: "var(--color-apiUsage)" }}
+                                activeDot={{ r: 6 }}
                             />
-                            {/* <Bar
-                                dataKey="projectRequests"
-                                fill="var(--color-projectRequests)"
-                                radius={4}
-                            /> */}
-                            <Bar
-                                dataKey="schemaRequests"
-                                fill="var(--color-schemaRequests)"
-                                radius={4}
-                            />
-                        </BarChart>
+                        </LineChart>
                     </ChartContainer>
                 )}
             </CardContent>
             <CardFooter className="flex-col items-start gap-2 text-sm">
                 <div className="flex gap-2 font-medium leading-none">
-                    API usage trending up <TrendingUp className="h-4 w-4" />
+                    Data for the selected timeframe <TrendingUp className="h-4 w-4" />
                 </div>
                 <div className="leading-none text-muted-foreground">
-                    Showing API requests distribution over time
+                    Displaying API request counts for {selectedRange}
                 </div>
             </CardFooter>
         </Card>

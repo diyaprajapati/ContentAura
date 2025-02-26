@@ -1,13 +1,13 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import TypingAnimation from "@/components/ui/typing-animation";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Overview } from "./Overview";
-import { RecentSales } from "./RecentSales";
+import { RecentApis } from "./RecentApis";
 import { PieChartGraph } from "./PieChartGraph";
 import axios from "axios";
-import { SwatchBook, TableOfContents } from "lucide-react";
+import { Activity, SwatchBook, TableOfContents } from "lucide-react";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -133,14 +133,12 @@ export default function Dashboard() {
               </CardContent>
             </Card>
             <Card>
-              <CardHeader>
-                <CardTitle>Recent Sales</CardTitle>
-                <CardDescription>
-                  You made 265 sales this month.
-                </CardDescription>
+              <CardHeader className="flex flex-row justify-between">
+                <CardTitle>Recently used APIs</CardTitle>
+                <Activity className="h-4 w-4" />
               </CardHeader>
               <CardContent>
-                <RecentSales />
+                <RecentApis />
               </CardContent>
             </Card>
           </div>

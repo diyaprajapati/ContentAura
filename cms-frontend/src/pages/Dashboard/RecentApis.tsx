@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Activity, AlertCircle } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { ApiRequest } from '@/lib/types/types';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import api from '@/lib/api/axios';
 
-export function RecentSales() {
+export function RecentApis() {
     const [requests, setRequests] = useState<ApiRequest[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -15,7 +15,12 @@ export function RecentSales() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const { data } = await api.get('/analytics/recent');
+                const token = localStorage.getItem("token");
+                const { data } = await api.get('/analytics/recent', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 setRequests(data);
             } catch (err) {
                 setError('Failed to load recent requests. Please check your authentication.');
@@ -61,12 +66,6 @@ export function RecentSales() {
 
     return (
         <Card className='border-none'>
-            <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                    <Activity className="h-4 w-4" />
-                    Recent API Requests
-                </CardTitle>
-            </CardHeader>
             <CardContent>
                 <div className="space-y-6">
                     {requests.map((request) => (
