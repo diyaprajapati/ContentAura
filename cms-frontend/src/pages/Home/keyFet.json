@@ -15,9 +15,9 @@
         "desc": "Fetch and integrate data with secure and scalable APIs"
     },
     {
-        "icon": "group.svg",
-        "title": "Collaboration Tools",
-        "desc": "Allow teams to work on shared projects seamlessly"
+        "icon": "activity.svg",
+        "title": "Real-time Analytics",
+        "desc": "Total projects, schemas, contents and also API calls with graphs"
     },
     {
         "icon": "lock.svg",
