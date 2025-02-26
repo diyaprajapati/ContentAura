@@ -43,9 +43,5 @@ public class Schema {
     @JoinColumn(name = "project_id", nullable = false)
     @JsonIgnore
     private Project project;
-
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "user_id", nullable = false)
-    // @JsonIgnore
-    // private User user;
+    
 }

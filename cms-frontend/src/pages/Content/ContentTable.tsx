@@ -98,7 +98,20 @@ export function ContentTable({ contentData, onEdit, onDelete }: ContentTableProp
         content: ''
     });
 
-    const schema = contentData.length > 0 ? Object.keys(contentData[0].data.data) : [];
+    // Get all possible schema fields from all data items
+    const getAllSchemaFields = React.useMemo(() => {
+        const allFields = new Set<string>();
+
+        contentData.forEach(item => {
+            if (item.data && item.data.data) {
+                Object.keys(item.data.data).forEach(key => {
+                    allFields.add(key);
+                });
+            }
+        });
+
+        return Array.from(allFields);
+    }, [contentData]);
 
     const handleContentClick = (title: string, content: string) => {
         setDialogContent({
@@ -108,12 +121,14 @@ export function ContentTable({ contentData, onEdit, onDelete }: ContentTableProp
         });
     };
 
-    const dynamicColumns: ColumnDef<ContentResponse>[] = schema.map((key) => ({
-        accessorKey: `data.data.${key}`,
+    const dynamicColumns: ColumnDef<ContentResponse>[] = getAllSchemaFields.map((key) => ({
+        //@ts-ignore
+        accessorFn: (row) => row.data?.data?.[key] ?? null,
+        id: key,
         header: key,
         cell: ({ row }) => {
             //@ts-ignore
-            const value = row.original.data.data[key];
+            const value = row.original.data?.data?.[key];
             const { displayText, fullText, needsTruncation } = formatCellContent(value);
 
             return needsTruncation ? (
