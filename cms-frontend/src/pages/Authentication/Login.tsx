@@ -72,7 +72,7 @@ export default function Login() {
 
   return (
     <div className="mt-3">
-      <Card className="p-2">
+      <Card className='pt-4 bg-black/30 backdrop-blur-md border border-white/10 shadow-xl rounded-lg'>
         <CardContent className="space-y-5">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {/* email */}

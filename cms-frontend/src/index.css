@@ -77,6 +77,7 @@
   /* hide scrollbar for IE, Edge and Firefox */
   -ms-overflow-style: none;
   scrollbar-width: none;
+    font-family: 'Signika Negative', sans-serif;
 }
 
 /* hide scrollbar for chrome, safari and opera */
