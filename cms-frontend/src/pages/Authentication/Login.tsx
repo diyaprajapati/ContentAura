@@ -1,14 +1,12 @@
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useForm } from 'react-hook-form'
+import { LockIcon, MailIcon } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
-import { User, Lock } from 'lucide-react'
+import axios from 'axios'
 import { ForgotPassword } from '../ForgotPassword/ForgotPassword'
 
 // validation schema 
@@ -22,18 +20,14 @@ const loginSchema = z.object({
 })
 
 // Infer TypeScript type from the schema
-type LoginFormData = z.infer<typeof loginSchema>
+// type LoginFormData = z.infer<typeof loginSchema>
 
-export default function Login() {
+const Login = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
   const navigate = useNavigate();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting }
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema)
-  })
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [errors, setErrors] = useState<{ email?: string, password?: string }>({})
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -42,12 +36,38 @@ export default function Login() {
     }
   }, [navigate])
 
-  const onSubmit = async (data: LoginFormData) => {
+  const validateForm = () => {
     try {
+      loginSchema.parse({ email, password })
+      setErrors({})
+      return true
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors: { email?: string, password?: string } = {}
+        error.errors.forEach((err) => {
+          if (err.path[0]) {
+            newErrors[err.path[0] as 'email' | 'password'] = err.message
+          }
+        })
+        setErrors(newErrors)
+      }
+      return false
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!validateForm()) {
+      return
+    }
+
+    try {
+      setLoading(true)
       // API call
       const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/auth/authenticate`,
-        data,
+        { email, password },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -67,70 +87,106 @@ export default function Login() {
         error.response?.data?.message || 'Something went wrong. Please try again.';
       console.error('Login error:', errorMessage);
       alert(errorMessage);
+    } finally {
+      setLoading(false);
     }
   }
 
+  // Staggered animation for form fields
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  }
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+  }
+
   return (
-    <div className="mt-3">
-      <Card className='pt-4 bg-black/30 backdrop-blur-md border border-white/10 shadow-xl rounded-lg'>
-        <CardContent className="space-y-5">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            {/* email */}
-            <div className="space-y-1">
-              <Label htmlFor="email">Email</Label>
-              <div className="relative">
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Email"
-                  className="pl-10 hover:drop-shadow-sm hover:shadow-violet-800 hover:transition-all ease-in-out focus:drop-shadow-sm focus:shadow-violet-800"
-                  {...register('email')}
-                />
-                <User className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-              </div>
-              {errors.email && (
-                <p className="text-sm text-red-500 mt-1">
-                  {errors.email.message}
-                </p>
-              )}
+    <motion.div
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="px-1"
+    >
+      <form onSubmit={handleSubmit}>
+        <motion.div variants={item} className="mb-5">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+              <MailIcon className="h-4 w-4 text-zinc-400" />
             </div>
+            <Input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="auth-input pl-10 bg-white/5 border-white/10 text-white placeholder:text-zinc-500 hover:border-indigo-500/50 focus:border-indigo-500"
+            />
+          </div>
+          {errors.email && (
+            <p className="text-sm text-red-500 mt-1 ml-1">
+              {errors.email}
+            </p>
+          )}
+        </motion.div>
 
-            {/* password */}
-            <div className="space-y-1">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Password"
-                  className="pl-10 hover:drop-shadow-sm hover:shadow-violet-800 hover:transition-all ease-in-out focus:drop-shadow-sm focus:shadow-violet-800"
-                  {...register('password')}
-                />
-                <Lock className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
-              </div>
-              {errors.password && (
-                <p className="text-sm text-red-500 mt-1">
-                  {errors.password.message}
-                </p>
-              )}
+        <motion.div variants={item} className="mb-5">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+              <LockIcon className="h-4 w-4 text-zinc-400" />
             </div>
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="auth-input pl-10 bg-white/5 border-white/10 text-white placeholder:text-zinc-500 hover:border-indigo-500/50 focus:border-indigo-500"
+            />
+          </div>
+          {errors.password && (
+            <p className="text-sm text-red-500 mt-1 ml-1">
+              {errors.password}
+            </p>
+          )}
+        </motion.div>
 
-            {/* button */}
-            <div className="w-full">
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Logging in...' : 'Login'}
-              </Button>
-            </div>
-            <div className='flex justify-center'>
-              <ForgotPassword />
-            </div>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+        <motion.div variants={item} className="flex items-center justify-between mb-6">
+          <span className="text-sm text-right font-medium text-indigo-400 cursor-pointer hover:text-indigo-300 transition-colors">
+            {/* Forgot Password? */}
+            <ForgotPassword />
+          </span>
+        </motion.div>
+
+        <motion.div variants={item}>
+          <Button
+            type="submit"
+            disabled={loading}
+            className="auth-button text-white"
+          >
+            {loading ? 'Loging in...' : 'Log in'}
+          </Button>
+        </motion.div>
+      </form>
+
+      <motion.div variants={item} className="mt-6 text-center">
+        <p className="text-sm text-zinc-400">
+          Don't have an account?{' '}
+          <span
+            onClick={() => setActiveTab('signup')}
+            className="font-medium text-indigo-400 cursor-pointer hover:text-indigo-300 transition-colors"
+          >
+            Sign up
+          </span>
+        </p>
+      </motion.div>
+    </motion.div>
   )
 }
+
+export default Login

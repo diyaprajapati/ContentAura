@@ -1,11 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
+import { UserIcon, MailIcon, LockIcon } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { z } from 'zod'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 
 // validation schema
 const signupSchema = z.object({
@@ -33,8 +36,7 @@ const signupSchema = z.object({
 // Infer the type from schema
 type SignupFormData = z.infer<typeof signupSchema>
 
-export default function Signup() {
-
+const Signup = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<SignupFormData>({
     firstname: '',
@@ -49,10 +51,10 @@ export default function Signup() {
     if (token !== null) {
       navigate('/dashboard');
     }
-  }, [])
+  }, [navigate])
 
   const [errors, setErrors] = useState<Partial<Record<keyof SignupFormData, string>>>({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const validateForm = () => {
     try {
@@ -91,14 +93,13 @@ export default function Signup() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (validateForm()) {
-      setIsSubmitting(true);
+      setLoading(true);
       const formDataNew = {
         firstname: formData.firstname,
         lastname: formData.lastname,
         email: formData.email,
         password: formData.password
       }
-      // console.log('Form data:', formDataNew);
 
       try {
         const response = await axios.post(
@@ -118,102 +119,172 @@ export default function Signup() {
         alert(message);
       }
       finally {
-        setIsSubmitting(false);
+        setLoading(false);
       }
     }
-  };
+  }
+
+  // Staggered animation for form fields
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  }
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+  }
 
   return (
-    <div className="mt-3">
-      <Card className="pt-4 bg-black/30 backdrop-blur-md border border-white/10 shadow-xl rounded-lg">
-        <CardContent className="space-y-5">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* First name */}
-            <div>
-              <Label>First name</Label>
-              <Input id='fname' name='firstname' type='text' placeholder='First name' value={formData.firstname} onChange={handleChange} className="hover:drop-shadow-sm hover:shadow-violet-800 hover:transition-all ease-in-out focus:drop-shadow-sm focus:shadow-violet-800" />
-              {errors.firstname && (
-                <p className="text-sm text-red-500 mt-1">
-                  {errors.firstname}
-                </p>
-              )}
+    <motion.div
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="px-1"
+    >
+      <form onSubmit={handleSubmit}>
+        <motion.div variants={item} className="mb-5">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+              <UserIcon className="h-4 w-4 text-zinc-400" />
             </div>
+            <Input
+              name="firstname"
+              type="text"
+              placeholder="First Name"
+              value={formData.firstname}
+              onChange={handleChange}
+              className="auth-input pl-10 bg-white/5 border-white/10 text-white placeholder:text-zinc-500 hover:border-indigo-500/50 focus:border-indigo-500"
+            />
+          </div>
+          {errors.firstname && (
+            <p className="text-sm text-red-500 mt-1 ml-1">
+              {errors.firstname}
+            </p>
+          )}
+        </motion.div>
 
-            {/* Last name */}
-            <div>
-              <Label>Last name</Label>
-              <Input id='lname' name='lastname' type='text' placeholder='Last name' value={formData.lastname} onChange={handleChange} className="hover:drop-shadow-sm hover:shadow-violet-800 hover:transition-all ease-in-out focus:drop-shadow-sm focus:shadow-violet-800" />
+        <motion.div variants={item} className="mb-5">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+              <UserIcon className="h-4 w-4 text-zinc-400" />
             </div>
-            {/* email */}
-            <div className="space-y-1">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Email"
-                value={formData.email}
-                onChange={handleChange}
-                className="hover:drop-shadow-sm hover:shadow-violet-800 hover:transition-all ease-in-out focus:drop-shadow-sm focus:shadow-violet-800"
-              />
-              {errors.email && (
-                <p className="text-sm text-red-500 mt-1">
-                  {errors.email}
-                </p>
-              )}
-            </div>
+            <Input
+              name="lastname"
+              type="text"
+              placeholder="Last Name"
+              value={formData.lastname}
+              onChange={handleChange}
+              className="auth-input pl-10 bg-white/5 border-white/10 text-white placeholder:text-zinc-500 hover:border-indigo-500/50 focus:border-indigo-500"
+            />
+          </div>
+          {errors.lastname && (
+            <p className="text-sm text-red-500 mt-1 ml-1">
+              {errors.lastname}
+            </p>
+          )}
+        </motion.div>
 
-            {/* password */}
-            <div className="space-y-1">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-                className="hover:drop-shadow-sm hover:shadow-violet-800 hover:transition-all ease-in-out focus:drop-shadow-sm focus:shadow-violet-800"
-              />
-              {errors.password && (
-                <p className="text-sm text-red-500 mt-1">
-                  {errors.password}
-                </p>
-              )}
+        <motion.div variants={item} className="mb-5">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+              <MailIcon className="h-4 w-4 text-zinc-400" />
             </div>
+            <Input
+              name="email"
+              type="email"
+              placeholder="Email Address"
+              value={formData.email}
+              onChange={handleChange}
+              className="auth-input pl-10 bg-white/5 border-white/10 text-white placeholder:text-zinc-500 hover:border-indigo-500/50 focus:border-indigo-500"
+            />
+          </div>
+          {errors.email && (
+            <p className="text-sm text-red-500 mt-1 ml-1">
+              {errors.email}
+            </p>
+          )}
+        </motion.div>
 
-            {/* confirm password */}
-            <div className="space-y-1">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                placeholder="Confirm Password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className="hover:drop-shadow-sm hover:shadow-violet-800 hover:transition-all ease-in-out focus:drop-shadow-sm focus:shadow-violet-800"
-              />
-              {errors.confirmPassword && (
-                <p className="text-sm text-red-500 mt-1">
-                  {errors.confirmPassword}
-                </p>
-              )}
+        <motion.div variants={item} className="mb-5">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+              <LockIcon className="h-4 w-4 text-zinc-400" />
             </div>
+            <Input
+              name="password"
+              type="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="auth-input pl-10 bg-white/5 border-white/10 text-white placeholder:text-zinc-500 hover:border-indigo-500/50 focus:border-indigo-500"
+            />
+          </div>
+          {errors.password && (
+            <p className="text-sm text-red-500 mt-1 ml-1">
+              {errors.password}
+            </p>
+          )}
+          <p className="text-xs text-zinc-500 mt-1 ml-1">Must include uppercase, lowercase, and number</p>
+        </motion.div>
 
-            {/* button */}
-            <div className="w-full">
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Signing up...' : 'Sign Up'}
-              </Button>
+        <motion.div variants={item} className="mb-5">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+              <LockIcon className="h-4 w-4 text-zinc-400" />
             </div>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+            <Input
+              name="confirmPassword"
+              type="password"
+              placeholder="Confirm Password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="auth-input pl-10 bg-white/5 border-white/10 text-white placeholder:text-zinc-500 hover:border-indigo-500/50 focus:border-indigo-500"
+            />
+          </div>
+          {errors.confirmPassword && (
+            <p className="text-sm text-red-500 mt-1 ml-1">
+              {errors.confirmPassword}
+            </p>
+          )}
+        </motion.div>
+
+        <motion.div variants={item} className="flex items-center space-x-2 mb-6">
+          <Checkbox id="terms" className="border-white/20 data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-500" required />
+          <Label htmlFor="terms" className="text-sm font-medium text-zinc-300">
+            I agree to the <span className="text-indigo-400 cursor-pointer hover:text-indigo-300 transition-colors">Terms of Service</span> and <span className="text-indigo-400 cursor-pointer hover:text-indigo-300 transition-colors">Privacy Policy</span>
+          </Label>
+        </motion.div>
+
+        <motion.div variants={item}>
+          <Button
+            type="submit"
+            disabled={loading}
+            className="auth-button text-white"
+          >
+            {loading ? 'Creating account...' : 'Create Account'}
+          </Button>
+        </motion.div>
+      </form>
+
+      <motion.div variants={item} className="mt-6 text-center">
+        <p className="text-sm text-zinc-400">
+          Already have an account?{' '}
+          <span
+            onClick={() => setActiveTab('login')}
+            className="font-medium text-indigo-400 cursor-pointer hover:text-indigo-300 transition-colors"
+          >
+            Sign in
+          </span>
+        </p>
+      </motion.div>
+    </motion.div>
   )
 }
+
+export default Signup

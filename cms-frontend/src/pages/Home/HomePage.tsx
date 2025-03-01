@@ -15,21 +15,19 @@ function HomePage() {
 
   return (
     <>
-      <nav className='absolute w-fit left-5 top-4'>
-        <motion.div className='bg-gradient-to-br from-indigo-500 to-blue-200 bg-clip-text text-transparent font-bold italic cursor-pointer text-xl'
-          initial={{
-            x: -10
-          }}
-          animate={{
-            x: 0,
-            transition: {
-              duration: 0.75
-            }
-          }}
+      {/* Logo/Brand - Top Left */}
+      <motion.div
+        className="absolute top-6 left-6 z-10"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <h1
+          className="text-xl md:text-3xl font-bold bg-gradient-to-r from-indigo-400 via-purple-500 to-blue-500 bg-clip-text text-transparent cursor-pointer"
         >
           Content Aura
-        </motion.div>
-      </nav>
+        </h1>
+      </motion.div>
       <motion.div className='flex flex-col space-y-10 h-dvh justify-center items-center w-full p-10'
         initial={{
           opacity: 0
