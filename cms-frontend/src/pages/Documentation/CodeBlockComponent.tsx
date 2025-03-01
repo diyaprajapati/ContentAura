@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { Copy, Check } from 'lucide-react';
+import { Copy, Check, Maximize, Minimize } from 'lucide-react';
 
 // Define the blog code to be displayed
 const blogCode = `// Blog.jsx
@@ -81,7 +81,7 @@ export default function Blog() {
     return (
         <div>
             <Head />
-            // this is the example for the string data type
+            {/* Example for the string data type */}
             <div className='flex flex-col gap-5 p-5'>
                 {data.length > 0 ? (
                     <div>
@@ -91,8 +91,7 @@ export default function Blog() {
                                     {item.Title}
                                 </div>
                                 <div className='text-lg font-medium'>
-                                // this component is for the long string with paragraphs...
-                                // it's code is at the end of this code
+                                    {/* This component is for the long string with paragraphs */}
                                     <MyComponent text={item.Data} />
                                 </div>
                             </div>
@@ -103,7 +102,7 @@ export default function Blog() {
                 )}
             </div>
 
-            // this is the example for the all other data types
+            {/* Example for all other data types */}
             <div>
                 {test.length > 0 ? (
                     <div>
@@ -132,8 +131,6 @@ export default function Blog() {
                     <div>No test content available</div>
                 )}
             </div>
-
-
         </div>
     );
 }
@@ -146,7 +143,7 @@ export default function MyComponent({ text }) {
 
     return (
         <div>
-            {text.split('\n\n').map((paragraph, index) => (
+            {text.split('\\n\\n').map((paragraph, index) => (
                 <p key={index} className="mb-4">
                     {paragraph}
                 </p>
@@ -157,49 +154,71 @@ export default function MyComponent({ text }) {
 `;
 
 const CodeBlockComponent = () => {
-  const [copied, setCopied] = useState(false);
+    const [copied, setCopied] = useState(false);
+    const [expanded, setExpanded] = useState(false);
 
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(blogCode);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy code:', err);
-    }
-  };
+    const handleCopy = async () => {
+        try {
+            await navigator.clipboard.writeText(blogCode);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error('Failed to copy code:', err);
+        }
+    };
 
-  return (
-    <div className="w-full relative">
-      <button
-        onClick={handleCopy}
-        className="absolute top-4 right-4 p-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors duration-200"
-        title={copied ? "Copied!" : "Copy code"}
-      >
-        {copied ? (
-          <Check className="h-4 w-4 text-green-500" />
-        ) : (
-          <Copy className="h-4 w-4 text-gray-300" />
-        )}
-      </button>
-      <SyntaxHighlighter
-        language="jsx"
-        style={oneDark}
-        showLineNumbers={true}
-        wrapLines={true}
-        customStyle={{
-          margin: '20px 0',
-          borderRadius: '8px',
-          fontSize: '14px',
-          backgroundColor: '#282c34',
-          padding: '2.5rem 1rem 1rem 1rem'
-        }}
-      >
-        {blogCode}
-      </SyntaxHighlighter>
-    </div>
-  );
+    const toggleExpand = () => {
+        setExpanded(!expanded);
+    };
+
+    return (
+        <div className={`w-full relative transition-all duration-300 ${expanded ? 'h-[70vh]' : ''}`}>
+            <div className="absolute top-4 right-4 flex space-x-2 z-10">
+                <button
+                    onClick={toggleExpand}
+                    className="p-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors duration-200"
+                    title={expanded ? "Collapse" : "Expand"}
+                >
+                    {expanded ? (
+                        <Minimize className="h-4 w-4 text-gray-300" />
+                    ) : (
+                        <Maximize className="h-4 w-4 text-gray-300" />
+                    )}
+                </button>
+                <button
+                    onClick={handleCopy}
+                    className="p-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors duration-200"
+                    title={copied ? "Copied!" : "Copy code"}
+                >
+                    {copied ? (
+                        <Check className="h-4 w-4 text-green-500" />
+                    ) : (
+                        <Copy className="h-4 w-4 text-gray-300" />
+                    )}
+                </button>
+            </div>
+            <div className={`${expanded ? 'h-full overflow-auto' : ''}`}>
+                <SyntaxHighlighter
+                    language="jsx"
+                    style={oneDark}
+                    showLineNumbers={true}
+                    wrapLines={true}
+                    customStyle={{
+                        margin: '0',
+                        borderRadius: '8px',
+                        fontSize: '14px',
+                        backgroundColor: '#1a1b26',
+                        padding: '2.5rem 1rem 1rem 1rem',
+                        height: expanded ? '100%' : 'auto',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1)'
+                    }}
+                >
+                    {blogCode}
+                </SyntaxHighlighter>
+            </div>
+        </div>
+    );
 };
 
 export default CodeBlockComponent;
-
