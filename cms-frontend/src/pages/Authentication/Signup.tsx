@@ -265,7 +265,7 @@ const Signup = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
           <Button
             type="submit"
             disabled={loading}
-            className="auth-button text-white"
+            className="text-white w-full md:w-fit"
           >
             {loading ? 'Creating account...' : 'Create Account'}
           </Button>

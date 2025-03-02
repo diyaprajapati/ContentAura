@@ -126,7 +126,7 @@ const SchemaTab = () => {
                                 <TableRow key={schema.id}>
                                     <TableCell className="font-medium">
                                         <span
-                                            className="cursor-pointer hover:text-blue-500 hover:underline"
+                                            className="cursor-pointer hover:text-violet-500 hover:underline"
                                             onClick={() => navigate(`/fields/${schema.id}`)}
                                         >
                                             {schema.name}

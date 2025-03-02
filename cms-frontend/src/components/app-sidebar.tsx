@@ -110,7 +110,7 @@ export function AppSidebar() {
 
     return (
         <Sidebar>
-            <SidebarContent>
+            <SidebarContent className="bg-violet-950/10">
                 <SidebarGroup>
                     {/* title */}
                     <SidebarGroupLabel>ContentAura</SidebarGroupLabel>
@@ -124,8 +124,12 @@ export function AppSidebar() {
                                         <SidebarMenuButton asChild>
                                             <a
                                                 href={item.url}
-                                                className={isActive ? "bg-white/20 font-semibold" : ""}
+                                                className={`border font-semibold ${isActive
+                                                    ? "text-violet-400 border-violet-900 hover:bg-white/20 hover:border-violet-600"
+                                                    : "border-transparent hover:border-violet-600"
+                                                    }`}
                                             >
+
                                                 <item.icon />
                                                 <span>{item.title}</span>
                                             </a>
@@ -137,23 +141,27 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
-            <SidebarFooter>
+            <SidebarFooter className="bg-violet-950/10">
                 <SidebarMenu>
                     <SidebarMenuSubItem>
                         {/* dropdown menu */}
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <SidebarMenuButton>
+                                <SidebarMenuButton className="border border-transparent hover:border-violet-600">
                                     <User2 /> {firstname}
                                     <ChevronUp className="ml-auto" />
                                 </SidebarMenuButton>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
-                                <DropdownMenuItem onClick={handleSettings} className="flex justify-between">
+                                <DropdownMenuItem onClick={handleSettings}
+                                    className="flex justify-between border border-transparent hover:border-violet-600"
+                                >
                                     <span>Settings</span>
                                     <Settings />
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={handleLogout} className="flex justify-between">
+                                <DropdownMenuItem onClick={handleLogout}
+                                    className="flex justify-between border border-transparent hover:border-violet-600"
+                                >
                                     <span>Logout</span>
                                     <LogOut />
                                 </DropdownMenuItem>

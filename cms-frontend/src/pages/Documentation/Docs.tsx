@@ -81,7 +81,7 @@ export default function Docs() {
                     {/* Sidebar */}
                     <div className="lg:col-span-3">
                         <div className="sticky top-8">
-                            <Card className="bg-gray-800/50 border-gray-700 shadow-xl backdrop-blur-sm">
+                            <Card className="border-gray-700 shadow-xl backdrop-blur-sm">
                                 <CardContent className="p-5">
                                     <h2 className="text-xl font-bold mb-4 text-violet-300">Contents</h2>
                                     <nav className="space-y-1">
@@ -127,7 +127,7 @@ export default function Docs() {
                     <div className="lg:col-span-9 space-y-12">
                         {/* Introduction section */}
                         <section ref={introRef} id="intro" className="scroll-mt-24">
-                            <Card className="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 shadow-lg">
+                            <Card className="backdrop-blur-sm border border-gray-700/50 shadow-lg">
                                 <CardContent className="p-8">
                                     <h2 className="text-2xl md:text-3xl font-bold mb-6 text-violet-300">Introduction</h2>
                                     <p className="text-gray-300 leading-relaxed">
@@ -139,7 +139,7 @@ export default function Docs() {
 
                         {/* Getting Started section */}
                         <section ref={gettingStartedRef} id="getting-started" className="scroll-mt-24">
-                            <Card className="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 shadow-lg">
+                            <Card className="backdrop-blur-sm border border-gray-700/50 shadow-lg">
                                 <CardContent className="p-8">
                                     <h2 className="text-2xl md:text-3xl font-bold mb-6 text-violet-300">Getting Started</h2>
 
@@ -189,7 +189,7 @@ export default function Docs() {
 
                         {/* API section */}
                         <section ref={apiStepRef} id="api" className="scroll-mt-24">
-                            <Card className="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 shadow-lg">
+                            <Card className="backdrop-blur-sm border border-gray-700/50 shadow-lg">
                                 <CardContent className="p-8">
                                     <h2 className="text-2xl md:text-3xl font-bold mb-6 text-violet-300">Using the API in React</h2>
                                     <p className="text-gray-300 mb-6">
@@ -202,7 +202,7 @@ export default function Docs() {
                                     </div>
 
                                     {/* Key points */}
-                                    <div className="bg-gray-800/50 rounded-lg p-6 border border-gray-700/50 mt-6">
+                                    <div className="rounded-lg mt-6">
                                         <h3 className="text-xl font-semibold mb-4 text-violet-200">Key Points</h3>
                                         <ul className="space-y-3">
                                             <li className="flex items-start text-gray-300">
@@ -225,7 +225,7 @@ export default function Docs() {
 
                         {/* Conclusion section */}
                         <section ref={conclusionRef} id="conclusion" className="scroll-mt-24">
-                            <Card className="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 shadow-lg">
+                            <Card className="backdrop-blur-sm border border-gray-700/50 shadow-lg">
                                 <CardContent className="p-8">
                                     <h2 className="text-2xl md:text-3xl font-bold mb-6 text-violet-300">Conclusion</h2>
                                     <p className="text-gray-300 mb-6 leading-relaxed">

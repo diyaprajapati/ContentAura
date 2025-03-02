@@ -134,7 +134,7 @@ export function ContentTable({ contentData, onEdit, onDelete }: ContentTableProp
             return needsTruncation ? (
                 <button
                     onClick={() => handleContentClick(key, fullText)}
-                    className="text-gray-200 hover:text-blue-400 text-left cursor-pointer"
+                    className="text-gray-200 hover:text-violet-400 text-left cursor-pointer"
                 >
                     {displayText}
                 </button>
