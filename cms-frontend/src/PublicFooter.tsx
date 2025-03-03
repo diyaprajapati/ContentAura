@@ -1,20 +1,20 @@
-export default function Footer() {
+export default function PublicFooter() {
     const items = [
         {
             title: "About Us",
-            url: "/footer/aboutus"
+            url: "/public/about"
         },
         {
             title: "Contact Us",
-            url: "/footer/contactus"
+            url: "/public/contact"
         },
         {
             title: "Privacy Policy",
-            url: "/footer/privacy"
+            url: "/public/privacy"
         },
         {
             title: "Terms Of Service",
-            url: "/footer/service"
+            url: "/public/terms"
         },
     ];
 

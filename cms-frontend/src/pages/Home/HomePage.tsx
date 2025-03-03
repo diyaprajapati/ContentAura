@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom'
 import KeyFeature from './KeyFeature'
 import WhyUs from './WhyUs'
 import { useRef } from 'react';
-import Footer from '../Footer/Footer'
 
 import Container from "@/components/ui/container";
 import FadeIn from "@/components/ui/fadein";
+import PublicFooter from '@/PublicFooter'
 
 const HomePage = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -72,7 +72,7 @@ const HomePage = () => {
       <KeyFeature ref={ref} />
       <WhyUs />
 
-      <Footer />
+      <PublicFooter />
     </div>
   );
 };
