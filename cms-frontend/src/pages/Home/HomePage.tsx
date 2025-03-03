@@ -6,16 +6,16 @@ import WhyUs from './WhyUs'
 import { useRef } from 'react';
 import Footer from '../Footer/Footer'
 
-// useRef is used for smooth scroll after click on the button
-function HomePage() {
+import Container from "@/components/ui/container";
+import FadeIn from "@/components/ui/fadein";
+
+const HomePage = () => {
   const ref = useRef<HTMLDivElement>(null);
   const handleClick = () => {
     ref.current?.scrollIntoView({ behavior: 'smooth' });
   };
-
-
   return (
-    <>
+    <div>
       {/* Logo/Brand - Top Left */}
       <motion.div
         className="absolute top-6 left-6 z-10"
@@ -29,44 +29,52 @@ function HomePage() {
           Content Aura
         </h1>
       </motion.div>
-      <motion.div className='flex flex-col space-y-10 h-dvh justify-center items-center w-full p-10'
-        initial={{
-          opacity: 0
-        }}
-        animate={{
-          opacity: 1,
-          transition: {
-            duration: 0.60,
-            delay: 0.1
-          }
-        }}
-      >
-        <div className='space-y-5 md:w-[70%] md:self-center'>
-          {/* Headline */}
-          <div className='font-extrabold text-5xl w-full text-center'>
-            Empower Your Business with Seamless <span className='text-violet-400 italic'>Content Management!</span>
-          </div>
-
-          {/* subHeadline */}
-          <div className='font-medium text-lg text-slate-500 w-full text-center'>
-            Streamline your projects with a robust, developer-friendly CMS designed for efficiency.
-          </div>
+      <section className="relative pt-24 pb-20 md:pt-32 md:pb-28 lg:pt-36 lg:pb-32 overflow-hidden">
+        <div className="">
+          <div className="absolute inset-0 bg-gradient-to-b from-violet-900/20 to-transparent opacity-30" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-violet-800/20 via-transparent to-transparent" />
         </div>
 
-        {/* Buttons */}
-        <div className='flex flex-row gap-8'>
-          <Link to={"/auth"}><Button className='p-8 rounded-full text-lg font-semibold hover:scale-105 hover:transition-all'>Get Started</Button> </Link>
-          <Button className='p-8 rounded-full text-lg font-semibold bg-transparent hover:scale-105 hover:transition-all' onClick={handleClick}> Learn more &rarr;</Button>
-        </div>
-      </motion.div>
+        <Container className="relative">
+          <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
+            <FadeIn delay={100}>
+              <span className="px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs font-medium">
+                Next-Generation Content Management
+              </span>
+            </FadeIn>
 
+            <FadeIn delay={200}>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 mt-4">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white/70">
+                  Empower Your Business with Seamless <span className='text-violet-400 italic'>Content Management!</span>
+                </span>
+              </h1>
+            </FadeIn>
+
+            <FadeIn delay={300} className="mb-8">
+              <p className="text-lg text-white/70 max-w-2xl">
+                Streamline your projects with a robust, developer-friendly CMS designed for efficiency.
+              </p>
+            </FadeIn>
+
+            <FadeIn delay={400}>
+              {/* Buttons */}
+              <div className='flex flex-row gap-8 justify-center'>
+                <Link to={"/auth"}><Button className='p-8 rounded-full text-lg font-semibold hover:scale-105 hover:transition-all'>Get Started</Button> </Link>
+                <Button className='p-8 rounded-full text-lg font-semibold bg-transparent hover:scale-105 hover:transition-all border' onClick={handleClick}> Learn more &rarr;</Button>
+              </div>
+              {/* </motion.div> */}
+            </FadeIn>
+          </div>
+        </Container>
+      </section >
       {/* Other components */}
       <KeyFeature ref={ref} />
       <WhyUs />
 
       <Footer />
-    </>
-  )
-}
+    </div>
+  );
+};
 
-export default HomePage
+export default HomePage;
