@@ -6,7 +6,6 @@ import { Toaster } from "@/components/ui/toaster"
 import { Toaster as Sonner } from "@/components/ui/sonner"
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import Footer from '../Footer/Footer'
 
 export default function Authentication() {
   const [activeTab, setActiveTab] = useState<string>("login")
@@ -114,7 +113,6 @@ export default function Authentication() {
           </Tabs>
         </div>
       </motion.div>
-      <Footer />
     </div>
   )
 }

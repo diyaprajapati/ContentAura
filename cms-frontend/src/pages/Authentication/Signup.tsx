@@ -7,7 +7,7 @@ import { UserIcon, MailIcon, LockIcon } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { z } from 'zod'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 
 // validation schema
@@ -256,8 +256,11 @@ const Signup = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
 
         <motion.div variants={item} className="flex items-center space-x-2 mb-6">
           <Checkbox id="terms" className="border-white/20 data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-500" required />
-          <Label htmlFor="terms" className="text-sm font-medium text-zinc-300">
-            I agree to the <span className="text-indigo-400 cursor-pointer hover:text-indigo-300 transition-colors">Terms of Service</span> and <span className="text-indigo-400 cursor-pointer hover:text-indigo-300 transition-colors">Privacy Policy</span>
+          <Label htmlFor="terms" className="text-sm font-medium text-zinc-300 flex gap-2">
+            I agree to the
+            <span className="text-indigo-400 cursor-pointer hover:text-indigo-300 transition-colors"><Link to='/public/terms'>Terms of Service</Link></span>
+            and
+            <span className="text-indigo-400 cursor-pointer hover:text-indigo-300 transition-colors"><Link to='/public/privacy'>Privacy Policy</Link></span>
           </Label>
         </motion.div>
 

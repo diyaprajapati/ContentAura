@@ -155,29 +155,33 @@ export default function Fields() {
   }
 
   return (
-    <div className="flex flex-col gap-8 mx-8 my-4">
-      <div className="flex justify-between w-full items-center ml-5 md:mx-16">
-        {/* Title */}
-        <div className="">
-          <Label className="font-bold md:text-5xl text-4xl">Fields</Label>
-          <p>Fields for Schema id: {schemaId}</p>
+    <div className="flex flex-col min-h-screen">
+      <div className="flex-grow flex flex-col gap-8 mx-8 my-4">
+        <div className="flex justify-between w-full items-center ml-5 md:mx-16">
+          {/* Title */}
+          <div className="">
+            <Label className="font-bold md:text-5xl text-4xl">Fields</Label>
+            <p>Fields for Schema id: {schemaId}</p>
+          </div>
+          {/* Button */}
+          <div className="md:mr-28">
+            {/* dialog box to add fields */}
+            <AddFieldDialog
+              schemaId={schemaId}
+              onFieldCreated={handleFieldAdded}
+            />
+            {/* button to save the fields */}
+            <Button onClick={onSave} className="ml-5">Save</Button>
+          </div>
         </div>
-        {/* Button */}
-        <div className="md:mr-28">
-          {/* dialog box to add fields */}
-          <AddFieldDialog
-            schemaId={schemaId}
-            onFieldCreated={handleFieldAdded}
-          />
-          {/* button to save the fields */}
-          <Button onClick={onSave} className="ml-5">Save</Button>
+        {/* table */}
+        <div>
+          <FieldTable fields={fields} />
         </div>
       </div>
-      {/* table */}
-      <div>
-        <FieldTable fields={fields} />
+      <div className="mb-2">
+        <Footer />
       </div>
-      <Footer />
     </div>
   );
 }

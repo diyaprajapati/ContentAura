@@ -137,26 +137,30 @@ export default function Schema() {
     }
 
     return (
-        <div className="flex flex-col gap-8 mx-8 my-4">
-            <div className="flex justify-between w-full items-center ml-5">
-                {/* Title */}
-                <div className="">
-                    <Label className="font-bold md:text-5xl text-4xl">Schemas</Label>
+        <div className="flex flex-col min-h-screen">
+            <div className="flex-grow flex flex-col gap-8 mx-8 my-4">
+                <div className="flex justify-between w-full items-center ml-5">
+                    {/* Title */}
+                    <div className="">
+                        <Label className="font-bold md:text-5xl text-4xl">Schemas</Label>
+                    </div>
+                    {/* Button */}
+                    <div>
+                        {/* dialog box to add schema */}
+                        <AddSchemaDialogbox projectId={projectId} onSchemaCreated={handleSchemaAdded} />
+                    </div>
                 </div>
-                {/* Button */}
-                <div>
-                    {/* dialog box to add schema */}
-                    <AddSchemaDialogbox projectId={projectId} onSchemaCreated={handleSchemaAdded} />
-                </div>
+
+                {/* data */}
+                <DataTableSchema data={schemas} onDelete={handleDeleteSchema} schemaId={0}
+                    currentName=""
+                    onUpdate={handleUpdateSchema} key={schemas.length} />
+
             </div>
-
-            {/* data */}
-            <DataTableSchema data={schemas} onDelete={handleDeleteSchema} schemaId={0}
-                currentName=""
-                onUpdate={handleUpdateSchema} key={schemas.length} />
-
             {/* footer */}
-            <Footer />
+            <div className="mb-2">
+                <Footer />
+            </div>
         </div>
     )
 }

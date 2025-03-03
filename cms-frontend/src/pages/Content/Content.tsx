@@ -185,98 +185,102 @@ const Content = () => {
   }
 
   return (
-    <div className="flex flex-col gap-8 mx-8 my-4 pb-6">
-      {/* Header */}
-      <div className="flex justify-between items-center gap-6">
-        <Label className="font-bold text-4xl md:text-5xl">Content</Label>
-        <div className="flex flex-col md:flex-row gap-4">
-          {/* Project Selector */}
-          <Select onValueChange={handleProjectChange} value={selectedProject}>
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Select a project" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Projects</SelectLabel>
-                {initialLoading ? (
-                  <SelectItem value="loading" disabled>
-                    Loading projects...
-                  </SelectItem>
-                ) : (
-                  projects.map((project) => (
-                    <SelectItem key={project.id} value={project.id.toString()}>
-                      {project.title}
+    <div className="flex flex-col min-h-screen">
+      <div className="flex-grow flex flex-col gap-8 mx-8 my-4 pb-6">
+        {/* Header */}
+        <div className="flex justify-between items-center gap-6">
+          <Label className="font-bold text-4xl md:text-5xl">Content</Label>
+          <div className="flex flex-col md:flex-row gap-4">
+            {/* Project Selector */}
+            <Select onValueChange={handleProjectChange} value={selectedProject}>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Select a project" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Projects</SelectLabel>
+                  {initialLoading ? (
+                    <SelectItem value="loading" disabled>
+                      Loading projects...
                     </SelectItem>
-                  ))
-                )}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+                  ) : (
+                    projects.map((project) => (
+                      <SelectItem key={project.id} value={project.id.toString()}>
+                        {project.title}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
 
-          {/* Schema Selector */}
-          <Select onValueChange={handleSchemaChange} value={selectedSchema}>
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Select a schema" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Schemas</SelectLabel>
-                {loadingSchemas ? (
-                  <SelectItem value="loading" disabled>
-                    Loading schemas...
-                  </SelectItem>
-                ) : (
-                  schemas.map((schema) => (
-                    <SelectItem key={schema.id} value={schema.id.toString()}>
-                      {schema.name}
+            {/* Schema Selector */}
+            <Select onValueChange={handleSchemaChange} value={selectedSchema}>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Select a schema" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Schemas</SelectLabel>
+                  {loadingSchemas ? (
+                    <SelectItem value="loading" disabled>
+                      Loading schemas...
                     </SelectItem>
-                  ))
+                  ) : (
+                    schemas.map((schema) => (
+                      <SelectItem key={schema.id} value={schema.id.toString()}>
+                        {schema.name}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Form and Table */}
+        <div className="flex flex-col gap-8">
+          {selectedSchema ? (
+            <>
+              {/* Form */}
+              <DynamicForm
+                schema={schemas.find(
+                  (schema) => schema.id.toString() === selectedSchema
                 )}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+                schemaId={selectedSchema}
+                initialValues={editingContent?.data || {}}
+                onSubmit={(updatedContent: Record<string, any>) => {
+                  const contentResponse: ContentResponse = {
+                    id: editingContent?.id || 0,
+                    schemaId: selectedSchema,
+                    data: updatedContent as ContentData,
+                    createdAt:
+                      editingContent?.createdAt || new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                  };
+
+                  handleFormSubmit(contentResponse);
+                }}
+                onCancel={() => setEditingContent(null)}
+              />
+
+              {/* Table */}
+              <ContentTable
+                contentData={contentData}
+                onEdit={(content: ContentResponse) => handleEdit(content)}
+                onDelete={(contentId: number) => handleDelete(contentId)}
+                editingContentId={editingContent?.id || null}
+              />
+            </>
+          ) : (
+            <p>Select a schema to manage its content.</p>
+          )}
         </div>
       </div>
-
-      {/* Form and Table */}
-      <div className="flex flex-col gap-8">
-        {selectedSchema ? (
-          <>
-            {/* Form */}
-            <DynamicForm
-              schema={schemas.find(
-                (schema) => schema.id.toString() === selectedSchema
-              )}
-              schemaId={selectedSchema}
-              initialValues={editingContent?.data || {}}
-              onSubmit={(updatedContent: Record<string, any>) => {
-                const contentResponse: ContentResponse = {
-                  id: editingContent?.id || 0,
-                  schemaId: selectedSchema,
-                  data: updatedContent as ContentData,
-                  createdAt:
-                    editingContent?.createdAt || new Date().toISOString(),
-                  updatedAt: new Date().toISOString(),
-                };
-
-                handleFormSubmit(contentResponse);
-              }}
-              onCancel={() => setEditingContent(null)}
-            />
-
-            {/* Table */}
-            <ContentTable
-              contentData={contentData}
-              onEdit={(content: ContentResponse) => handleEdit(content)}
-              onDelete={(contentId: number) => handleDelete(contentId)}
-              editingContentId={editingContent?.id || null}
-            />
-          </>
-        ) : (
-          <p>Select a schema to manage its content.</p>
-        )}
+      <div className="mb-2">
+        <Footer />
       </div>
-      <Footer />
     </div>
   );
 };

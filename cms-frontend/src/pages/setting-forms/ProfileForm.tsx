@@ -9,7 +9,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { getUserDetails, updateUserDetails } from "@/lib/api/user";
-import Footer from "../Footer/Footer";
 
 const profileFormSchema = z.object({
     firstname: z.string().min(1, { message: "First name is required." }).max(50),
@@ -117,7 +116,6 @@ export function ProfileForm() {
                     Update Profile
                 </Button>
             </form>
-            <Footer />
         </Form>
     );
 }

@@ -1,6 +1,5 @@
 import { Separator } from "@/components/ui/separator";
 import { PasswordForm } from "./PasswordForm";
-import Footer from "@/pages/Footer/Footer";
 
 export default function SettingsPasswordPage() {
   return (
@@ -13,7 +12,6 @@ export default function SettingsPasswordPage() {
       </div>
       <Separator />
       <PasswordForm />
-      <Footer />
     </div>
   )
 }
