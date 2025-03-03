@@ -190,7 +190,19 @@
   }
 }
 
-
+@layer components {
+  .glass-panel {
+    @apply bg-background/70 backdrop-blur-lg border border-border/50 shadow-sm;
+  }
+  
+  .content-section {
+    @apply py-4;
+  }
+  
+  .chip {
+    @apply inline-block px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary;
+  }
+}
 
 @layer base {
   * {
