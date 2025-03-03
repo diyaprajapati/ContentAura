@@ -7,6 +7,7 @@ import { deleteSchema, getAllSchemasByProjectId, updateSchema } from "@/lib/api/
 import { toast } from "@/hooks/use-toast";
 import { SchemaRequestData } from "@/lib/types/schema";
 import { Skeleton } from "@/components/ui/skeleton";
+import Footer from "../Footer/Footer";
 
 export default function Schema() {
     // convert to string
@@ -153,6 +154,9 @@ export default function Schema() {
             <DataTableSchema data={schemas} onDelete={handleDeleteSchema} schemaId={0}
                 currentName=""
                 onUpdate={handleUpdateSchema} key={schemas.length} />
+
+            {/* footer */}
+            <Footer />
         </div>
     )
 }

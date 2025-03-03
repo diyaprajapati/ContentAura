@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import KeyFeature from './KeyFeature'
 import WhyUs from './WhyUs'
 import { useRef } from 'react';
+import Footer from '../Footer/Footer'
 
 // useRef is used for smooth scroll after click on the button
 function HomePage() {
@@ -62,6 +63,8 @@ function HomePage() {
       {/* Other components */}
       <KeyFeature ref={ref} />
       <WhyUs />
+
+      <Footer />
     </>
   )
 }

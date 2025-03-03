@@ -21,6 +21,7 @@ import { toast } from "@/hooks/use-toast"
 import { getAllProjects } from "@/lib/api/project"
 import { ProjectData } from "@/lib/types/project"
 import { Label } from "@/components/ui/label"
+import Footer from "../Footer/Footer"
 
 export default function ProjectTable() {
     const [projects, setProjects] = React.useState<ProjectData[]>([])
@@ -155,6 +156,7 @@ export default function ProjectTable() {
                     </Table>
                 </div>
             </div>
+            <Footer />
         </div>
     )
 }

@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import DynamicForm from "./DynamicForm";
 import { ContentTable } from "./ContentTable";
 import { Skeleton } from "@/components/ui/skeleton";
+import Footer from "../Footer/Footer";
 
 const Content = () => {
   const [projects, setProjects] = useState<ProjectData[]>([]);
@@ -146,8 +147,8 @@ const Content = () => {
     setContentData((prev) =>
       prev.some((item) => item.id === updatedContent.id)
         ? prev.map((item) =>
-            item.id === updatedContent.id ? updatedContent : item
-          )
+          item.id === updatedContent.id ? updatedContent : item
+        )
         : [...prev, updatedContent]
     );
     setEditingContent(null);
@@ -237,40 +238,11 @@ const Content = () => {
         </div>
       </div>
 
-      {/* Schema Fields
-            <div>
-                {selectedSchema ? (
-                    <div>
-                        <h2 className="font-bold">Schema Fields:</h2>
-                        {formatFields(schemas.find((schema) => schema.id.toString() === selectedSchema))}
-                    </div>
-                ) : (
-                    <p>Select a schema to view its fields.</p>
-                )}
-            </div> */}
-
       {/* Form and Table */}
       <div className="flex flex-col gap-8">
         {selectedSchema ? (
           <>
             {/* Form */}
-            {/* <DynamicForm
-                            schema={schemas.find((schema) => schema.id.toString() === selectedSchema)}
-                            schemaId={selectedSchema}
-                            initialValues={editingContent?.data || {}}
-                            onSubmit={(updatedContent: Record<string, any>) => {
-                                const contentResponse: ContentResponse = {
-                                    id: editingContent?.id || 0,
-                                    schemaId: selectedSchema,
-                                    data: updatedContent as ContentData,
-                                    createdAt: editingContent?.createdAt || new Date().toISOString(),
-                                    updatedAt: new Date().toISOString(),
-                                };
-
-                                handleFormSubmit(contentResponse);
-                            }}
-                            onCancel={() => setEditingContent(null)}
-                        /> */}
             <DynamicForm
               schema={schemas.find(
                 (schema) => schema.id.toString() === selectedSchema
@@ -304,6 +276,7 @@ const Content = () => {
           <p>Select a schema to manage its content.</p>
         )}
       </div>
+      <Footer />
     </div>
   );
 };

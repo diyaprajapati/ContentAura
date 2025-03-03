@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { BookOpen, Code, FileText, ChevronRight } from "lucide-react";
 import data from './data.json';
 import CodeBlockComponent from "./CodeBlockComponent";
+import Footer from "../Footer/Footer";
 
 // Define interfaces for our data structure
 interface Instruction {
@@ -242,6 +243,7 @@ export default function Docs() {
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 }

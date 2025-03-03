@@ -8,6 +8,7 @@ import { RecentApis } from "./RecentApis";
 import { PieChartGraph } from "./PieChartGraph";
 import axios from "axios";
 import { Activity, SwatchBook, TableOfContents, TrendingUp } from "lucide-react";
+import Footer from "../Footer/Footer";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -145,7 +146,7 @@ export default function Dashboard() {
           </div>
         </TabsContent>
       </Tabs>
-
+      <Footer />
     </div>
   )
 }

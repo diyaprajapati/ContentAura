@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import ProjectOptionsDropdown from "./ProjectOptionsDropdown";
 import { useNavigate } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
+import Footer from "../Footer/Footer";
 
 
 export default function Project() {
@@ -159,6 +160,7 @@ export default function Project() {
                     <p className="text-center text-gray-500">No projects found</p>
                 )}
             </div>
+            <Footer />
         </div>
     )
 }

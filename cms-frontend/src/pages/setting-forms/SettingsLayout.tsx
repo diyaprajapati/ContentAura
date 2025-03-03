@@ -10,7 +10,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 const sidebarNavItems = [
   { title: "Profile", href: "/settings", },
   { title: "Change Password", href: "/settings/password", },
-  { title: "Appearance", href: "/settings/appearence", },
 ]
 
 export default function SettingsLayout() {

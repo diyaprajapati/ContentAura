@@ -8,6 +8,7 @@ import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { SchemaRequestData } from "@/lib/types/schema";
 import { Skeleton } from "@/components/ui/skeleton";
+import Footer from "../Footer/Footer";
 
 export default function Fields() {
   const { schemaId } = useParams<{ schemaId: string }>();
@@ -176,6 +177,7 @@ export default function Fields() {
       <div>
         <FieldTable fields={fields} />
       </div>
+      <Footer />
     </div>
   );
 }

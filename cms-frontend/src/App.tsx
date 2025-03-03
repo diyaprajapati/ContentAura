@@ -17,6 +17,11 @@ import SettingsPasswordPage from './pages/setting-forms/ConfPassword/SettingsPas
 import Docs from './pages/Documentation/Docs'
 import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
 import NotFound from './pages/NotFound'
+import FooterLayout from './pages/Footer/FooterLayout'
+import AboutUs from './pages/Footer/AboutUs'
+import ContactUs from './pages/Footer/ContactUs'
+import Privacy from './pages/Footer/Privacy'
+import Service from './pages/Footer/Service'
 
 // import GlowingCursor from './GlowingCursor'
 
@@ -56,10 +61,18 @@ function App() {
             <Route index element={<Fields />} />
           </Route>
 
-          {/*  */}
+          {/* settings */}
           <Route path='/settings' element={<SettingsLayout />}>
             <Route index element={<ProfileForm />} />
             <Route path='/settings/password' element={<SettingsPasswordPage />} />
+          </Route>
+
+          {/* footer */}
+          <Route path='/footer' element={<FooterLayout />}>
+            <Route index path='/footer/aboutus' element={<AboutUs />} />
+            <Route index path='/footer/contactus' element={<ContactUs />} />
+            <Route index path='/footer/privacy' element={<Privacy />} />
+            <Route index path='/footer/service' element={<Service />} />
           </Route>
 
           {/*  */}
