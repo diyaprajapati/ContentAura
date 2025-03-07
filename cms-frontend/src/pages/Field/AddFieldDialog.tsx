@@ -60,63 +60,6 @@ export function AddFieldDialog({ onFieldCreated }: AddFieldDialogProps) {
     setOpen(false);
   };
 
-  // const handleSubmit = async () => {
-  //     if (!name.trim()) {
-  //         toast({
-  //             title: "Error",
-  //             description: "Field name cannot be empty.",
-  //             variant: "destructive",
-  //         });
-  //         return;
-  //     }
-  //     if (!schemaId) {
-  //         toast({
-  //             title: "Error",
-  //             description: "Schema ID is missing.",
-  //             variant: "destructive",
-  //         });
-  //         return;
-  //     }
-  //     if (!type) {
-  //         toast({
-  //             title: "Error",
-  //             description: "Field type is required.",
-  //             variant: "destructive",
-  //         });
-  //         return;
-  //     }
-  //     setIsSubmitting(true);
-  //     try {
-  //         const response = await updateSchema(parseInt(schemaId), { name, type });
-  //         console.log(response);
-
-  //         if (response && response.status === 200) {
-  //             toast({
-  //                 title: "Success",
-  //                 description: "Field created successfully.",
-  //                 variant: "default",
-  //             });
-
-  //             onFieldCreated();
-  //             setOpen(false);
-  //         }
-  //         else {
-  //             throw new Error("Failed to create field");
-  //         }
-  //     }
-  //     catch (error) {
-  //         console.log(error);
-  //         toast({
-  //             title: "Error",
-  //             description: "Failed to create field. Please try again.",
-  //             variant: "destructive",
-  //         });
-  //     }
-  //     finally {
-  //         setIsSubmitting(false);
-  //     }
-  // }
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -140,7 +83,7 @@ export function AddFieldDialog({ onFieldCreated }: AddFieldDialogProps) {
               id="name"
               className="col-span-3"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value.replace(/\s/g, ""))}
               placeholder="Field name"
             />
           </div>
