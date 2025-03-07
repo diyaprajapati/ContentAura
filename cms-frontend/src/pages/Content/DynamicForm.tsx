@@ -277,7 +277,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
               id={name}
               type={inputType}
               required={isRequired}
-              value={formData[name] || ""}
+              value={formData[name] !== undefined ? formData[name] : ""}
               className="hover:border-violet-400/60 transition-all w-full"
               onChange={(e) =>
                 handleInputChange(name, e.target.value, fieldType)
