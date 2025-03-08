@@ -306,7 +306,7 @@ export default function Flow() {
             // Process fields for this schema
             if (schema.fields && typeof schema.fields === 'object') {
                 const fieldsArray = Object.entries(schema.fields);
-                const fieldCount = fieldsArray.length;
+                // const fieldCount = fieldsArray.length;
 
                 // Calculate field layout in a vertical column
                 const fieldY = schemaY + 100; // Start position for fields
