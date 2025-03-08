@@ -142,8 +142,11 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         if (fieldType === "array") {
           return (
             <div key={name} className="flex flex-col gap-2 mb-4">
-              <Label htmlFor={name} className="font-semibold">
-                {name} (List){" "}
+              <Label htmlFor={name} className="label-elegant flex items-center">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">{name}</span>
+                  <span className="text-xs uppercase tracking-wider text-primary bg-primary/10 px-2 py-1 rounded-md">List</span>
+                </div>
                 {isRequired && <span className="text-red-500">*</span>}
               </Label>
               {formData[name]?.map((item: string, index: number) => (
@@ -189,9 +192,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
                     fieldType
                   )
                 }
-                className="bg-transparent border hover:bg-slate-500/10"
+                className="bg-slate-500/10 border hover: hover:bg-slate-500/20 border-primary hover:text-primary"
               >
                 <Plus />
+                Add Item
               </Button>
             </div>
           );
@@ -200,8 +204,15 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         if (fieldType === "boolean") {
           return (
             <div key={name} className="flex flex-col gap-2 mb-4">
-              <Label htmlFor={name} className="font-semibold">
+              {/* <Label htmlFor={name} className="font-semibold">
                 {name} (Boolean){" "}
+                {isRequired && <span className="text-red-500">*</span>}
+              </Label> */}
+              <Label htmlFor={name} className="label-elegant flex items-center">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">{name}</span>
+                  <span className="text-xs uppercase tracking-wider text-primary bg-primary/10 px-2 py-1 rounded-md">Boolean</span>
+                </div>
                 {isRequired && <span className="text-red-500">*</span>}
               </Label>
               <Select
@@ -227,8 +238,15 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         if (fieldType === "Link") {
           return (
             <div key={name} className="flex flex-col gap-2 mb-4">
-              <Label htmlFor={name} className="font-semibold">
+              {/* <Label htmlFor={name} className="font-semibold">
                 {name} (Link){" "}
+                {isRequired && <span className="text-red-500">*</span>}
+              </Label> */}
+              <Label htmlFor={name} className="label-elegant flex items-center">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">{name}</span>
+                  <span className="text-xs uppercase tracking-wider text-primary bg-primary/10 px-2 py-1 rounded-md">Link</span>
+                </div>
                 {isRequired && <span className="text-red-500">*</span>}
               </Label>
               <Input
@@ -249,8 +267,15 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         if (fieldType === "string") {
           return (
             <div key={name} className="flex flex-col gap-2 mb-4">
-              <Label htmlFor={name} className="font-semibold">
+              {/* <Label htmlFor={name} className="font-semibold">
                 {name} (String){" "}
+                {isRequired && <span className="text-red-500">*</span>}
+              </Label> */}
+              <Label htmlFor={name} className="label-elegant flex items-center">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">{name}</span>
+                  <span className="text-xs uppercase tracking-wider text-primary bg-primary/10 px-2 py-1 rounded-md">String</span>
+                </div>
                 {isRequired && <span className="text-red-500">*</span>}
               </Label>
               <Textarea
@@ -270,8 +295,15 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         const inputType = fieldType === "integer" ? "number" : fieldType;
         return (
           <div key={name} className="flex flex-col gap-2 mb-4">
-            <Label htmlFor={name} className="font-semibold">
+            {/* <Label htmlFor={name} className="font-semibold">
               {name} {isRequired && <span className="text-red-500">*</span>}
+            </Label> */}
+            <Label htmlFor={name} className="label-elegant flex items-center">
+              <div className="flex items-center gap-2">
+                <span className="font-medium">{name}</span>
+                <span className="text-xs uppercase tracking-wider text-primary bg-primary/10 px-2 py-1 rounded-md">Number</span>
+              </div>
+              {isRequired && <span className="text-red-500">*</span>}
             </Label>
             <Input
               id={name}

@@ -189,7 +189,10 @@ const Content = () => {
       <div className="flex-grow flex flex-col gap-8 mx-8 my-4 pb-6">
         {/* Header */}
         <div className="flex justify-between items-center gap-6">
-          <Label className="font-bold text-4xl md:text-5xl">Content</Label>
+          <div className="">
+            <Label className="font-bold text-4xl md:text-5xl">Content</Label>
+            <p className="text-gray-400 pr-2">View and manage your content. Select a project and schema to see and create new content.</p>
+          </div>
           <div className="flex flex-col md:flex-row gap-4">
             {/* Project Selector */}
             <Select onValueChange={handleProjectChange} value={selectedProject}>

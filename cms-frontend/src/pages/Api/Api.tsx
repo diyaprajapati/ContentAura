@@ -43,7 +43,7 @@ export default function ProjectTable() {
                             variant="ghost"
                             size="icon"
                             onClick={() => handleCopy(apiKey)}
-                            className="h-8 w-8 p-0"
+                            className="h-8 w-8 p-0 hover:text-primary"
                         >
                             <Copy className="h-4 w-4" />
                         </Button>
@@ -107,7 +107,7 @@ export default function ProjectTable() {
                     </div>
                 </div>
                 <div className="w-full md:w-[80%] self-center">
-                    <div className="rounded-md border p-1">
+                    <div className="glass-panel rounded-xl overflow-hidden mb-8">
                         <Table>
                             <TableHeader>
                                 {table.getHeaderGroups().map((headerGroup) => (

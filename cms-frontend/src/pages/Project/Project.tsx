@@ -83,7 +83,7 @@ export default function Project() {
             <div className="flex-grow flex flex-col gap-8 mx-8 my-4">
                 <div className="flex justify-between w-full items-center ml-5">
                     {/* Title */}
-                    <div className="">
+                    <div className="flex flex-col">
                         <Label className="font-bold md:text-5xl text-4xl">Your Projects</Label>
                     </div>
                     {/* Button */}

@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { Copy } from 'lucide-react';
+import { Copy, Database } from 'lucide-react';
 import { getAllProjects } from '@/lib/api/project';
 import { getAllSchemasByProjectId } from '@/lib/api/schema';
 import { SchemaData } from '@/lib/types/schema';
@@ -84,7 +84,10 @@ const SchemaTab = () => {
             {/* Main Content */}
             <div className="flex-grow flex flex-col gap-8">
                 <div className="flex justify-between w-full items-center">
-                    <Label className="font-bold md:text-5xl text-4xl">Schemas</Label>
+                    <div className='flex flex-col '>
+                        <Label className="font-bold md:text-5xl text-4xl">Schemas</Label>
+                        <p className='text-gray-400 pr-2'>View and manage your database schemas. Select a project to see its available schemas.</p>
+                    </div>
                     <Select onValueChange={handleProjectChange} value={selectedProject}>
                         <SelectTrigger className="w-[200px]">
                             <SelectValue placeholder="Select a project name" />
@@ -106,10 +109,10 @@ const SchemaTab = () => {
                     </Select>
                 </div>
 
-                <div className="rounded-md border">
+                <div className="glass-panel rounded-xl overflow-hidden mb-8">
                     <Table>
                         <TableHeader>
-                            <TableRow>
+                            <TableRow className='hover:bg-muted/5'>
                                 <TableHead className='w-[30%]'>Schema Name</TableHead>
                                 <TableHead className="text-center">Fields</TableHead>
                                 <TableHead className='w-[40%] text-right'>URL</TableHead>
@@ -129,9 +132,12 @@ const SchemaTab = () => {
                                     <TableRow key={schema.id}>
                                         <TableCell className="font-medium">
                                             <span
-                                                className="cursor-pointer hover:text-violet-500 hover:underline"
+                                                className="flex items-center gap-3 cursor-pointer hover:text-primary hover:underline"
                                                 onClick={() => navigate(`/fields/${schema.id}`)}
                                             >
+                                                <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                                                    <Database className="w-6 h-6 text-primary" />
+                                                </div>
                                                 {schema.name}
                                             </span>
                                         </TableCell>

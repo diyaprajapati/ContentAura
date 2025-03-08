@@ -219,11 +219,11 @@ export function ContentTable({ contentData, onEdit, onDelete }: ContentTableProp
 
     return (
         <div className="w-full">
-            <div className="rounded-md border">
+            <div className="glass-panel rounded-xl overflow-hidden mb-8">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
+                            <TableRow key={headerGroup.id} className="hover:bg-muted/5">
                                 {headerGroup.headers.map((header) => (
                                     <TableHead key={header.id}>
                                         {header.isPlaceholder
