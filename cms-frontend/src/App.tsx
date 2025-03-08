@@ -122,6 +122,7 @@ import ContactUs from './pages/Footer/ContactUs'
 import Privacy from './pages/Footer/Privacy'
 import Service from './pages/Footer/Service'
 import PublicLayout from './PublicLayout.tsx' // Create this new component
+import Flow from './pages/ReactFlow/Flow.tsx'
 
 // import GlowingCursor from './GlowingCursor'
 
@@ -159,6 +160,9 @@ function App() {
           </Route>
           <Route path='/fields/:schemaId' element={<Layout />}>
             <Route index element={<Fields />} />
+          </Route>
+          <Route path='/flowchart' element={<Layout />}>
+            <Route index element={<Flow />} />
           </Route>
 
           {/* settings */}

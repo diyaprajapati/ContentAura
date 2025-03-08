@@ -1,5 +1,6 @@
 package com.ContentAura.cms_service.project;
 
+import com.ContentAura.cms_service.dto.ProjectHierarchyDTO;
 import com.ContentAura.cms_service.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,12 @@ public class ProjectController {
             @AuthenticationPrincipal User user
     ) {
         return ResponseEntity.ok(projectService.createProject(request, user));
+    }
+
+    @PreAuthorize("hasAuthority('VIEW_SCHEMA')")
+    @GetMapping("/hierarchy/{projectId}")
+    public ResponseEntity<ProjectHierarchyDTO> getProjectHierarchy(@PathVariable Long projectId) {
+        return ResponseEntity.ok(projectService.getProjectHierarchy(projectId));
     }
 
     @GetMapping

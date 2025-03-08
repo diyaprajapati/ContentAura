@@ -8,7 +8,8 @@ import {
     FileText,
     LogOut,
     Settings,
-    File
+    File,
+    Workflow
 } from "lucide-react"
 
 import {
@@ -60,6 +61,11 @@ const items = [
         title: "Api Keys",
         url: "/api",
         icon: Key,
+    },
+    {
+        title: "Flow chart",
+        url: "/flowchart",
+        icon: Workflow,
     },
 ]
 
