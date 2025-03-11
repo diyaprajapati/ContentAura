@@ -5,6 +5,10 @@ import { BookOpen, Code, FileText, ChevronRight } from "lucide-react";
 import data from './data.json';
 import CodeBlockComponent from "./CodeBlockComponent";
 import Footer from "../Footer/Footer";
+import StringComp from "./StringComp";
+import ListComp from "./ListComp";
+import NumComp from "./NumComp";
+
 
 // Define interfaces for our data structure
 interface Instruction {
@@ -184,6 +188,44 @@ export default function Docs() {
                                             </div>
                                         </div>
                                     )}
+                                </CardContent>
+                            </Card>
+                        </section>
+
+                        {/* Code snippets */}
+                        <section ref={apiStepRef} id="api" className="scroll-mt-24">
+                            <Card className="backdrop-blur-sm border border-gray-700/50 shadow-lg">
+                                <CardContent className="p-8">
+                                    <h2 className="text-2xl md:text-3xl font-bold mb-6 text-violet-300">Code snippets</h2>
+                                    <p className="text-gray-300 mb-6">
+                                        Use these ready-to-implement code snippets based on your data type requirements.
+                                    </p>
+
+                                    {/* Code example */}
+                                    <div className="my-8">
+                                        <h3 className="text-lg font-semibold mb-4 flex items-center text-violet-200">
+                                            <span className="font-medium text-violet-200">For String data-type</span>
+                                        </h3>
+                                        <StringComp />
+                                    </div>
+
+                                    <div className="my-8">
+                                        <h3 className="text-lg font-semibold mb-4 flex items-center text-violet-200">
+                                            <span className="font-medium text-violet-200">For List data-type</span>
+                                        </h3>
+                                        <ListComp />
+                                    </div>
+
+                                    <div className="my-8">
+                                        <h3 className="text-lg font-semibold mb-4 flex items-center text-violet-200">
+                                            <span className="font-medium text-violet-200">For the Number and Boolean datatype</span>
+                                        </h3>
+                                        <NumComp />
+                                    </div>
+
+                                    <div className="bg-violet-900/20 border border-violet-700/30 rounded-lg p-6">
+                                        <p className="text-violet-200 font-medium">For the complete implementation covering all data types, refer to the complete code example in the API section below.</p>
+                                    </div>
                                 </CardContent>
                             </Card>
                         </section>
