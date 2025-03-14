@@ -3,17 +3,24 @@ import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 import KeyFeature from './KeyFeature'
 import WhyUs from './WhyUs'
-import { useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
+import keyFet from './keyFet.json'
+import whyUs from './whyUs.json'
 
 import Container from "@/components/ui/container";
 import FadeIn from "@/components/ui/fadein";
 import PublicFooter from '@/PublicFooter'
 
+
 const HomePage = () => {
+  const memoizedFeatures = useMemo(() => keyFet, []);
+  const memoizedWhyUs = useMemo(() => whyUs, []);
+
   const ref = useRef<HTMLDivElement>(null);
-  const handleClick = () => {
+
+  const handleClick = useCallback(() => {
     ref.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  }, []);
   return (
     <div>
       {/* Logo/Brand - Top Left */}
@@ -69,8 +76,8 @@ const HomePage = () => {
         </Container>
       </section >
       {/* Other components */}
-      <KeyFeature ref={ref} />
-      <WhyUs />
+      <KeyFeature ref={ref} features={memoizedFeatures} />
+      <WhyUs features={memoizedWhyUs} />
 
       <PublicFooter />
     </div>
