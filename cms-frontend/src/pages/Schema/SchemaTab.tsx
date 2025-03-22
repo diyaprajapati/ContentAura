@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -74,10 +74,10 @@ const SchemaTab = () => {
             .catch((err) => console.error('Failed to copy URL:', err));
     };
 
-    const getFieldCount = (schema: SchemaData) => {
+    const getFieldCount = useCallback((schema: SchemaData) => {
         if (!schema.content?.properties) return 0;
         return Object.keys(schema.content.properties).length;
-    };
+    }, []);
 
     return (
         <div className="flex flex-col min-h-screen mx-8 my-4">

@@ -27,52 +27,59 @@ import {
 import { DropdownMenu, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { DropdownMenuContent, DropdownMenuItem } from "./ui/dropdown-menu"
 import { useNavigate, useLocation } from "react-router-dom"
-import { useEffect, useState } from "react";
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
-// Menu items.
-const items = [
-    {
-        title: "Dashboard",
-        url: "/dashboard",
-        icon: Home,
-    },
-    {
-        title: "Documentation",
-        url: "/documentation",
-        icon: File,
-    },
-    {
-        title: "Projects",
-        url: "/project",
-        icon: Folder,
-    },
-    {
-        title: "Schemas",
-        url: "/schema",
-        icon: Database,
-    },
-    {
-        title: "Content",
-        url: "/content",
-        icon: FileText,
-    },
-    {
-        title: "Api Keys",
-        url: "/api",
-        icon: Key,
-    },
-    {
-        title: "Flow chart",
-        url: "/flowchart",
-        icon: Workflow,
-    },
-]
+import { useEffect, useMemo, useState } from "react";
 
 export function AppSidebar() {
     const navigate = useNavigate();
     const location = useLocation();
     const [firstname, setFirstname] = useState("");
+
+    // Menu items.
+    const menuItems = useMemo(() => [
+        {
+            title: "Dashboard",
+            url: "/dashboard",
+            icon: Home,
+        },
+        {
+            title: "Documentation",
+            url: "/documentation",
+            icon: File,
+        },
+        {
+            title: "Projects",
+            url: "/project",
+            icon: Folder,
+        },
+        {
+            title: "Schemas",
+            url: "/schema",
+            icon: Database,
+        },
+        {
+            title: "Content",
+            url: "/content",
+            icon: FileText,
+        },
+        {
+            title: "Api Keys",
+            url: "/api",
+            icon: Key,
+        },
+        {
+            title: "Flow chart",
+            url: "/flowchart",
+            icon: Workflow,
+        },
+    ], []);
+
+    // Memoizing active menu items calculation
+    const activeItems = useMemo(() => {
+        return menuItems.map((item) => ({
+            ...item,
+            isActive: location.pathname === item.url
+        }));
+    }, [menuItems, location.pathname]);
 
     // fetch firstname from the backend
     useEffect(() => {
@@ -84,7 +91,7 @@ export function AppSidebar() {
             }
 
             try {
-                const response = await fetch(`${API_URL}/api/auth/user-details`, {
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/user-details`, {
                     headers: { Authorization: `Bearer ${token}` }
                 })
 
@@ -123,7 +130,7 @@ export function AppSidebar() {
                     <SidebarGroupContent>
                         {/* sidebar items */}
                         <SidebarMenu>
-                            {items.map((item) => {
+                            {activeItems.map((item) => {
                                 const isActive = location.pathname === item.url;
                                 return (
                                     <SidebarMenuItem key={item.title}>

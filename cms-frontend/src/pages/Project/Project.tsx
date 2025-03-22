@@ -3,7 +3,7 @@ import { toast } from "@/hooks/use-toast";
 import { getAllProjects } from "@/lib/api/project";
 import { ProjectData } from "@/lib/types/project";
 import { ToastAction } from "@radix-ui/react-toast";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AddProjectDialogBox } from "./AddProjectDialogBox";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ProjectOptionsDropdown from "./ProjectOptionsDropdown";
@@ -28,11 +28,9 @@ export default function Project() {
         }
         else {
             toast({
-                title: `Error accurse ${res}`,
-                action: (
-                    <ToastAction altText="Goto schedule to undo">Undo</ToastAction>
-                ),
-            })
+                title: `Error occurred: ${res?.statusText || "Unknown error"}`,
+                action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
+            });
             console.log("Error", res);
         }
         setLoading(false);
@@ -48,20 +46,22 @@ export default function Project() {
     }, []);
 
     // Filter and sort projects based on the selected filter
-    const sortedProjects = [...projects].sort((a, b) => {
-        if (filter === "name") {
-            return a.title.localeCompare(b.title);
-        } else {
-            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        }
-    });
+    const sortedProjects = useMemo(() => {
+        return [...projects].sort((a, b) => {
+            if (filter === "name") {
+                return a.title.localeCompare(b.title);
+            } else {
+                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            }
+        });
+    }, [projects, filter]);
 
     // to navigate it to the schema
     const navigate = useNavigate();
 
-    const handleNavigateToSchema = (projectId: number) => {
+    const handleNavigateToSchema = useCallback((projectId: number) => {
         navigate(`/schema/${projectId}`);
-    }
+    }, [navigate])
 
     // Skeleton loader component
     const ProjectSkeleton = () => (

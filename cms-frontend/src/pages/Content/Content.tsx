@@ -14,7 +14,7 @@ import { deleteContent, getAllContentBySchemaId } from "@/lib/api/content";
 import { ProjectData } from "@/lib/types/project";
 import { SchemaData } from "@/lib/types/schema";
 import { ContentData, ContentResponse } from "@/lib/types/content";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import DynamicForm from "./DynamicForm";
 import { ContentTable } from "./ContentTable";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -26,6 +26,8 @@ const Content = () => {
   const [schemas, setSchemas] = useState<SchemaData[]>([]);
   const [selectedSchema, setSelectedSchema] = useState<string>("");
   const [contentData, setContentData] = useState<ContentResponse[]>([]);
+  const memoizedContentData = useMemo(() => contentData, [contentData]);
+
   const [editingContent, setEditingContent] = useState<ContentResponse | null>(
     null
   );
@@ -33,7 +35,14 @@ const Content = () => {
   const [loadingSchemas, setLoadingSchemas] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  console.log(contentData);
+  // console.log(contentData);
+
+  const selectedSchemaData = useMemo(
+    () => schemas.find((schema) => schema.id.toString() === selectedSchema),
+    [schemas, selectedSchema]
+  );
+
+
   // Fetch all projects on mount
   useEffect(() => {
     const fetchProjects = async () => {
@@ -154,15 +163,26 @@ const Content = () => {
     setEditingContent(null);
   };
 
-  // const formatFields = (schema: SchemaData | undefined) => {
-  //     if (!schema?.content?.properties) return "No fields";
+  const projectOptions = useMemo(
+    () =>
+      projects.map((project) => (
+        <SelectItem key={project.id} value={project.id.toString()}>
+          {project.title}
+        </SelectItem>
+      )),
+    [projects]
+  );
 
-  //     return Object.entries(schema.content.properties).map(([name, details]: [string, any]) => (
-  //         <div key={name}>
-  //             <strong>{name}</strong>: {details.type} {details.required ? "(Required)" : "(Optional)"}
-  //         </div>
-  //     ));
-  // };
+  const schemaOptions = useMemo(
+    () =>
+      schemas.map((schema) => (
+        <SelectItem key={schema.id} value={schema.id.toString()}>
+          {schema.name}
+        </SelectItem>
+      )),
+    [schemas]
+  );
+
 
   // Skeleton loader
   if (isLoading) {
@@ -207,11 +227,7 @@ const Content = () => {
                       Loading projects...
                     </SelectItem>
                   ) : (
-                    projects.map((project) => (
-                      <SelectItem key={project.id} value={project.id.toString()}>
-                        {project.title}
-                      </SelectItem>
-                    ))
+                    projectOptions
                   )}
                 </SelectGroup>
               </SelectContent>
@@ -230,11 +246,7 @@ const Content = () => {
                       Loading schemas...
                     </SelectItem>
                   ) : (
-                    schemas.map((schema) => (
-                      <SelectItem key={schema.id} value={schema.id.toString()}>
-                        {schema.name}
-                      </SelectItem>
-                    ))
+                    schemaOptions
                   )}
                 </SelectGroup>
               </SelectContent>
@@ -248,9 +260,7 @@ const Content = () => {
             <>
               {/* Form */}
               <DynamicForm
-                schema={schemas.find(
-                  (schema) => schema.id.toString() === selectedSchema
-                )}
+                schema={selectedSchemaData}
                 schemaId={selectedSchema}
                 initialValues={editingContent?.data || {}}
                 onSubmit={(updatedContent: Record<string, any>) => {
@@ -270,7 +280,7 @@ const Content = () => {
 
               {/* Table */}
               <ContentTable
-                contentData={contentData}
+                contentData={memoizedContentData}
                 onEdit={(content: ContentResponse) => handleEdit(content)}
                 onDelete={(contentId: number) => handleDelete(contentId)}
                 editingContentId={editingContent?.id || null}

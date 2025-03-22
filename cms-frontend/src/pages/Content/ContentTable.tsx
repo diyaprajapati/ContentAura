@@ -121,28 +121,30 @@ export function ContentTable({ contentData, onEdit, onDelete }: ContentTableProp
         });
     };
 
-    const dynamicColumns: ColumnDef<ContentResponse>[] = getAllSchemaFields.map((key) => ({
-        //@ts-ignore
-        accessorFn: (row) => row.data?.data?.[key] ?? null,
-        id: key,
-        header: key,
-        cell: ({ row }) => {
+    const dynamicColumns: ColumnDef<ContentResponse>[] = React.useMemo(() =>
+        getAllSchemaFields.map((key) => ({
             //@ts-ignore
-            const value = row.original.data?.data?.[key];
-            const { displayText, fullText, needsTruncation } = formatCellContent(value);
+            accessorFn: (row) => row.data?.data?.[key] ?? null,
+            id: key,
+            header: key,
+            cell: ({ row }) => {
+                //@ts-ignore
+                const value = row.original.data?.data?.[key];
+                const { displayText, fullText, needsTruncation } = formatCellContent(value);
 
-            return needsTruncation ? (
-                <button
-                    onClick={() => handleContentClick(key, fullText)}
-                    className="text-gray-200 hover:text-violet-400 text-left cursor-pointer"
-                >
-                    {displayText}
-                </button>
-            ) : (
-                <span className="text-gray-200">{displayText}</span>
-            );
-        },
-    }));
+                return needsTruncation ? (
+                    <button
+                        onClick={() => handleContentClick(key, fullText)}
+                        className="text-gray-200 hover:text-violet-400 text-left cursor-pointer"
+                    >
+                        {displayText}
+                    </button>
+                ) : (
+                    <span className="text-gray-200">{displayText}</span>
+                );
+            },
+        })),
+        [getAllSchemaFields]);
 
     const columns: ColumnDef<ContentResponse>[] = [
         ...dynamicColumns,

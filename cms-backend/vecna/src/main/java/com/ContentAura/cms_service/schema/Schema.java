@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
-@Table(name = "`schemas`")
+@Table(name = "schemas")
 public class Schema {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

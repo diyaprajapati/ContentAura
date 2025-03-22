@@ -7,12 +7,14 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 
 export default function Layout() {
     const navigate = useNavigate();
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token === null) {
             navigate('/auth');
         }
-    })
+    }, [navigate])
+
     return (
         <SidebarProvider className='flex h-screen'>
             <Toaster />
