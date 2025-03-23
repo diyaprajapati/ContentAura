@@ -1,5 +1,6 @@
 package com.ContentAura.cms_api.controller;
 
+import com.ContentAura.cms_api.service.RateLimitService;
 import com.ContentAura.cms_service.content.ContentService;
 import com.ContentAura.cms_service.project.Project;
 import com.ContentAura.cms_service.project.ProjectService;
@@ -18,13 +19,20 @@ import java.util.stream.Collectors;
 public class Content {
     private final ContentService contentService;
     private final ProjectService projectService;
+    private final RateLimitService rateLimitService;
 
     @GetMapping("/{projectId}/{schemaId}")
-    public ResponseEntity<List<JsonNode>> getAllContentBySchemaId(
+    public ResponseEntity<?> getAllContentBySchemaId(
             @PathVariable Long projectId,
             @PathVariable Long schemaId,
             @RequestHeader("X-API-Key") String apiKey
     ) {
+
+        // Check Rate Limit
+        if (!rateLimitService.allowRequest(apiKey)) {
+            return ResponseEntity.status(429).body("Too many requests. Try again later.");
+        }
+
         // Validate API key against project
         Project project = projectService.getProjectById(projectId);
         if (!project.getApiKey().equals(apiKey)) {
