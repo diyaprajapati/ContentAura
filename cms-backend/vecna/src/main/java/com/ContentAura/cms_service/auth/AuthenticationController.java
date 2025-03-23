@@ -23,10 +23,18 @@ import java.util.Map;
 public class AuthenticationController {
     private final AuthenticationService service;
     private final LoginRateLimiterService loginRateLimiterService;
+    private final SignupRateLimiterService signupRateLimiterService;
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request, HttpServletRequest httpServletRequest) {
+        String ip = httpServletRequest.getRemoteAddr();
+
+        if(!signupRateLimiterService.tryConsume(ip)) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .body("Too many signup attempts. Try again later.");
+        }
+
         return ResponseEntity.ok(service.register(request));
     }
 
