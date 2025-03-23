@@ -3,6 +3,7 @@ package com.ContentAura.cms_service.auth;
 import com.ContentAura.cms_service.user.UpdatePasswordRequest;
 import com.ContentAura.cms_service.user.UpdateProfileRequest;
 import com.ContentAura.cms_service.user.User;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService service;
+    private final LoginRateLimiterService loginRateLimiterService;
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     @PostMapping("/register")
@@ -29,7 +31,18 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<?> authenticate(
+            @RequestBody AuthenticationRequest request,
+            HttpServletRequest httpServletRequest) {
+
+        String ip = httpServletRequest.getRemoteAddr();
+
+        if(!loginRateLimiterService.allowLogin(ip)) {
+            logger.warn("Too many login attempts in IP address: " + ip);
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .body(Map.of("error", "Too many failed login attempts. Try again in 1 minute"));
+        }
+
         return ResponseEntity.ok(service.authenticate(request));
     }
 

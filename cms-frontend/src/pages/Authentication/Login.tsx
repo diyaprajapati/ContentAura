@@ -1,15 +1,15 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { LockIcon, MailIcon } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { z } from 'zod'
 import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
 import axios from 'axios'
 import { ForgotPassword } from '../ForgotPassword/ForgotPassword'
+import { toast } from '@/hooks/use-toast'
 
-// validation schema 
+// Validation Schema 
 const loginSchema = z.object({
   email: z.string()
     .min(1, "Email is required")
@@ -19,15 +19,14 @@ const loginSchema = z.object({
     .max(50, "Password must not exceed 50 characters")
 })
 
-// Infer TypeScript type from the schema
-// type LoginFormData = z.infer<typeof loginSchema>
-
 const Login = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState<{ email?: string, password?: string }>({})
   const [loading, setLoading] = useState(false)
+  const [isCooldown, setIsCooldown] = useState(false);
+  const [cooldownTime, setCooldownTime] = useState(0);
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -64,7 +63,6 @@ const Login = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
 
     try {
       setLoading(true)
-      // API call
       const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/auth/authenticate`,
         { email, password },
@@ -83,14 +81,36 @@ const Login = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
         navigate("/dashboard");
       }
     } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message || 'Something went wrong. Please try again.';
-      console.error('Login error:', errorMessage);
-      alert(errorMessage);
+      if (error.response?.status === 429) {
+        startCooldown(60); // Start cooldown for 60 seconds
+        toast({
+          title: "Too many login attempts. Try again after 1 minute",
+        });
+      } else {
+        toast({
+          title: "Login Failed. Please try again.",
+        });
+      }
     } finally {
       setLoading(false);
     }
   }
+
+  const startCooldown = (seconds: number) => {
+    setIsCooldown(true);
+    setCooldownTime(seconds);
+
+    const interval = setInterval(() => {
+      setCooldownTime((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setIsCooldown(false);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
 
   // Staggered animation for form fields
   const container = {
@@ -126,6 +146,7 @@ const Login = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              disabled={isCooldown}
               className="auth-input pl-10 bg-white/5 border-white/10 text-white placeholder:text-zinc-500 hover:border-indigo-500/50 focus:border-indigo-500"
             />
           </div>
@@ -146,6 +167,7 @@ const Login = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              disabled={isCooldown}
               className="auth-input pl-10 bg-white/5 border-white/10 text-white placeholder:text-zinc-500 hover:border-indigo-500/50 focus:border-indigo-500"
             />
           </div>
@@ -158,7 +180,6 @@ const Login = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
 
         <motion.div variants={item} className="flex items-center justify-between mb-6">
           <span className="text-sm text-right font-medium text-indigo-400 cursor-pointer hover:text-indigo-300 transition-colors">
-            {/* Forgot Password? */}
             <ForgotPassword />
           </span>
         </motion.div>
@@ -166,10 +187,10 @@ const Login = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
         <motion.div variants={item}>
           <Button
             type="submit"
-            disabled={loading}
+            disabled={loading || isCooldown}
             className="text-white w-full md:w-fit"
           >
-            {loading ? 'Loging in...' : 'Log in'}
+            {isCooldown ? `Try again in ${cooldownTime}s` : (loading ? 'Logging in...' : 'Log in')}
           </Button>
         </motion.div>
       </form>
@@ -189,4 +210,4 @@ const Login = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
   )
 }
 
-export default Login
+export default Login;
