@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { LockIcon, MailIcon } from 'lucide-react'
+import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { z } from 'zod'
 import { useNavigate } from 'react-router-dom'
@@ -23,6 +23,7 @@ const Login = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState<{ email?: string, password?: string }>({})
   const [loading, setLoading] = useState(false)
   const [isCooldown, setIsCooldown] = useState(false);
@@ -163,13 +164,20 @@ const Login = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
               <LockIcon className="h-4 w-4 text-zinc-400" />
             </div>
             <Input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={isCooldown}
               className="auth-input pl-10 bg-white/5 border-white/10 text-white placeholder:text-zinc-500 hover:border-indigo-500/50 focus:border-indigo-500"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-3 flex items-center text-zinc-400 hover:text-white"
+            >
+              {showPassword ? <EyeIcon className="h-4 w-4" /> : <EyeOffIcon className="h-4 w-4" />}
+            </button>
           </div>
           {errors.password && (
             <p className="text-sm text-red-500 mt-1 ml-1">

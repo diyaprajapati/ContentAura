@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { UserIcon, MailIcon, LockIcon } from 'lucide-react'
+import { UserIcon, MailIcon, LockIcon, EyeIcon, EyeOffIcon } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { z } from 'zod'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
 
 // validation schema
 const signupSchema = z.object({
@@ -43,17 +45,19 @@ const Signup = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
     confirmPassword: ''
   })
 
+  const [errors, setErrors] = useState<Partial<Record<keyof SignupFormData, string>>>({})
+  const [loading, setLoading] = useState(false)
+  const [isCooldown, setIsCooldown] = useState(false);
+  const [cooldownTime, setCooldownTime] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token !== null) {
       navigate('/dashboard');
     }
   }, [navigate])
-
-  const [errors, setErrors] = useState<Partial<Record<keyof SignupFormData, string>>>({})
-  const [loading, setLoading] = useState(false)
-  const [isCooldown, setIsCooldown] = useState(false);
-  const [cooldownTime, setCooldownTime] = useState(0);
 
   const validateForm = () => {
     try {
@@ -175,13 +179,38 @@ const Signup = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
               </div>
               <Input
                 name={field}
-                type={field.includes("password") ? "password" : "text"}
+                type={
+                  field === "password"
+                    ? (showPassword ? "text" : "password")
+                    : field === "confirmPassword"
+                      ? (showConfirmPassword ? "text" : "password")
+                      : "text"
+                }
                 placeholder={field.replace(/([A-Z])/g, " $1").trim()}
                 value={formData[field as keyof SignupFormData]}
                 onChange={handleChange}
                 disabled={isCooldown}
                 className="auth-input pl-10 bg-white/5 border-white/10 text-white placeholder:text-zinc-500 hover:border-indigo-500/50 focus:border-indigo-500"
               />
+
+              {/* Toggle Password Visibility Button */}
+              {field.includes("password") && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    field === "password"
+                      ? setShowPassword(!showPassword)
+                      : setShowConfirmPassword(!showConfirmPassword)
+                  }
+                  className="absolute inset-y-0 right-3 flex items-center text-zinc-400 hover:text-white"
+                >
+                  {field === "password"
+                    ? (showPassword ? <EyeIcon className="h-4 w-4" /> : <EyeOffIcon className="h-4 w-4" />)
+                    : (showConfirmPassword ? <EyeIcon className="h-4 w-4" /> : <EyeOffIcon className="h-4 w-4" />)}
+                </button>
+
+              )}
+
             </div>
             {errors[field as keyof SignupFormData] && (
               <p className="text-sm text-red-500 mt-1 ml-1">
@@ -190,6 +219,15 @@ const Signup = ({ setActiveTab }: { setActiveTab: (tab: string) => void }) => {
             )}
           </motion.div>
         ))}
+        <motion.div variants={item} className="flex items-center space-x-2 mb-6">
+          <Checkbox id="terms" className="border-white/20 data-[state=checked]:bg-indigo-500 data-[state=checked]:border-indigo-500" required />
+          <Label htmlFor="terms" className="text-sm font-medium text-zinc-300 flex gap-2">
+            I agree to the
+            <span className="text-indigo-400 cursor-pointer hover:text-indigo-300 transition-colors"><Link to='/public/terms'>Terms of Service</Link></span>
+            and
+            <span className="text-indigo-400 cursor-pointer hover:text-indigo-300 transition-colors"><Link to='/public/privacy'>Privacy Policy</Link></span>
+          </Label>
+        </motion.div>
 
         <motion.div variants={item}>
           <Button
