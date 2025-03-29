@@ -132,7 +132,7 @@ const SchemaTab = () => {
                                     <TableRow key={schema.id}>
                                         <TableCell className="font-medium">
                                             <span
-                                                className="flex items-center gap-3 cursor-pointer hover:text-primary hover:underline"
+                                                className="flex items-center gap-3 cursor-pointer hover:text-violet-500 hover:underline transition-all"
                                                 onClick={() => navigate(`/fields/${schema.id}`)}
                                             >
                                                 <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">

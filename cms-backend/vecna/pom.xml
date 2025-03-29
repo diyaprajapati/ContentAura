@@ -10,6 +10,8 @@
 	<artifactId>cms-service</artifactId>
 	<version>1.0.0</version>
 	<name>vecna</name>
+	<packaging>jar</packaging> <!-- Explicitly define packaging -->
+
 
 	<properties>
 		<java.version>17</java.version>
@@ -119,12 +121,17 @@
         </dependency>
     </dependencies>
 
+
+
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>3.2.1</version>
+				<configuration>
+					<classifier>exec</classifier> <!-- Important for multi-module projects -->
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
