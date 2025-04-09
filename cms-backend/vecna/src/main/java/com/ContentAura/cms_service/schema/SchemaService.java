@@ -1,5 +1,7 @@
 package com.ContentAura.cms_service.schema;
 
+import com.ContentAura.cms_service.content.Content;
+import com.ContentAura.cms_service.content.ContentRepository;
 import com.ContentAura.cms_service.project.Project;
 import com.ContentAura.cms_service.project.ProjectRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,6 +22,7 @@ public class SchemaService {
     private final SchemaRepository schemaRepository;
     private final ProjectRepository projectRepository;
     private final ObjectMapper objectMapper;
+    private final ContentRepository contentRepository;
 
     public Schema createSchema(String name, JsonNode content, Long projectId) {
         // validateSchemaWithNode(content);
@@ -102,12 +105,35 @@ public Schema updateSchema(Long id, String name, JsonNode content) {
                 }
             }
 
-            // Remove the specified property
-            currentNode.remove(pathParts[pathParts.length - 1]);
+            // Get the property name that is being removed
+            String propertyName = pathParts[pathParts.length - 1];
+
+            // Remove the specified property from schema
+            currentNode.remove(propertyName);
 
             // Update the schema with modified content - keeping it as JsonNode
             schema.setContent(rootNode);
-            return schemaRepository.save(schema);
+            Schema updatedSchema = schemaRepository.save(schema);
+
+            // Now update all associated content items to remove this property
+            List<Content> contents = schema.getContents();
+            if (contents != null && !contents.isEmpty()) {
+                for (Content content : contents) {
+                    JsonNode contentData = content.getData();
+                    if (contentData != null && contentData.isObject()) {
+                        ObjectNode contentObjectNode = (ObjectNode) contentData;
+                        // Only remove if the property exists in this content item
+                        if (contentObjectNode.has(propertyName)) {
+                            contentObjectNode.remove(propertyName);
+                            content.setData(contentObjectNode);
+                        }
+                    }
+                }
+                // Save all updated content items
+                contentRepository.saveAll(contents);
+            }
+
+            return updatedSchema;
 
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Error processing JSON content", e);
