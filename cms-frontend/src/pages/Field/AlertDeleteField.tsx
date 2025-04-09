@@ -27,12 +27,12 @@ export function AlertDeleteField({ children, onConfirm }: AlertBoxProps) {
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your
-                        Project and remove your data from our servers.
+                        This action cannot be undone. This will permanently delete this field
+                        and remove its data from all associated content.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    {/* cancle button */}
+                    {/* cancel button */}
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     {/* delete button */}
                     <AlertDialogAction onClick={onConfirm} className="bg-red-600 hover:bg-red-900">Delete</AlertDialogAction>

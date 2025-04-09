@@ -83,7 +83,7 @@ export function DataTableSchema({
             ),
             cell: ({ row }) => (
                 <div
-                    className="text-left pl-4 cursor-pointer hover:underline hover:text-blue-400"
+                    className="text-left pl-4 cursor-pointer hover:underline hover:text-violet-400"
                     onClick={() => navigate(`/fields/${row.original.id}`)}
                 >
                     {row.getValue("name")}

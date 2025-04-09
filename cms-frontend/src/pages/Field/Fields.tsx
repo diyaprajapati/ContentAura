@@ -129,6 +129,35 @@ export default function Fields() {
     }
   }
 
+  const handleDeleteField = async (fieldName: string) => {
+    try {
+      // Make API call to delete the field
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/schema/${schemaId}/property/properties.${fieldName}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete field');
+      }
+
+      // Update local state to remove the field
+      setFields(fields.filter(field => field.name !== fieldName));
+      toast({
+        title: `Field ${fieldName} deleted successfully`
+      });
+    } catch (error) {
+      console.error('Error deleting field:', error);
+      toast({
+        title: "Failed to delete field"
+      })
+    }
+  };
+
   // Skeleton loader
   if (isLoading) {
     return (
@@ -176,7 +205,7 @@ export default function Fields() {
         </div>
         {/* table */}
         <div>
-          <FieldTable fields={fields} />
+          <FieldTable fields={fields} onDeleteField={handleDeleteField} />
         </div>
       </div>
       <div className="mb-2">
