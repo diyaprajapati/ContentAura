@@ -55,15 +55,13 @@ ContentAura is a powerful and flexible content management system designed to hel
    - Copy the API endpoint from the **API** tab.
    - Example API request:
      ```bash
-     GET http://localhost:8080/api/{projectId}/{schemaId}/
+     GET http://localhost:8081/api/{projectId}/{schemaId}/
      ```
 
 ## API Documentation
 ### Sample Endpoints
 - **Create a Project:** `POST /api/projects`
 - **Add Schema Fields:** `POST /api/schema/{projectId}`
-- **Insert Content:** `POST /api/{userId}/{projectId}/{schemaId}`
-- **Fetch Content:** `GET /api/{userId}/{projectId}/{schemaId}`
 
 ## Project Hierarchy Visualization
 - Select a project from the dropdown in the **Hierarchy** tab to visualize your structure.
