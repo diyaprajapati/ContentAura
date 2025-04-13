@@ -16,7 +16,7 @@ import { getAllProjects } from '@/lib/api/project';
 
 const fetchProjectHierarchy = async (projectId: string, token: string | null) => {
     try {
-        const response = await axios.get(`http://localhost:8080/api/projects/hierarchy/${projectId}`, {
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/projects/hierarchy/${projectId}`, {
             headers: { Authorization: `Bearer ${token}` },
         });
         return response.data;
