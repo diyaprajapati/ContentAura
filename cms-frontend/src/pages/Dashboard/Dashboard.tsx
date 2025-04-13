@@ -51,10 +51,10 @@ export default function Dashboard() {
 
       try {
         const [schemaRes, contentRes] = await Promise.all([
-          axios.get("http://localhost:8080/api/schema/count/all", {
+          axios.get(`${import.meta.env.VITE_API_BASE_URL}/schema/count/all`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get("http://localhost:8080/api/content/count/all", {
+          axios.get(`${import.meta.env.VITE_API_BASE_URL}/content/count/all`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);

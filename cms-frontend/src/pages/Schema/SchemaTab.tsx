@@ -64,7 +64,8 @@ const SchemaTab = () => {
     };
 
     const copyToClipboard = (projectId: string, schemaId: number) => {
-        const url = `http://localhost:8081/api/${projectId}/${schemaId}`;
+        // const url = `http://localhost:8081/api/${projectId}/${schemaId}`;
+        const url = `https://api.contentaura.xyz/api/${projectId}/${schemaId}`;
         navigator.clipboard.writeText(url)
             .then(() => {
                 setCopiedSchemaId(schemaId);
