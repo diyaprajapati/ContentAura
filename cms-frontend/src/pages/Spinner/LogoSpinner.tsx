@@ -1,11 +1,9 @@
-import './LogoSpinner.css';
+import PulseLoader from "./PulseLoader";
 
-const LogoSpinner = () => {
+export default function LogoSpinner() {
     return (
-        <div className="flex justify-center items-center h-screen bg-transperant z-50 fixed top-0 left-0 w-full">
-            <img src='./logo.png' alt="ContentAura Logo" className="w-24 h-24 animate-spin-slow" />
+        <div className="flex flex-col items-center justify-center py-10 bg-transparent">
+            <PulseLoader size="lg" color="brand" className="mb-4" />
         </div>
-    );
-};
-
-export default LogoSpinner;
+    )
+}
