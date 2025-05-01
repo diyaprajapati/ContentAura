@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Copy, Database } from 'lucide-react';
 import { getAllProjects } from '@/lib/api/project';
@@ -12,6 +11,7 @@ import { SchemaData } from '@/lib/types/schema';
 import { ProjectData } from '@/lib/types/project';
 import { toast } from 'sonner';
 import Footer from '../Footer/Footer';
+import LogoSpinner from '../Spinner/LogoSpinner';
 
 const SchemaTab = () => {
     const navigate = useNavigate(); // Initialize navigate function
@@ -59,7 +59,7 @@ const SchemaTab = () => {
 
     const handleProjectChange = (value: string) => {
         setSelectedProject(value);
-        setSchemas([]);
+        setSchemas([]); // Clear schemas when project changes
         localStorage.setItem('selectedProject', value);
     };
 
@@ -121,13 +121,11 @@ const SchemaTab = () => {
                         </TableHeader>
                         <TableBody>
                             {loading ? (
-                                [...Array(3)].map((_, index) => (
-                                    <TableRow key={index}>
-                                        <TableCell><Skeleton className="h-4 w-32" /></TableCell>
-                                        <TableCell><Skeleton className="h-4 w-8" /></TableCell>
-                                        <TableCell><Skeleton className="h-4 w-full" /></TableCell>
-                                    </TableRow>
-                                ))
+                                <TableRow>
+                                    <TableCell colSpan={3} className="text-center">
+                                        <LogoSpinner /> {/* Show LogoSpinner during loading */}
+                                    </TableCell>
+                                </TableRow>
                             ) : schemas.length > 0 ? (
                                 schemas.map((schema) => (
                                     <TableRow key={schema.id}>

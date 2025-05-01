@@ -9,48 +9,29 @@ import { PieChartGraph } from "./PieChartGraph";
 import axios from "axios";
 import { Activity, SwatchBook, TableOfContents, TrendingUp } from "lucide-react";
 import Footer from "../Footer/Footer";
+import LogoSpinner from "../Spinner/LogoSpinner";
+
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const [firstname, setFirstname] = useState("");
   const [schemaCount, setSchemaCount] = useState<number | null>(null);
   const [contentCount, setContentCount] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true); // Spinner state
 
-
-  // fetch firstname from the backend
   useEffect(() => {
-    const fetchUserDetails = async () => {
-      const token = localStorage.getItem("token")
-      if (!token) {
-        navigate('/auth')
-        return
-      }
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/auth");
+      return;
+    }
 
+    const fetchAllData = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/user-details`, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
-
-        if (!response.ok) {
-          throw new Error()
-        }
-
-        const data = await response.json()
-        setFirstname(data.firstname)
-      } catch {
-        localStorage.removeItem('token')
-        navigate('/auth')
-      }
-    };
-    const fetchCounts = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        navigate("/auth");
-        return;
-      }
-
-      try {
-        const [schemaRes, contentRes] = await Promise.all([
+        const [userRes, schemaRes, contentRes] = await Promise.all([
+          fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/user-details`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
           axios.get(`${import.meta.env.VITE_API_BASE_URL}/schema/count/all`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
@@ -59,18 +40,23 @@ export default function Dashboard() {
           }),
         ]);
 
+        if (!userRes.ok) throw new Error();
+
+        const userData = await userRes.json();
+        setFirstname(userData.firstname);
         setSchemaCount(schemaRes.data);
         setContentCount(contentRes.data);
-
-      } catch {
+        setLoading(false);
+      } catch (error) {
         localStorage.removeItem("token");
         navigate("/auth");
       }
     };
 
-    fetchUserDetails();
-    fetchCounts();
+    fetchAllData();
   }, [navigate]);
+
+  if (loading) return <LogoSpinner />;
 
   return (
     <div className="flex flex-col m-2 mx-5">
@@ -85,11 +71,9 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* data of dashboard */}
       <Tabs defaultValue="overview" className="space-y-4 mt-10 lg:m-10">
         <TabsContent value="overview" className="space-y-4">
           <div className="grid md:grid-rows-2 md:grid-flow-col gap-4">
-            {/* <PiChartGraph /> */}
             <div className="md:row-span-3">
               <PieChartGraph />
             </div>
@@ -100,27 +84,19 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-3xl md:text-5xl font-bold">
-                  {schemaCount !== null ? `${schemaCount}` : "Loading..."}
+                  {schemaCount}
                 </div>
-                {/* <p className="text-xs text-muted-foreground">
-                  +19% from last month
-                </p> */}
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0">
-                <CardTitle className="text-sm font-medium">
-                  Contents
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Contents</CardTitle>
                 <TableOfContents className="text-gray-400 w-5" />
               </CardHeader>
               <CardContent>
                 <div className="text-3xl md:text-5xl font-bold">
-                  {contentCount !== null ? `${contentCount}` : "Loading..."}
+                  {contentCount}
                 </div>
-                {/* <p className="text-xs text-muted-foreground">
-                  +201 since last hour
-                </p> */}
               </CardContent>
             </Card>
           </div>
@@ -148,5 +124,5 @@ export default function Dashboard() {
       </Tabs>
       <Footer />
     </div>
-  )
+  );
 }

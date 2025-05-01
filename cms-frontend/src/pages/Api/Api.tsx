@@ -22,9 +22,11 @@ import { getAllProjects } from "@/lib/api/project"
 import { ProjectData } from "@/lib/types/project"
 import { Label } from "@/components/ui/label"
 import Footer from "../Footer/Footer"
+import LogoSpinner from "../Spinner/LogoSpinner"
 
 export default function ProjectTable() {
     const [projects, setProjects] = React.useState<ProjectData[]>([])
+    const [loading, setLoading] = React.useState(true);
 
     const columns: ColumnDef<ProjectData>[] = [
         {
@@ -93,9 +95,16 @@ export default function ProjectTable() {
                     ),
                 })
             }
+            setLoading(false);
         }
         fetchProjects()
     }, [])
+
+    if (loading) return (
+        <div className="flex justify-center items-center h-screen">
+            <LogoSpinner />
+        </div>
+    );
 
     return (
         <div className="flex flex-col min-h-full">

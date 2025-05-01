@@ -13,6 +13,7 @@ import '@xyflow/react/dist/style.css';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ProjectData } from '@/lib/types/project';
 import { getAllProjects } from '@/lib/api/project';
+import LogoSpinner from '../Spinner/LogoSpinner';
 
 const fetchProjectHierarchy = async (projectId: string, token: string | null) => {
     try {
@@ -53,6 +54,7 @@ export default function Flow() {
     });
     const [initialLoading, setInitialLoading] = useState<boolean>(true);
     const [projects, setProjects] = useState<ProjectData[]>([]);
+    const [loadingHierarchy, setLoadingHierarchy] = useState<boolean>(false); // State to track project hierarchy loading
     const token = localStorage.getItem('token');
 
     useEffect(() => {
@@ -81,8 +83,6 @@ export default function Flow() {
 
         // Top level - Project node
         const projectNodeWidth = 250;
-        // const projectNodeHeight = 60;
-
         newNodes.push({
             id: `project-${data.projectId}`,
             position: { x: 0, y: 0 },
@@ -103,21 +103,16 @@ export default function Flow() {
         // Calculate layout for second level - Schema nodes
         const schemaCount = data.schemas.length;
         const schemaNodeWidth = 220;
-        // const schemaNodeHeight = 50;
-        const schemaVerticalOffset = 150; // Vertical distance from project to schemas
+        const schemaVerticalOffset = 150;
 
-        // Position schemas in a row below the project
-        // Calculate total width needed for all schemas
-        const totalSchemasWidth = schemaCount * schemaNodeWidth + (schemaCount - 1) * 50; // 50px spacing between schemas
+        const totalSchemasWidth = schemaCount * schemaNodeWidth + (schemaCount - 1) * 50;
         const schemaStartX = -totalSchemasWidth / 2 + schemaNodeWidth / 2;
 
-        // Process schemas
         data.schemas.forEach((schema: any, schemaIndex: number) => {
             const schemaId = `schema-${schema.schemaId}`;
-            const schemaX = schemaStartX + (schemaIndex * (schemaNodeWidth + 50)); // Space schemas evenly
+            const schemaX = schemaStartX + (schemaIndex * (schemaNodeWidth + 50));
             const schemaY = schemaVerticalOffset;
 
-            // Add schema node
             newNodes.push({
                 id: schemaId,
                 position: { x: schemaX, y: schemaY },
@@ -135,7 +130,6 @@ export default function Flow() {
                 }
             });
 
-            // Connect project to schema
             newEdges.push({
                 id: `e-project-${schemaId}`,
                 source: `project-${data.projectId}`,
@@ -149,18 +143,15 @@ export default function Flow() {
                 }
             });
 
-            // Process fields for this schema
             if (schema.fields && typeof schema.fields === 'object') {
                 const fieldsArray = Object.entries(schema.fields);
                 const fieldCount = fieldsArray.length;
 
                 if (fieldCount > 0) {
                     const fieldNodeWidth = 180;
-                    // const fieldNodeHeight = 40;
-                    const fieldVerticalOffset = 120; // Distance from schema to fields
+                    const fieldVerticalOffset = 120;
 
-                    // Position fields in a row under their schema
-                    const totalFieldsWidth = fieldCount * fieldNodeWidth + (fieldCount - 1) * 30; // 30px spacing
+                    const totalFieldsWidth = fieldCount * fieldNodeWidth + (fieldCount - 1) * 30;
                     const fieldStartX = schemaX - totalFieldsWidth / 2 + fieldNodeWidth / 2;
 
                     fieldsArray.forEach(([fieldName, fieldType], fieldIndex) => {
@@ -168,7 +159,6 @@ export default function Flow() {
                         const fieldX = fieldStartX + (fieldIndex * (fieldNodeWidth + 30));
                         const fieldY = schemaY + fieldVerticalOffset;
 
-                        // Add field node
                         newNodes.push({
                             id: fieldId,
                             position: { x: fieldX, y: fieldY },
@@ -186,7 +176,6 @@ export default function Flow() {
                             }
                         });
 
-                        // Connect schema to field
                         newEdges.push({
                             id: `e-${schemaId}-${fieldId}`,
                             source: schemaId,
@@ -208,6 +197,7 @@ export default function Flow() {
 
     useEffect(() => {
         if (selectedProject && token) {
+            setLoadingHierarchy(true);  // Set loading to true when starting to fetch hierarchy
             fetchProjectHierarchy(selectedProject, token)
                 .then((data) => {
                     if (data) {
@@ -218,13 +208,12 @@ export default function Flow() {
                         setEdges(newEdges);
                     }
                 })
-                .catch(err => console.error("Error fetching hierarchy:", err));
+                .catch(err => console.error("Error fetching hierarchy:", err))
+                .finally(() => setLoadingHierarchy(false));  // Set loading to false after the fetch is done
         }
-    }, [selectedProject, token, setNodes, setEdges]);
+    }, [selectedProject, token]);
 
-    // Custom handler to prevent node deletion via keyboard
     const onKeyDown = useCallback((event: React.KeyboardEvent) => {
-        // Prevent deletion with Delete or Backspace keys
         if (event.key === 'Delete' || event.key === 'Backspace') {
             event.preventDefault();
         }
@@ -254,23 +243,29 @@ export default function Flow() {
                 </Select>
             </div>
             <div className="h-[calc(100%-60px)]">
-                <ReactFlow
-                    nodes={nodes}
-                    edges={edges}
-                    onNodesChange={onNodesChange}
-                    onEdgesChange={onEdgesChange}
-                    fitView
-                    fitViewOptions={{ padding: 0.3 }}
-                    defaultViewport={{ x: 0, y: 0, zoom: 1 }}
-                    deleteKeyCode={null}
-                    nodesDraggable={true}
-                    connectOnClick={false}
-                    nodesConnectable={false}
-                    elementsSelectable={true}
-                >
-                    <Controls className='bg-slate-800 text-violet-300 border border-violet-500 rounded-md' />
-                    <Background color='#A78BFA' gap={24} size={1.5} className='dark:bg-slate-900' />
-                </ReactFlow>
+                {loadingHierarchy ? (
+                    <div className="flex justify-center items-center h-full">
+                        <LogoSpinner />
+                    </div>
+                ) : (
+                    <ReactFlow
+                        nodes={nodes}
+                        edges={edges}
+                        onNodesChange={onNodesChange}
+                        onEdgesChange={onEdgesChange}
+                        fitView
+                        fitViewOptions={{ padding: 0.3 }}
+                        defaultViewport={{ x: 0, y: 0, zoom: 1 }}
+                        deleteKeyCode={null}
+                        nodesDraggable={true}
+                        connectOnClick={false}
+                        nodesConnectable={false}
+                        elementsSelectable={true}
+                    >
+                        <Controls className='bg-slate-800 text-violet-300 border border-violet-500 rounded-md' />
+                        <Background color='#A78BFA' gap={24} size={1.5} className='dark:bg-slate-900' />
+                    </ReactFlow>
+                )}
             </div>
         </div>
     );

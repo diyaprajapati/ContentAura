@@ -7,8 +7,8 @@ import { getFieldsBySchemaId, updateSchema } from "@/lib/api/schema";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { SchemaRequestData } from "@/lib/types/schema";
-import { Skeleton } from "@/components/ui/skeleton";
 import Footer from "../Footer/Footer";
+import LogoSpinner from "../Spinner/LogoSpinner";
 
 export default function Fields() {
   const { schemaId } = useParams<{ schemaId: string }>();
@@ -24,7 +24,7 @@ export default function Fields() {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  console.log(fields, isLoading);
+  // console.log(fields, isLoading);
 
   useEffect(() => {
     if (!schemaId) {
@@ -32,7 +32,7 @@ export default function Fields() {
       return;
     }
     fetchFields();
-  }, []);
+  }, [schemaId]);
 
   if (!schemaId) {
     return null; // or a loading spinner
@@ -162,23 +162,7 @@ export default function Fields() {
   if (isLoading) {
     return (
       <div className="flex flex-col gap-8 mx-8 my-4">
-        <div className="flex justify-between w-full items-center ml-5 md:mx-16">
-          <div>
-            <Skeleton className="h-12 w-48 mb-2" />
-            <Skeleton className="h-6 w-64" />
-          </div>
-          <div className="flex gap-4">
-            <Skeleton className="h-10 w-24" />
-            <Skeleton className="h-10 w-24" />
-          </div>
-        </div>
-        <div className="mt-4">
-          {[1, 2, 3].map((_, index) => (
-            <div key={index} className="flex items-center mb-4">
-              <Skeleton className="h-10 w-full" />
-            </div>
-          ))}
-        </div>
+        <LogoSpinner /> {/* Replace skeleton with LogoSpinner */}
       </div>
     );
   }

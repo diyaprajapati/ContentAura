@@ -8,8 +8,8 @@ import { AddProjectDialogBox } from "./AddProjectDialogBox";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ProjectOptionsDropdown from "./ProjectOptionsDropdown";
 import { useNavigate } from "react-router-dom";
-import { Skeleton } from "@/components/ui/skeleton";
 import Footer from "../Footer/Footer";
+import LogoSpinner from "../Spinner/LogoSpinner";
 
 
 export default function Project() {
@@ -21,20 +21,27 @@ export default function Project() {
     // apicall
     const fetchProject = async () => {
         setLoading(true);
-        const res = await getAllProjects();
-
-        if (res?.status === 200) {
-            setProjects(res.data);
-        }
-        else {
+        try {
+            const res = await getAllProjects();
+            if (res?.status === 200) {
+                setProjects(res.data);
+            } else {
+                toast({
+                    title: `Error occurred: ${res?.statusText || "Unknown error"}`,
+                    action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
+                });
+                console.log("Error", res);
+            }
+        } catch (error) {
             toast({
-                title: `Error occurred: ${res?.statusText || "Unknown error"}`,
-                action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
+                title: "Error",
+                description: "Failed to fetch projects. Please try again.",
+                variant: "destructive",
             });
-            console.log("Error", res);
+            console.error("API call error", error);
         }
         setLoading(false);
-    }
+    };
 
     // handle delete project
     const handleDelete = (projectId: number) => {
@@ -61,22 +68,12 @@ export default function Project() {
 
     const handleNavigateToSchema = useCallback((projectId: number) => {
         navigate(`/schema/${projectId}`);
-    }, [navigate])
+    }, [navigate]);
 
-    // Skeleton loader component
-    const ProjectSkeleton = () => (
-        <div className="mx-5 px-5 py-2 flex flex-col gap-7">
-            <div className="flex flex-row justify-between mx-2 items-center">
-                <div className="flex flex-col gap-2 w-full">
-                    <Skeleton className="h-6 w-1/2 mb-2" />
-                    <Skeleton className="h-4 w-3/4 mb-1" />
-                    <Skeleton className="h-3 w-1/4" />
-                </div>
-                <Skeleton className="h-8 w-8 rounded-full" />
-            </div>
-            <hr />
-        </div>
-    );
+    // Spinner display during loading
+    if (loading) {
+        return <LogoSpinner />;
+    }
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -111,13 +108,7 @@ export default function Project() {
                 {/* project layout */}
                 <div>
                     <hr className="ml-10 mr-10 mb-2" />
-                    {loading ? (
-                        <>
-                            <ProjectSkeleton />
-                            <ProjectSkeleton />
-                            <ProjectSkeleton />
-                        </>
-                    ) : sortedProjects.length > 0 ? (
+                    {sortedProjects.length > 0 ? (
                         sortedProjects.map((proj) => (
                             <div
                                 className="mx-5 px-5 py-2 flex flex-col gap-7"
@@ -166,5 +157,5 @@ export default function Project() {
                 <Footer />
             </div>
         </div>
-    )
+    );
 }
