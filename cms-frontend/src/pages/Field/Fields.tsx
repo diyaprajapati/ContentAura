@@ -174,7 +174,8 @@ export default function Fields() {
           {/* Title */}
           <div className="">
             <Label className="font-bold md:text-5xl text-4xl">Fields</Label>
-            <p>Fields for Schema id: {schemaId}</p>
+            {/* <p>Fields for Schema id: {schemaId}</p> */}
+            <p className="text-gray-400 pr-2">  After adding all the fields, click on Save. </p>
           </div>
           {/* Button */}
           <div className="md:mr-28">

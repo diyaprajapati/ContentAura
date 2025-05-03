@@ -69,8 +69,7 @@ export function AddFieldDialog({ onFieldCreated }: AddFieldDialogProps) {
         <DialogHeader>
           <DialogTitle>Add New Field</DialogTitle>
           <DialogDescription>
-            Fill all fields and Click submit when you're done. After adding all
-            the fields, click on Save. Note: You can't change it if you save it.
+            Fill all fields and Click submit when you're done.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">

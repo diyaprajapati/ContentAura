@@ -254,7 +254,7 @@ const Content = () => {
                 initialValues={editingContent?.data || {}}
                 onSubmit={(updatedContent: Record<string, any>) => {
                   const contentResponse: ContentResponse = {
-                    id: editingContent?.id || 0,
+                    id: updatedContent.id || editingContent?.id || 0,
                     schemaId: selectedSchema,
                     data: updatedContent as ContentData,
                     createdAt:
@@ -264,6 +264,7 @@ const Content = () => {
 
                   handleFormSubmit(contentResponse);
                 }}
+
                 onCancel={() => setEditingContent(null)}
               />
 
