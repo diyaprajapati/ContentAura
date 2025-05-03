@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react";
-import { ChartPie, TrendingUp } from "lucide-react";
+import { ChartPie } from "lucide-react";
 import { Label, Pie, PieChart } from "recharts";
 import {
     Card,
@@ -130,9 +130,9 @@ export function PieChartGraph() {
                 </ChartContainer>
             </CardContent>
             <CardFooter className="flex-col gap-2 text-sm">
-                <div className="flex items-center gap-2 font-medium leading-none">
+                {/* <div className="flex items-center gap-2 font-medium leading-none">
                     Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-                </div>
+                </div> */}
                 <div className="leading-none text-muted-foreground">
                     Showing total schema counts per project
                 </div>
