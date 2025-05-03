@@ -42,6 +42,7 @@ import {
     AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { ContentDialog } from "./ContentDialog";
+import { toast } from "sonner";
 
 // Helper function to truncate text
 const truncateText = (text: string, maxLength: number = 50): string => {
@@ -189,7 +190,21 @@ export function ContentTable({ contentData, onEdit, onDelete }: ContentTableProp
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                        <AlertDialogAction onClick={() => onDelete(content.id)} className="bg-red-600 hover:bg-red-900">Delete</AlertDialogAction>
+                                        {/* <AlertDialogAction onClick={() => onDelete(content.id)} className="bg-red-600 hover:bg-red-900">Delete</AlertDialogAction> */}
+                                        <AlertDialogAction
+                                            onClick={async () => {
+                                                try {
+                                                    await onDelete(content.id);
+                                                    toast.success("Content deleted successfully");
+                                                } catch (err) {
+                                                    toast.error("Failed to delete content");
+                                                }
+                                            }}
+                                            className="bg-red-600 hover:bg-red-900"
+                                        >
+                                            Delete
+                                        </AlertDialogAction>
+
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
                             </AlertDialog>
