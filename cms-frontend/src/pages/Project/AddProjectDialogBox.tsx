@@ -40,7 +40,7 @@ export function AddProjectDialogBox({ onProjectAdded }: AddProjectDialogBoxProps
     const [formData, setFromData] = useState({
         title: "",
         description: "",
-        generateApiKey: false,
+        generateApiKey: true,
     });
 
     const [open, setOpen] = useState(false);
@@ -60,7 +60,7 @@ export function AddProjectDialogBox({ onProjectAdded }: AddProjectDialogBoxProps
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            projectSchema.parse(formData);
+            projectSchema.parse({ ...formData, generateApiKey: true });
             const token = getAuthToken();
 
             const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/projects`, formData, {
@@ -137,11 +137,12 @@ export function AddProjectDialogBox({ onProjectAdded }: AddProjectDialogBoxProps
                     <div className="flex justify-start ml-32">
                         <div className="flex items-center space-x-2">
                             {/* check box for api */}
-                            <Checkbox id="apiKey"
-                                checked={formData.generateApiKey}
-                                // onCheckedChange={handleChange}
-                                onCheckedChange={(checked: boolean) => setFromData((prev) => ({ ...prev, generateApiKey: checked }))}
-                                required />
+                            <Checkbox
+                                id="apiKey"
+                                checked={true}
+                                disabled
+                            />
+
                             <Label
                                 htmlFor="apiKey"
                                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
