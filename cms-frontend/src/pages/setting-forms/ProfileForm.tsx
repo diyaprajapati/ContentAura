@@ -5,10 +5,18 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "@/hooks/use-toast";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { getUserDetails, updateUserDetails } from "@/lib/api/user";
+import LogoSpinner from "../Spinner/LogoSpinner";
 
 const profileFormSchema = z.object({
     firstname: z.string().min(1, { message: "First name is required." }).max(50),
@@ -32,13 +40,10 @@ export function ProfileForm() {
     });
 
     useEffect(() => {
-        async function fetchUserDetails() {
+        const fetchUserDetails = async () => {
             try {
                 const res = await getUserDetails();
                 if (res?.data) {
-                    // Ensure this logs actual user data
-                    // console.log("Fetched user details:", res.data);
-
                     form.reset({
                         firstname: res.data.firstname || "",
                         lastname: res.data.lastname || "",
@@ -47,14 +52,23 @@ export function ProfileForm() {
                 }
             } catch (error) {
                 console.error("Failed to fetch user details", error);
-                toast({ title: "Error", description: "Could not load user details", variant: "destructive" });
+                toast({
+                    title: "Error",
+                    description: "Could not load user details",
+                    variant: "destructive",
+                });
             } finally {
                 setLoading(false);
             }
-        }
+        };
 
-        fetchUserDetails();
-    }, [form.reset]);
+        // Use requestIdleCallback to reduce blocking time on mount (optional but useful)
+        if ("requestIdleCallback" in window) {
+            (window as any).requestIdleCallback(fetchUserDetails);
+        } else {
+            fetchUserDetails();
+        }
+    }, []); // No need to add form.reset in dependency array
 
     async function onSubmit(data: ProfileFormValues) {
         try {
@@ -67,7 +81,11 @@ export function ProfileForm() {
     }
 
     if (loading) {
-        return <p>Loading user details...</p>;
+        return (
+            <div className="flex items-center justify-center min-h-[200px]">
+                <LogoSpinner />
+            </div>
+        );
     }
 
     return (
@@ -112,9 +130,7 @@ export function ProfileForm() {
                         </FormItem>
                     )}
                 />
-                <Button type="submit">
-                    Update Profile
-                </Button>
+                <Button type="submit">Update Profile</Button>
             </form>
         </Form>
     );
