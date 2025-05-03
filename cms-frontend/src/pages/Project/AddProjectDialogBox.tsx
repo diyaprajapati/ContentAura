@@ -25,7 +25,7 @@ const projectSchema = z.object({
         .max(30, "Title must not exceed 30 characters"),
     description: z.string()
         .min(1, "Description is required")
-        .max(200, "Description must not exceed 100 characters"),
+        .max(200, "Description must not exceed 200 characters"),
     generateApiKey: z.boolean(),
 });
 
