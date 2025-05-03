@@ -111,7 +111,6 @@ import Content from "./pages/Content/Content";
 import Api from './pages/Api/Api'
 // import Setting from './pages/Settings/Setting'
 import SettingsLayout from './pages/setting-forms/SettingsLayout'
-import { ProfileForm } from './pages/setting-forms/ProfileForm'
 import SettingsPasswordPage from './pages/setting-forms/ConfPassword/SettingsPasswordPage'
 import Docs from './pages/Documentation/Docs'
 import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword'
@@ -121,8 +120,9 @@ import AboutUs from './pages/Footer/AboutUs'
 import ContactUs from './pages/Footer/ContactUs'
 import Privacy from './pages/Footer/Privacy'
 import Service from './pages/Footer/Service'
-import PublicLayout from './PublicLayout.tsx' // Create this new component
+import PublicLayout from './PublicLayout.tsx'
 import Flow from './pages/ReactFlow/Flow.tsx'
+import ProfileFormPage from './pages/setting-forms/ProfileFormPage.tsx'
 
 // import GlowingCursor from './GlowingCursor'
 
@@ -167,7 +167,7 @@ function App() {
 
           {/* settings */}
           <Route path='/settings' element={<SettingsLayout />}>
-            <Route index element={<ProfileForm />} />
+            <Route index element={<ProfileFormPage />} />
             <Route path='/settings/password' element={<SettingsPasswordPage />} />
           </Route>
 
