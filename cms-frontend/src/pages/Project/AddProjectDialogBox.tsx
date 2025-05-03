@@ -141,7 +141,7 @@ export function AddProjectDialogBox({ onProjectAdded }: AddProjectDialogBoxProps
                                 checked={formData.generateApiKey}
                                 // onCheckedChange={handleChange}
                                 onCheckedChange={(checked: boolean) => setFromData((prev) => ({ ...prev, generateApiKey: checked }))}
-                            />
+                                required />
                             <Label
                                 htmlFor="apiKey"
                                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
