@@ -12,7 +12,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -174,12 +174,19 @@ export function ContentTable({ contentData, onEdit, onDelete }: ContentTableProp
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => onEdit(content)}>
+                            <DropdownMenuItem
+                                onClick={() => onEdit(content)}
+                                className="cursor-pointer">
                                 Edit
                             </DropdownMenuItem>
                             <AlertDialog>
                                 <AlertDialogTrigger asChild>
-                                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>Delete</DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        onSelect={(e) => e.preventDefault()}
+                                        className="text-red-400 hover:!text-red-500 transition-all cursor-pointer">
+                                        <Trash2 />
+                                        Delete
+                                    </DropdownMenuItem>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
@@ -190,7 +197,6 @@ export function ContentTable({ contentData, onEdit, onDelete }: ContentTableProp
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                        {/* <AlertDialogAction onClick={() => onDelete(content.id)} className="bg-red-600 hover:bg-red-900">Delete</AlertDialogAction> */}
                                         <AlertDialogAction
                                             onClick={async () => {
                                                 try {
