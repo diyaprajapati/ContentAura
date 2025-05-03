@@ -12,7 +12,7 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table";
-import { MoreHorizontal, Trash2 } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -177,6 +177,7 @@ export function ContentTable({ contentData, onEdit, onDelete }: ContentTableProp
                             <DropdownMenuItem
                                 onClick={() => onEdit(content)}
                                 className="cursor-pointer">
+                                <Pencil />
                                 Edit
                             </DropdownMenuItem>
                             <AlertDialog>
