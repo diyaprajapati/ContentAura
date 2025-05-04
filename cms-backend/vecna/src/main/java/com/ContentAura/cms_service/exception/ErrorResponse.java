@@ -1,5 +1,8 @@
 package com.ContentAura.cms_service.exception;
 
+import lombok.Getter;
+
+@Getter
 public class ErrorResponse {
     private int status;
     private String message;
@@ -11,15 +14,4 @@ public class ErrorResponse {
         this.timestamp = timestamp;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String getTimestamp() {
-        return timestamp;
-    }
 }

@@ -172,16 +172,4 @@ public Schema updateSchema(Long id, String name, JsonNode content) {
             throw new RuntimeException("Error processing JSON content", e);
         }
     }
-
-    // private void validateSchemaWithNode(JsonNode content) {
-    // try {
-    // String response =
-    // restTemplate.postForObject("http://localhost:3001/validate", content,
-    // String.class);
-    // System.out.println("Validation successful: " + response);
-    // }
-    // catch (Exception e) {
-    // throw new RuntimeException("Validation failed: " + e.getMessage());
-    // }
-    // }
 }

@@ -9,11 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,12 +31,6 @@ public class SchemaController {
         Schema schema = schemaService.createSchema(request.getName(), request.getContent(), projectId);
         return ResponseEntity.ok(toResponse(schema));
     }
-
-//    @GetMapping("/count/{projectId}")
-//    public ResponseEntity<Integer> getAllSchemas(@PathVariable Long projectId) {
-//        Project project = projectService.getProjectById(projectId);
-//        return ResponseEntity.ok(project.getSchemas().size());
-//    }
 
     @GetMapping("/count/{projectId}")
     public ResponseEntity<SchemaCountResponse> getAllSchemas(@PathVariable Long projectId) {
@@ -72,13 +62,6 @@ public class SchemaController {
         Schema schema = schemaService.getSchemaById(id);
         return ResponseEntity.ok(toResponse(schema));
     }
-
-//    @PreAuthorize("hasAuthority('UPDATE_SCHEMA')")
-//    @PutMapping("/{id}")
-//    public ResponseEntity<SchemaResponse> updateSchema(@PathVariable Long id, @RequestBody SchemaRequest request) {
-//        Schema schema = schemaService.updateSchema(id, request.getName(), request.getContent());
-//        return ResponseEntity.ok(toResponse(schema));
-//    }
 
     @PreAuthorize("hasAuthority('UPDATE_SCHEMA')")
     @PutMapping("/{id}")
@@ -124,12 +107,4 @@ public class SchemaController {
                 // .project(toProjectResponse(schema.getProject()))
                 .build();
     }
-
-    // private SchemaResponse.ProjectResponse toProjectResponse(Project project) {
-    // return SchemaResponse.ProjectResponse.builder()
-    // .id(project.getId())
-    // .title(project.getTitle())
-    // .description(project.getDescription())
-    // .build();
-    // }
 }

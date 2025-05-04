@@ -16,13 +16,4 @@ public class SchemaResponse {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
-//    private ProjectResponse project;
-
-//    @Data
-//    @Builder
-//    public static class ProjectResponse {
-//        private Long id;
-//        private String title;
-//        private String description;
-//    }
 }

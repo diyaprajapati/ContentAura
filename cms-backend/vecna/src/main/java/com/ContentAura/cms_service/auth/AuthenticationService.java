@@ -9,8 +9,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -111,7 +109,6 @@ public class AuthenticationService {
     }
 
     private void validatePasswordComplexity(String password) {
-        // Example password policy - adjust according to your requirements
         if (password.length() < 6) {
             throw new IllegalArgumentException("Password must be at least 6 characters long");
         }
@@ -141,9 +138,6 @@ public class AuthenticationService {
 
         // Update to new password
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-
-        // Optional: You might want to add password history check
-        // Optional: You might want to add password complexity validation
 
         userRepository.save(user);
     }
