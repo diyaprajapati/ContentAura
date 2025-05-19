@@ -6,11 +6,9 @@ import WhyUs from './WhyUs'
 import { useCallback, useMemo, useRef } from 'react';
 import keyFet from './keyFet.json'
 import whyUs from './whyUs.json'
-
 import Container from "@/components/ui/container";
 import FadeIn from "@/components/ui/fadein";
 import PublicFooter from '@/PublicFooter'
-
 
 const HomePage = () => {
   const memoizedFeatures = useMemo(() => keyFet, []);
