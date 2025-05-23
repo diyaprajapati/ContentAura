@@ -9,10 +9,13 @@ import whyUs from './whyUs.json'
 import Container from "@/components/ui/container";
 import FadeIn from "@/components/ui/fadein";
 import PublicFooter from '@/PublicFooter'
+import Feedback from './Feedback'
+import feedbacks from './feedbacks.json'
 
 const HomePage = () => {
   const memoizedFeatures = useMemo(() => keyFet, []);
   const memoizedWhyUs = useMemo(() => whyUs, []);
+  const memoizedFeedbacks = useMemo(() => feedbacks, []);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -76,6 +79,7 @@ const HomePage = () => {
       {/* Other components */}
       <KeyFeature ref={ref} features={memoizedFeatures} />
       <WhyUs features={memoizedWhyUs} />
+      <Feedback feedbacks={memoizedFeedbacks} />
 
       <PublicFooter />
     </div>

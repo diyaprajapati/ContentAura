@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "name": "Sarah Johnson",
+    "role": "Marketing Director",
+    "company": "TechFlow Inc",
+    "avatar": "https://images.unsplash.com/photo-1494790108755-2616b612b47c?w=150&h=150&fit=crop&crop=face",
+    "rating": 5,
+    "feedback": "ContentAura makes creating and managing schemas incredibly intuitive. I can define custom data structures in seconds and use them instantly with dynamic URLs!",
+    "featured": true
+  },
+  {
+    "id": 2,
+    "name": "Michael Chen",
+    "role": "CTO",
+    "company": "StartupLab",
+    "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+    "rating": 5,
+    "feedback": "The auto-generated APIs and dynamic URLs save a ton of backend effort. I just plug the endpoint into my React frontend and it's live!"
+  },
+  {
+    "id": 3,
+    "name": "Emily Rodriguez",
+    "role": "Content Manager",
+    "company": "CreativeAgency",
+    "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+    "rating": 5,
+    "feedback": "One of my favorite features is the automatic form generation from schemas. It feels like magic — define a structure, and the form appears ready-to-use."
+  },
+  {
+    "id": 4,
+    "name": "David Park",
+    "role": "Product Manager",
+    "company": "InnovateTech",
+    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+    "rating": 4,
+    "feedback": "ContentAura balances a clean, modern interface with advanced customization. Perfect for both non-tech users and developers."
+  },
+  {
+    "id": 5,
+    "name": "Lisa Thompson",
+    "role": "Digital Strategist",
+    "company": "BrandForward",
+    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
+    "rating": 5,
+    "feedback": "Editing content and seeing real-time updates through the API is so smooth. Great for projects where live content is critical."
+  },
+  {
+    "id": 6,
+    "name": "James Wilson",
+    "role": "Lead Developer",
+    "company": "CodeCraft Solutions",
+    "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
+    "rating": 5,
+    "feedback": "I use ContentAura to prototype CMS-based apps quickly. The schema-to-API workflow is a dream for full-stack devs."
+  },
+  {
+    "id": 7,
+    "name": "Aarvi Kapoor",
+    "role": "Frontend Developer",
+    "company": "PixelForge Studios",
+    "avatar": "https://randomuser.me/api/portraits/women/65.jpg",
+    "rating": 4,
+    "feedback": "I use ContentAura to prototype CMS-based apps quickly. The schema-to-API workflow is a dream for full-stack devs."
+  }
+]
